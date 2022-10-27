@@ -1,4 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ActividadesPage } from '../../pages/administrations/ActividadesPage';
+import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
+import { FuncionariosPage } from '../../pages/administrations/FuncionariosPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
 import { HomePage } from '../../pages/HomePage';
 
@@ -6,27 +9,24 @@ export const appStore = createSlice({
     name: 'app',
     initialState: {
         routes: [
-            { key: 'chkHome', path: '/', component: HomePage },
+            { key: 'chkHome', name:'Home' ,path: '/', component: HomePage },
             // Sesión
             { key: 'chkLogin', path: '/auth', component: LoginPage, isPublic: true, clean: true },
             // { key: 'chkLoginByToken', path: '/auth/login-by-token', component: AuthLoginByToken, isPublic: true, clean: true },
             // { key: 'chkLogout', path: '/auth/logout', component: AuthLogout, isPublic: true, clean: true },
             // { key: 'chkAdmContraseña', path: '/account/password', component: undefined },
             // { key: 'chkVisitanteQR', path: '/auth/visitantes-qr', component: VisitantesQr, isPublic: true, clean: true },
-            // // Administraciones
-            // { key: 'accesos', path: '/accesos/', component: Accesos },
-            // { key: 'actividades', path: '/actividades/', component: Actividades },
-            // { key: 'equipos', path: '/equipos/', component: Equipos },
-            // { key: 'empresas', path: '/empresas/', component: Empresas2 },
+            // Administraciones
+            { key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
             // { key: 'derechoAdmision', path: '/derechoAdmision/', component: DerechoAdmision },
             // { key: 'categoria', path: '/categoria/', component: Categoria },
             // { key: 'requisito', path: '/requisito/', component: Requisito },
             // { key: 'zonaMarcacion', path: '/zonaMarcacion/', component: ZonaMarcacion },
             // { key: 'dispositivos-moviles', path: '/dispositivos-moviles/', component: DispositivosMoviles },
-            // { key: 'funcionarios', path: '/funcionarios/', component: Funcionarios },
+            { key: 'funcionarios', name:'Funcionarios', path: '/funcionarios/', component: FuncionariosPage },
             // { key: 'visitantes', path: '/visitantes/', component: Visitantes },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
-            // { key: 'asistencia', path: '/asistencia/', component: Asistencia },
+            { key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // { key: 'eventos-tiempo-real', path: '/eventos-tiempo-real/', component: EventosTiempoReal },
             // // GYM
             // { key: 'gym-registrar-pagos', path: '/gym-registrar-pagos/', component: RegistrarPagos },
@@ -42,7 +42,8 @@ export const appStore = createSlice({
         ], // 'authenticated', 'not-authenticated'
         services: {},
     },
-    reducers: {        
+    reducers: {
+                
     }
 })
 

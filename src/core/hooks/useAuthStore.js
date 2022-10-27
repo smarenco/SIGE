@@ -12,9 +12,8 @@ export const useAuthStore = () => {
 
 
     const startLogin = async({ email, password }) => {
-        //dispatch( onChecking() );
-        dispatch( onLogout('Credenciales incorrectas') );
-        return;
+        dispatch( onChecking() );
+
         console.log({ email, password })
         try {
             //const { data } = await sigeApi.post('/auth', { email, password })

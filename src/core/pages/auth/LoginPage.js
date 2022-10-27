@@ -1,5 +1,6 @@
 import { Modal } from 'antd';
 import { useEffect } from 'react';
+import { alertError } from '../../common/functions';
 import { useAuthStore } from '../../hooks/useAuthStore';
 import { useForm } from '../../hooks/useForm';
 import './LoginPage.css';
@@ -31,7 +32,7 @@ export const LoginPage = () => {
     useEffect(() => {
         console.log(errorMessage)
       if( errorMessage !== undefined ){
-        error('Error en la autenticacion', errorMessage);
+        alertError('Error en la autenticacion', errorMessage);
       }
     
     }, [errorMessage])

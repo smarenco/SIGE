@@ -2,7 +2,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { AppRouter } from './core/router/AppRouter'
+import { AppRouter } from './core/routers/AppRouter'
 import { store } from './core/store/store'
 
 export const SigeApp = () => {

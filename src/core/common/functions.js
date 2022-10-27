@@ -1,8 +1,7 @@
-import i18n from "@/i18n";
 import moment from "moment";
-import { API_URL } from "@/env";
-import { message, Modal } from "antd";
+import { Form, message, Modal } from "antd";
 import { HHmm, DDMMYYYY, ACCESS_TOKEN, LOCALE } from "./consts";
+import { API_URL } from "../../env";
 
 export const renderFormItem = (key, label, initialValue, component) => {
     let labelExt, valuePropName = 'value';
@@ -241,7 +240,7 @@ export const maskString = (s, m, cleanBefore, fillWith0) => {
     return s;
 }
 
-export const getParams = key => {
+/*export const getParams = key => {
     let params;
     try {
         params = JSON.parse(localStorage.getItem('params'));
@@ -263,26 +262,26 @@ export const getParams = key => {
         return params[key];
     }
     return params;
-}
+}*/
 
-export const getParamsAsync = () => {
-    return new Promise((res, rej) => {
-        const maxAttemts = 300;
-        let attemts = 0;
-        let params;
-        const interval = setInterval(() => {
-            params = getParams();
-            if (params || attemts++ > maxAttemts) {
-                clearInterval(interval);
-                if (params) {
-                    res(params);
-                } else {
-                    rej('No se han cargaron los parámetros del sistema');
-                }
-            }
-        }, 50);
-    });
-}
+// export const getParamsAsync = () => {
+//     return new Promise((res, rej) => {
+//         const maxAttemts = 300;
+//         let attemts = 0;
+//         let params;
+//         const interval = setInterval(() => {
+//             params = getParams();
+//             if (params || attemts++ > maxAttemts) {
+//                 clearInterval(interval);
+//                 if (params) {
+//                     res(params);
+//                 } else {
+//                     rej('No se han cargaron los parámetros del sistema');
+//                 }
+//             }
+//         }, 50);
+//     });
+// }
 
 export const asArr = arr => Object.keys(arr).map(id => ({ id, value: arr[id] }));
 
