@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import sigeApi from "../api/sigeApi";
 import { clearErrorMessage, onChecking, onLogin, onLogout } from "../store/auth/authSlice";
-//import { onLogoutCalendar } from "../store/calendar/calendarSlice";
-
-
 
 export const useAuthStore = () => {    
 
@@ -32,23 +29,6 @@ export const useAuthStore = () => {
         }
     }
 
-    /*const startRegister = async({ name, email, password }) => {
-        dispatch( onChecking() );
-
-        try {
-            const { data } = await sigeApi.post('/auth/new', { name, email, password })
-
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('token-init-date', new Date().getTime());
-
-            dispatch( onLogin( { name: data.name, uid: data.uid} ) );
-            
-        } catch (err) {
-            dispatch( onLogout( err.response.data?.msg || '--') );
-            setTimeout(() => dispatch( clearErrorMessage() ), 10);
-        }
-    }*/
-
     const checkAuthToken = async() => {
         const token = localStorage.getItem('token');
         
@@ -70,7 +50,6 @@ export const useAuthStore = () => {
 
     const startLoguot = () => {
         localStorage.clear();
-        //dispatch( onLogoutCalendar() );
         dispatch( onLogout() );
     }
 
@@ -82,7 +61,6 @@ export const useAuthStore = () => {
 
         //* Metodos
         startLogin,
-        //startRegister,
         checkAuthToken,
         startLoguot
     }
