@@ -4,3 +4,4 @@ tendriamos casi 800k registros de asistencia
 - Hay qeu revisar bien los atributos del der
 - Pensar periodos de cursos, ej: hay cursos que tienen en la parte teorica clases 3 veces por semana, pero en la parte práctica 5 veces por semana
 - Pensar tambien modalidads de cursos
+- Cronogramas, asistencias, listas 
