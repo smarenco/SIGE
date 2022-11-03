@@ -8,16 +8,15 @@ import {
 } from "react-router-dom";
 import { APP_PATH } from '../../env';
 import { useAuthStore } from '../hooks/useAuthStore';
-import { LoginPage } from '../pages/auth/LoginPage';
 import DefaultLayout from '../layouts/DefaultLayout';
-
+import "./App.css";
 export const AppRouter = () => {
 
     //const authStatus = 'not-authenticated';
 
     const { status, checkAuthToken } = useAuthStore();
     const app = useSelector( state => state.app );
-    console.log(app)
+    
     useEffect(() => {
       checkAuthToken();
     }, []);
@@ -31,7 +30,7 @@ export const AppRouter = () => {
     const renderPrivateRoutes = (routes, j) => {
         let r = routes.map((route, i) => {
             if (route.isPublic !== true) {
-                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout component={<route.component app={app} />} /> } />;
+                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout component={<route.component />} app={app} /> } />;
                 //return <DefaultLayout key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact component={route.component} app={this.props.app} />;
             }
             //return <PublicLayout key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact component={route.component} app={this.props.app} />;

@@ -1,6 +1,6 @@
-import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { Button, Checkbox, Input, Layout, Table, Tag } from 'antd';
+import { ReloadOutlined } from '@ant-design/icons';
 import React from 'react'
-
 
 const paginationStyle = {
     marginRight: 24,
@@ -57,15 +57,11 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
             columns={columns()}
             rowSelection={{ onChange: onRowSelectedChange, selectedRowKeys }}
             dataSource={data}
-            style={{
-                margin: -24,
-                marginBottom: -24,
-            }}
             footer={data => 
                 <div>
-                    <Button icon='reload' onClick={onReload} />
+                    <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
-                    <Input placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Busqueda: e.target.value })} /> 
+                    <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Busqueda: e.target.value })} /> 
                     &nbsp;
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}

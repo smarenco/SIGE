@@ -5,8 +5,8 @@ export const APP_PATH = '';
 //export const API_URL_BASE = 'https://ddns.fusionar.com.uy:6588';
 
 //DESA
-export const API_URL = 'http://backend.fsclock.git';
-export const API_URL_BASE = 'http://backend.fsclock.git';
+export const API_URL = 'http://backend.fscloc';
+export const API_URL_BASE = 'http://backend.fscloc';
 
 export const APP_NAME = 'FSClock Web'
 

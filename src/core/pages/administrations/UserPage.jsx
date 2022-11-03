@@ -1,19 +1,22 @@
-import { Button, Card, Dropdown, Menu, Modal, Icon } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal } from 'antd'
 import React from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
+import { UserModal } from '../../modals/UserModal';
+import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
+import { userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
 
 export const UserPage = ({ app }) => {
 
-    const [item, setItem] = useState({});
+    const [item, setItem] = useState(new User);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
     const [total, setTotal] = useState(0);
-    const [rowSelected, setRowSelected] = useState({selectedRowKeys, selectedRows});
-    const [showModal, setShowModal] = useState(false);
+    const [rowSelected, setRowSelected] = useState({selectedRowKeys: [], selectedRows: []});
+    const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -23,28 +26,27 @@ export const UserPage = ({ app }) => {
     const { selectedRowKeys, selectedRows } = rowSelected;
     
     const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => this.props.app.services.funcionario.index(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => this.props.app.services.funcionario.index(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => this.props.app.services.funcionario.index(filters, 'csv')}>CSV</Menu.Item>
+        <Menu.Item onClick={() => userIndex(filters, 'xls')}>Excel</Menu.Item>
+        <Menu.Item onClick={() => userIndex(filters, 'pdf')}>PDF</Menu.Item>
+        <Menu.Item onClick={() => userIndex(filters, 'csv')}>CSV</Menu.Item>
     </Menu>);
 
     const renderExtraTable = () => {
 
         return (
             <>
-                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={!user().Empresa.ExportarPersVisit || loading}>
-                    <Button style={{ marginRight: 15 }} icon="export" disabled={loading}>Exportar</Button>
+                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={!user()?.Empresa?.ExportarPersVisit || loading}>
+                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    {/* <Button key="new" onClick={e => {setShowModal(true); setItem(new Funcionario); }} disabled={loading}>Nuevo</Button> */}
-                    <Button key="new" onClick={e => {setShowModal(true); setItem({}); }} disabled={loading}>Nuevo</Button>
-                    <Button key="edit" onClick={onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
+                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
+                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
                 <Button.Group style={{ marginLeft: 15 }}>
-                    <Button key="activate" onClick={onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
-                    <Button key="desactivate" onClick={onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
+                    <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
+                    <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
             </>
         );
     }
@@ -58,11 +60,14 @@ export const UserPage = ({ app }) => {
                 okText: 'Eliminar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea eliminar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: () => {
+                onOk: async() => {
                     setLoading(true);
-                    this.service.delete(selectedRowKeys)
-                        .then(loadData)
-                        .catch(renderError)
+                    try {
+                        await userDelete(selectedRowKeys)
+                    } catch(err) {
+                        renderError(err);
+                    }                        
+                    loadData();
                     },
             }); break;
             case 'activate': Modal.confirm({
@@ -70,12 +75,14 @@ export const UserPage = ({ app }) => {
                 okText: 'Activar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea activar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: () => {
+                onOk: async() => {
                     setLoading(true);
-                    this.service.toggle(true, selectedRowKeys)
-                        .then()
-                        .catch(renderError)
-                        .then(loadData);
+                    try {
+                        await userToggle(true, selectedRowKeys)
+                    } catch(err) {
+                        renderError(err);
+                    }                        
+                    loadData();
                 },
             }); break;
             case 'desactivate': Modal.confirm({
@@ -83,12 +90,14 @@ export const UserPage = ({ app }) => {
                 okText: 'Desactivar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea desactivar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: () => {
+                onOk: async() => {
                     setLoading(true);
-                    this.service.toggle(false, selectedRowKeys)
-                        .then()
-                        .catch(renderError)
-                        .then(loadData);
+                    try {
+                       await userToggle(false, selectedRowKeys)
+                    } catch(err) {
+                        renderError(err);
+                    }                        
+                    loadData();
                 },
             }); break;
         }
@@ -98,73 +107,77 @@ export const UserPage = ({ app }) => {
         setFilters({ ...filters, ...filter });
     }
 
-    const onPageChange = (page, pageSize) => {
+    const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        this.service.index({ page, pageSize, ...filters })
-            .then(({ data, total }) => { setData(data); setTotal(total); setLoading(false); setRowSelected({}); })
-            .catch(renderError);
+        const { data, total } = await userIndex({ page, pageSize, ...filters });
+        setData(data); setTotal(total); setLoading(false); setRowSelected({});
     }
 
     const loadData = () => onPageChange(1);
 
-    const loadItem = (id) => {
+    const loadItem = async(id) => {
         setLoading(true);
-        this.service.getById(id)
-            .then(item => this.setState({ item, modal: true }))
-            .catch(renderError)
-            .then(() => setLoading(false) );
-    }
-
-    const onModalOk = (obj) => {
-        setConfirmLoading(true);
-        if (item.IdFuncionario) {
-            this.service.update(obj.IdFuncionario, obj)
-                .then(() => { setShowModal(false); loadData(); })
-                .catch(alertError)
-                .then(() => setConfirmLoading(false));
-        } else {
-            this.service.create(obj)
-                .then(() => this.setState({ modal: false }, this.loadData))
-                .catch(alertError)
-                .then(() => setConfirmLoading(false));
+        try {
+            const item = await userShow(id)
+            setItem(item); setOpenModal(true);
+        } catch(err) {
+            renderError(err);
         }
     }
 
+    const onModalOk = async(obj) => {
+        console.log('guardar')
+        setConfirmLoading(true);
+        try {
+            if (item.IdUser) {
+                await userUpdate(obj.IdUser, obj);
+            } else {
+                await userCreate(obj);
+            }
 
-  return (
-      <>
-          <Card
-              title={(<strong>Funcionarios</strong>)}
-              className='ant-section'
-              extra={renderExtraTable()}
-          >
+            setOpenModal(false); loadData();
+        } catch(err) {
+            renderError(err);
+        }
+
+        setConfirmLoading(false)        
+    }
+
+
+    return (
+        <>
+            <Card
+                title={(<strong>Funcionarios</strong>)}
+                className='ant-section'
+                extra={renderExtraTable()}
+            >
               <UserTable
-                  data={data}
-                  onReload={loadData}
-                  onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
-                  setFilters={onFilterTable}
-                  selectedRowKeys={selectedRowKeys}
-                  loading={loading}
-                  onPageChange={onPageChange}
-                  pagination={{
-                      pageSize: pageSize,
-                      page: page,
-                      total: total,
-                  }}
-                  onEditClick={loadItem}
+                    data={data}
+                    onReload={loadData}
+                    onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
+                    setFilters={onFilterTable}
+                    selectedRowKeys={selectedRowKeys}
+                    loading={loading}
+                    onPageChange={onPageChange}
+                    pagination={{
+                        pageSize: pageSize,
+                        page: page,
+                        total: total,
+                    }}
+                    onEditClick={loadItem}
               />
-          </Card>
-          {/* <ModalEntity
-              app={app}
-              visible={showModal}
-              item={item}
-              onOk={onModalOk}
-              confirmLoading={confirmLoading}
-              onCancel={() => { setShowModal(false); setItem(new Funcionario); }}
-          /> */}
-      </>
-  )
+            </Card>
+            <UserModal
+                app={app}
+                open={openModal}
+                item={item}
+                onOk={onModalOk}
+                confirmLoading={confirmLoading}
+                onCancel={() => { setOpenModal(false); setItem(new User); }}
+            />
+        </>
+    )
 }

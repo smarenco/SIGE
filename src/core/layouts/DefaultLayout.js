@@ -16,9 +16,8 @@ const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = ({ component, app }) => {
 
-
   const [collapsed, setCollapsed] = useState(false);
-
+  
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -27,7 +26,7 @@ const DefaultLayout = ({ component, app }) => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
-          items={app.routes.map((route, i) => {
+          items={app?.routes.map((route, i) => {
             if(!route.isPublic){
               return {
                 key: i,
