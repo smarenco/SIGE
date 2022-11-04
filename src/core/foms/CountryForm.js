@@ -17,7 +17,7 @@ export const CountryForm = ({ view, loading, formState, onInputChange }) => {
             <Loading loading={loading}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={16}>
-                        <Input name='Nombre' disabled={view} onChange={onChangeInput} value={formState?.Nombre} />
+                        <Input name='Name' disabled={view} onChange={onChangeInput} value={formState?.Name} />
                     </Form.Item>                    
                 </LayoutH>
             </Loading>

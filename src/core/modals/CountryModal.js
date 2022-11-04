@@ -18,7 +18,7 @@ export const CountryModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.Nombre || formState.Nombre.trim().length === 0){
+        if(!formState.Name || formState.Name.trim().length === 0){
             renderError('Debe ingresar el nombre');
             return;
         }
