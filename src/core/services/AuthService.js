@@ -138,8 +138,8 @@ export const AuthService = () => {
             });
     }
 
-     const hasPermission = (IdFuncion) => {
-        //return true;
+    const hasPermission = (IdFuncion) => {
+        return true;
         let user = JSON.parse(localStorage.getItem(USER));
         if (!user) {
             return false;
