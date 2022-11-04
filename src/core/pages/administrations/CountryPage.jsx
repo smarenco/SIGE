@@ -2,15 +2,16 @@ import { Button, Card, Dropdown, Menu, Modal } from 'antd'
 import React from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
-import { UserModal } from '../../modals/UserModal';
-import User from '../../models/User';
+import { CountryModal } from '../../modals/CountryModal';
+import Country from '../../models/Country';
 import { AuthService } from '../../services/AuthService';
-import { userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
-import { UserTable } from '../../tables/UserTable';
+import { CountryTable } from '../../tables/CountryTable';
 
-export const UserPage = ({ app }) => {
+import { countryCreate, countryDelete, countryIndex, countryShow, countryUpdate } from '../../services/CountryService';
 
-    const [item, setItem] = useState(new User);
+export const CountryPage = ({ app }) => {
+
+    const [item, setItem] = useState(new Country);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
@@ -26,9 +27,9 @@ export const UserPage = ({ app }) => {
     const { selectedRowKeys, selectedRows } = rowSelected;
     
     const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => userIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => userIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => userIndex(filters, 'csv')}>CSV</Menu.Item>
+        <Menu.Item onClick={() => countryIndex(filters, 'xls')}>Excel</Menu.Item>
+        <Menu.Item onClick={() => countryIndex(filters, 'pdf')}>PDF</Menu.Item>
+        <Menu.Item onClick={() => countryIndex(filters, 'csv')}>CSV</Menu.Item>
     </Menu>);
 
     const renderExtraTable = () => {
@@ -39,13 +40,13 @@ export const UserPage = ({ app }) => {
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
+                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Country); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
-                <Button.Group style={{ marginLeft: 15 }}>
+                {/* <Button.Group style={{ marginLeft: 15 }}>
                     <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
                     <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
-                </Button.Group>
+                </Button.Group> */}
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
             </>
         );
@@ -63,14 +64,14 @@ export const UserPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                        await userDelete(selectedRowKeys)
+                        await countryDelete(selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
                     loadData();
                     },
             }); break;
-            case 'activate': Modal.confirm({
+            /*case 'activate': Modal.confirm({
                 title: 'Activar registro',
                 okText: 'Activar',
                 cancelText: 'Cancelar',
@@ -78,14 +79,14 @@ export const UserPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                        await userToggle(true, selectedRowKeys)
+                        await countryToggle(true, selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
                     loadData();
                 },
-            }); break;
-            case 'desactivate': Modal.confirm({
+            }); break;*/
+            /*case 'desactivate': Modal.confirm({
                 title: 'Desactivar registro',
                 okText: 'Desactivar',
                 cancelText: 'Cancelar',
@@ -93,13 +94,13 @@ export const UserPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                       await userToggle(false, selectedRowKeys)
+                       await countryToggle(false, selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
                     loadData();
                 },
-            }); break;
+            }); break;*/
         }
     }
 
@@ -112,7 +113,7 @@ export const UserPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await userIndex({ page, pageSize, ...filters });
+        const { data, total } = await countryIndex({ page, pageSize, ...filters });
         setData(data); setTotal(total); setLoading(false); setRowSelected({});
     }
 
@@ -121,7 +122,7 @@ export const UserPage = ({ app }) => {
     const loadItem = async(id) => {
         setLoading(true);
         try {
-            const item = await userShow(id)
+            const item = await countryShow(id)
             setItem(item); setOpenModal(true);
         } catch(err) {
             renderError(err);
@@ -132,10 +133,10 @@ export const UserPage = ({ app }) => {
         console.log('guardar')
         setConfirmLoading(true);
         try {
-            if (item.IdUser) {
-                await userUpdate(obj.IdUser, obj);
+            if (item.IdCountry) {
+                await countryUpdate(obj.IdCountry, obj);
             } else {
-                await userCreate(obj);
+                await countryCreate(obj);
             }
 
             setOpenModal(false); loadData();
@@ -150,11 +151,11 @@ export const UserPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Funcionarios</strong>)}
+                title={(<strong>Paises</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-              <UserTable
+              <CountryTable
                     data={data}
                     onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
@@ -170,13 +171,13 @@ export const UserPage = ({ app }) => {
                     onEditClick={loadItem}
               />
             </Card>
-            <UserModal
+            <CountryModal
                 app={app}
                 open={openModal}
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
-                onCancel={() => { setOpenModal(false); setItem(new User); }}
+                onCancel={() => { setOpenModal(false); setItem(new Country); }}
             />
         </>
     )

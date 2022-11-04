@@ -9,6 +9,7 @@ import {
 import { APP_PATH } from '../../env';
 import { useAuthStore } from '../hooks/useAuthStore';
 import DefaultLayout from '../layouts/DefaultLayout';
+import { LoginPage } from '../pages/auth/LoginPage';
 import "./App.css";
 export const AppRouter = () => {
 
@@ -16,6 +17,9 @@ export const AppRouter = () => {
 
     const { status, checkAuthToken } = useAuthStore();
     const app = useSelector( state => state.app );
+    
+
+    console.log(status);
     
     useEffect(() => {
       checkAuthToken();
@@ -40,14 +44,14 @@ export const AppRouter = () => {
 
     return (
         <div className="appRouter">
-            {/* {
+            {
             status === 'not-authenticated' 
             ?
                 <Routes>
                     <Route path='/auth/*' element={ <LoginPage /> } />
                     <Route path='/*' element={ <Navigate to="auth/login" /> } />
                 </Routes>
-            : */}
+            : 
                 <div className="app">
                     
                     <Routes>
@@ -55,7 +59,7 @@ export const AppRouter = () => {
                         <Route path='/*' element={ <Navigate to="/" /> } />
                     </Routes>
                 </div>   
-            {/* } */}
+            }
         </div>
     )
 }

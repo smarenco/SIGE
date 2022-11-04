@@ -11,7 +11,6 @@ export const useAuthStore = () => {
     const startLogin = async({ email, password }) => {
         dispatch( onChecking() );
 
-        console.log({ email, password })
         try {
             //const { data } = await sigeApi.post('/auth', { email, password })
 
@@ -31,16 +30,17 @@ export const useAuthStore = () => {
 
     const checkAuthToken = async() => {
         const token = localStorage.getItem('token');
-        
+        console.log(token)
         if( !token ) return dispatch( onLogout() );
 
         try {
-            const { data } = await sigeApi.get('/auth/renew');
+            //const { data } = await sigeApi.get('/auth/renew');
 
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('token-init-date', new Date().getTime());
+            //localStorage.setItem('token', data.token);
+            //localStorage.setItem('token-init-date', new Date().getTime());
 
-            dispatch( onLogin( { name: data.name, uid: data.uid} ) );
+            //dispatch( onLogin( { name: data.name, uid: data.uid} ) );
+            dispatch( onLogin( { name: 'Santiago', uid: 123} ) );
 
         } catch (err) {
             localStorage.clear();

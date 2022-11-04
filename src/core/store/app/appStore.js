@@ -2,6 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 import { CONFIG } from '../../common/consts';
 import { ActividadesPage } from '../../pages/administrations/ActividadesPage';
 import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
+import { CityPage } from '../../pages/administrations/CityPage';
+import { CountryPage } from '../../pages/administrations/CountryPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
 import { HomePage } from '../../pages/HomePage';
@@ -17,11 +19,6 @@ export const appStore = createSlice({
         session: {
 
         },
-        config: {
-            eventosTiempoRealAccesos: [],
-            eventosTiempoRealShowMobiles: false,
-            eventosActivosIdAcceso: undefined,
-        },
         routes: [
             { key: 'chkHome', name:'Home' ,path: '/', component: HomePage },
             // Sesión
@@ -32,6 +29,8 @@ export const appStore = createSlice({
             // { key: 'chkVisitanteQR', path: '/auth/visitantes-qr', component: VisitantesQr, isPublic: true, clean: true },
             // Administraciones
             { key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
+            { key: 'countries', name:'Paises', path: '/countries', component: CountryPage },
+            { key: 'cities', name:'Ciudades', path: '/cities', component: CityPage },
             // { key: 'derechoAdmision', path: '/derechoAdmision/', component: DerechoAdmision },
             // { key: 'categoria', path: '/categoria/', component: Categoria },
             // { key: 'requisito', path: '/requisito/', component: Requisito },
@@ -61,8 +60,6 @@ export const appStore = createSlice({
                 // { key: 'config', to: '/config', icon: 'setting', title: i18n.t('global.menu.configuration'), fastAccess: true },
             ],
         },
-
-        params: {},
 
         config: JSON.parse(localStorage.getItem(CONFIG) || '{}'),
         
