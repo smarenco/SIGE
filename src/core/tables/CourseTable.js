@@ -40,7 +40,7 @@ export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, s
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 150,
+                width: 250,
                 ellipsis: true,
             }, {
                 title: 'Cuotas',
@@ -53,7 +53,7 @@ export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, s
                 dataIndex: 'value_quota',
                 key: 'ValorCouta',
                 render: (t, r) => <span>${t}</span>,
-                width: 100,
+                width: 150,
                 ellipsis: true,
             }, {
                 title: 'Baja',

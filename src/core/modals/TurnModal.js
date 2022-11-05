@@ -1,10 +1,10 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CountryForm } from '../foms/CountryForm';
+import { TurnForm } from '../foms/TurnForm';
 import { useForm } from '../hooks/useForm';
 
-export const CountryModal = (props) => {
+export const TurnModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
@@ -16,6 +16,14 @@ export const CountryModal = (props) => {
         
         if(!formState.name || formState.name.trim().length === 0){
             renderError('Debe ingresar el nombre');
+            return;
+        }
+        if(!formState.from_hour || formState.from_hour.length === 0){
+            renderError('Debe ingresar la hora inicial');
+            return;
+        }
+        if(!formState.to_hour || formState.to_hour.length === 0){
+            renderError('Debe ingresar la hora final');
             return;
         }
 
@@ -43,11 +51,12 @@ export const CountryModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <CountryForm
+            <TurnForm
                 app={app}
                 view={view}
                 formState={formState}
                 onInputChange={onInputChange}
+                onInputChangeByName={onInputChangeByName}
                 onCancel={onCancel}
             />
         </Modal>

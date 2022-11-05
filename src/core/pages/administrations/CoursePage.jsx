@@ -99,8 +99,8 @@ export const CoursePage = ({ app }) => {
         console.log('guardar')
         setConfirmLoading(true);
         try {
-            if (item.IdCourse) {
-                await courseUpdate(obj.IdCourse, obj);
+            if (item.id) {
+                await courseUpdate(obj.id, obj);
             } else {
                 await courseCreate(obj);
             }
@@ -117,7 +117,7 @@ export const CoursePage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Coursees</strong>)}
+                title={(<strong>Cursos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
@@ -143,6 +143,7 @@ export const CoursePage = ({ app }) => {
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
+                loading={loading}
                 onCancel={() => { setOpenModal(false); setItem(new Course); }}
             />
         </>

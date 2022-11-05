@@ -132,8 +132,8 @@ export const UserPage = ({ app }) => {
         console.log('guardar')
         setConfirmLoading(true);
         try {
-            if (item.IdUser) {
-                await userUpdate(obj.IdUser, obj);
+            if (item.id) {
+                await userUpdate(obj.id, obj);
             } else {
                 await userCreate(obj);
             }
@@ -176,6 +176,7 @@ export const UserPage = ({ app }) => {
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
+                loading={loading}
                 onCancel={() => { setOpenModal(false); setItem(new User); }}
             />
         </>

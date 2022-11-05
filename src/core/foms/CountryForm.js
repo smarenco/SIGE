@@ -4,14 +4,14 @@ import { Form, Input } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 
-export const CountryForm = ({ view, loading, formState, onInputChange }) => {
+export const CountryForm = ({ view, loading, confirmLoading, formState, onInputChange }) => {
 
     return (
         <Form layout='vertical'>
             <Loading loading={loading}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={16}>
-                        <Input name='Name' disabled={view} onChange={onInputChange} value={formState?.name} />
+                        <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>                    
                 </LayoutH>
             </Loading>

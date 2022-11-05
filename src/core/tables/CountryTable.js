@@ -27,7 +27,7 @@ export const CountryTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 150,
+                width: 250,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {

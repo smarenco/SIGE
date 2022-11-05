@@ -6,9 +6,9 @@ import LayoutH from '../components/layout/LayoutH';
 import { countryCombo } from '../services/CountryService';
 import { renderError } from '../common/functions';
 
-export const CityForm = ({ view, loading, formState, onInputChange, onInputChangeByName }) => {    
+export const CityForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
-    let [countries, setCountries ] = useState([]);
+    let [countries, setCountries ] = useState([{country_id: 1, name: 'Uruguay'}]);
 
     const fetchCountries = async () => {
         try {
@@ -24,24 +24,23 @@ export const CityForm = ({ view, loading, formState, onInputChange, onInputChang
         fetchCountries();
       }, []);
     
-    //countries = [{country_id: 1, name: 'Uruguay'}];
     return (
         <Form layout='vertical'>
             <Loading loading={loading}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={12}>
-                        <Input name='Name' disabled={view} onChange={onInputChange} value={formState?.name} />
+                        <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Pais`} labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view}
+                            disabled={view || confirmLoading}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={IdCountry => onInputChangeByName('IdCountry', IdCountry)}
+                            onChange={country_id => onInputChangeByName('country_id', country_id)}
                             > 
                                 {countries.map(country => 
-                                    <Select.Option value={country.country_id} key={country.country_id}>{country.name}</Select.Option>
+                                    <Select.Option value={country.id} key={country.id}>{country.name}</Select.Option>
                                     )}
                             </Select>
                     </Form.Item>

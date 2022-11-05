@@ -133,8 +133,8 @@ export const CountryPage = ({ app }) => {
         console.log('guardar')
         setConfirmLoading(true);
         try {
-            if (item.IdCountry) {
-                await countryUpdate(obj.IdCountry, obj);
+            if (item.id) {
+                await countryUpdate(obj.id, obj);
             } else {
                 await countryCreate(obj);
             }
@@ -177,6 +177,7 @@ export const CountryPage = ({ app }) => {
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
+                loading={loading}
                 onCancel={() => { setOpenModal(false); setItem(new Country); }}
             />
         </>

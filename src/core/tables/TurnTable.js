@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -27,9 +27,21 @@ export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setF
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 250,
+                width: 200,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
+            }, {
+                title: 'Desde',
+                dataIndex: 'from_hour',
+                key: 'Desde',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Hasta',
+                dataIndex: 'to_hour',
+                key: 'Hasta',
+                width: 200,
+                ellipsis: true,
             }, {
                 title: 'Baja',
                 key: 'Baja',

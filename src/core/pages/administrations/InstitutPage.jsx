@@ -2,16 +2,16 @@ import { Button, Card, Dropdown, Menu, Modal } from 'antd'
 import React from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
-import { CityModal } from '../../modals/CityModal';
-import City from '../../models/City';
+import { InstitutModal } from '../../modals/InstitutModal';
+import Institut from '../../models/Institut';
 import { AuthService } from '../../services/AuthService';
-import { CityTable } from '../../tables/CityTable';
+import { InstitutTable } from '../../tables/InstitutTable';
 
-import { cityCreate, cityDelete, cityIndex, cityShow, cityUpdate } from '../../services/CityService';
+import { institutCreate, institutDelete, institutIndex, institutShow, institutUpdate } from '../../services/InstitutService';
 
-export const CityPage = ({ app }) => {
+export const InstitutPage = ({ app }) => {
 
-    const [item, setItem] = useState(new City);
+    const [item, setItem] = useState(new Institut);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
@@ -27,9 +27,9 @@ export const CityPage = ({ app }) => {
     const { selectedRowKeys, selectedRows } = rowSelected;
     
     const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => cityIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => cityIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => cityIndex(filters, 'csv')}>CSV</Menu.Item>
+        <Menu.Item onClick={() => institutIndex(filters, 'xls')}>Excel</Menu.Item>
+        <Menu.Item onClick={() => institutIndex(filters, 'pdf')}>PDF</Menu.Item>
+        <Menu.Item onClick={() => institutIndex(filters, 'csv')}>CSV</Menu.Item>
     </Menu>);
 
     const renderExtraTable = () => {
@@ -40,13 +40,9 @@ export const CityPage = ({ app }) => {
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new City); }} disabled={loading}>Nuevo</Button>
+                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Institut); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
-                {/* <Button.Group style={{ marginLeft: 15 }}>
-                    <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
-                    <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
-                </Button.Group> */}
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
             </>
         );
@@ -64,43 +60,13 @@ export const CityPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                        await cityDelete(selectedRowKeys)
+                        await institutDelete(selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
                     loadData();
                     },
             }); break;
-            /*case 'activate': Modal.confirm({
-                title: 'Activar registro',
-                okText: 'Activar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea activar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                        await cityToggle(true, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
-            /*case 'desactivate': Modal.confirm({
-                title: 'Desactivar registro',
-                okText: 'Desactivar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea desactivar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                       await cityToggle(false, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
         }
     }
 
@@ -113,7 +79,7 @@ export const CityPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await cityIndex({ page, pageSize, ...filters });
+        const { data, total } = await institutIndex({ page, pageSize, ...filters });
         setData(data); setTotal(total); setLoading(false); setRowSelected({});
     }
 
@@ -122,7 +88,7 @@ export const CityPage = ({ app }) => {
     const loadItem = async(id) => {
         setLoading(true);
         try {
-            const item = await cityShow(id)
+            const item = await institutShow(id)
             setItem(item); setOpenModal(true);
         } catch(err) {
             renderError(err);
@@ -134,9 +100,9 @@ export const CityPage = ({ app }) => {
         setConfirmLoading(true);
         try {
             if (item.id) {
-                await cityUpdate(obj.id, obj);
+                await institutUpdate(obj.id, obj);
             } else {
-                await cityCreate(obj);
+                await institutCreate(obj);
             }
 
             setOpenModal(false); loadData();
@@ -151,11 +117,11 @@ export const CityPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Cityes</strong>)}
+                title={(<strong>Institutos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-              <CityTable
+              <InstitutTable
                     data={data}
                     onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
@@ -171,14 +137,14 @@ export const CityPage = ({ app }) => {
                     onEditClick={loadItem}
               />
             </Card>
-            <CityModal
+            <InstitutModal
                 app={app}
                 open={openModal}
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new City); }}
+                onCancel={() => { setOpenModal(false); setItem(new Institut); }}
             />
         </>
     )

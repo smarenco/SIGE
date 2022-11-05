@@ -1,10 +1,10 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CountryForm } from '../foms/CountryForm';
+import { GroupForm } from '../foms/GroupForm';
 import { useForm } from '../hooks/useForm';
 
-export const CountryModal = (props) => {
+export const GroupModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
@@ -16,6 +16,14 @@ export const CountryModal = (props) => {
         
         if(!formState.name || formState.name.trim().length === 0){
             renderError('Debe ingresar el nombre');
+            return;
+        }
+        if(!formState.from_date || formState.from_date.length === 0){
+            renderError('Debe ingresar la fecha inicial');
+            return;
+        }
+        if(!formState.to_date || formState.to_date.length === 0){
+            renderError('Debe ingresar la fecha final');
             return;
         }
 
@@ -30,7 +38,7 @@ export const CountryModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={800}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -43,11 +51,14 @@ export const CountryModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <CountryForm
+            <GroupForm
                 app={app}
                 view={view}
                 formState={formState}
+                loading={loading}
+                confirmLoading={confirmLoading}
                 onInputChange={onInputChange}
+                onInputChangeByName={onInputChangeByName}
                 onCancel={onCancel}
             />
         </Modal>

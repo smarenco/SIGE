@@ -6,7 +6,7 @@ import LayoutH from '../components/layout/LayoutH';
 import { renderError } from '../common/functions';
 import { institutCombo } from '../services/InstitutService';
 
-export const CourseForm = ({ view, loading, formState, onInputChange, onInputChangeByName }) => {    
+export const CourseForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
     let [instituts, setInstituts ] = useState([]);
 
@@ -29,16 +29,16 @@ export const CourseForm = ({ view, loading, formState, onInputChange, onInputCha
             <Loading loading={loading}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={12}>
-                        <Input name='name' disabled={view} onChange={onInputChange} value={formState?.name} />
+                        <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Identificador`} labelAlign='left' span={12}>
-                        <Input name='identifier' disabled={view} onChange={onInputChange} value={formState?.name} />
+                        <Input name='identifier' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Instituto`} labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view}
+                            disabled={view || confirmLoading}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={institut_id => onInputChangeByName('institut_id', institut_id)}
                             > 
@@ -48,10 +48,10 @@ export const CourseForm = ({ view, loading, formState, onInputChange, onInputCha
                             </Select>
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Cantidad Coutas`} labelAlign='left' span={6}>
-                        <InputNumber name='amount_quote' disabled={view} onChange={onInputChange} value={formState?.amount_quote} />
+                        <InputNumber name='amount_quote' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.amount_quote} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Valor Couta`} labelAlign='left' span={6}>
-                        <InputNumber name='value_quote' disabled={view} onChange={onInputChange} value={formState?.value_quote} />
+                        <InputNumber name='value_quote' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.value_quote} />
                     </Form.Item>
                 </LayoutH>
             </Loading>

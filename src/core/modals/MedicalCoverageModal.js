@@ -8,13 +8,13 @@ export const MedicalCoverageModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
-    const { view, app, open, item, onOk: onOkProp, confirmLoading, onCancel: onCancelProp } = props;
+    const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
     const { formState, onInputChange, onInputChangeByName } = useForm(item);
 
     const onOk = () => {
         
-        if(!formState.Name || formState.Name.trim().length === 0){
+        if(!formState.name || formState.name.trim().length === 0){
             renderError('Debe ingresar el nombre');
             return;
         }
@@ -35,7 +35,7 @@ export const MedicalCoverageModal = (props) => {
             okText='Guardar'
             cancelText='Cancelar'
             cancelButtonProps={{ disabled: confirmLoading }}
-            loading={confirmLoading}
+            loading={loading}
             onOk={onOk}
             maskClosable={false}
             closable={!confirmLoading}

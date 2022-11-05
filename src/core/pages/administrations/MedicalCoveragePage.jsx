@@ -133,8 +133,8 @@ export const MedicalCoveragePage = ({ app }) => {
         console.log('guardar')
         setConfirmLoading(true);
         try {
-            if (item.IdMedicalCoverage) {
-                await medicalCoverageUpdate(obj.IdMedicalCoverage, obj);
+            if (item.id) {
+                await medicalCoverageUpdate(obj.id, obj);
             } else {
                 await medicalCoverageCreate(obj);
             }
@@ -151,7 +151,7 @@ export const MedicalCoveragePage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Coverturas Medicas</strong>)}
+                title={(<strong>Coberturas Medicas</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
@@ -177,6 +177,7 @@ export const MedicalCoveragePage = ({ app }) => {
                 item={item}
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
+                loading={loading}
                 onCancel={() => { setOpenModal(false); setItem(new MedicalCoverage); }}
             />
         </>

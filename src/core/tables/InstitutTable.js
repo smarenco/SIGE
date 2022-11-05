@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const InstitutTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -27,9 +27,27 @@ export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setF
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 250,
+                width: 200,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
+            }, {
+                title: 'Descripcion',
+                dataIndex: 'description',
+                key: 'Descripcion',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Pais',
+                dataIndex: 'country_name',
+                key: 'Pais',
+                width: 200,
+                ellipsis: true,
+            }, {
+                title: 'Ciudad',
+                dataIndex: 'city_name',
+                key: 'Ciudad',
+                width: 200,
+                ellipsis: true,
             }, {
                 title: 'Baja',
                 key: 'Baja',

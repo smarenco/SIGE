@@ -8,7 +8,7 @@ export const UserModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
-    const { view, app, open, item, onOk: onOkProp, confirmLoading, onCancel: onCancelProp } = props;
+    const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
     const { formState, onInputChange, onInputChangeByName } = useForm(item); 
 
@@ -35,7 +35,7 @@ export const UserModal = (props) => {
             okText='Guardar'
             cancelText='Cancelar'
             cancelButtonProps={{ disabled: confirmLoading }}
-            loading={confirmLoading}
+            loading={loading}
             onOk={onOk}
             maskClosable={false}
             closable={!confirmLoading}

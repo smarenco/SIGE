@@ -5,7 +5,10 @@ import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
 import { CityPage } from '../../pages/administrations/CityPage';
 import { CountryPage } from '../../pages/administrations/CountryPage';
 import { CoursePage } from '../../pages/administrations/CoursePage';
+import { GroupPage } from '../../pages/administrations/GroupPage';
+import { InstitutPage } from '../../pages/administrations/InstitutPage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
+import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
 import { HomePage } from '../../pages/HomePage';
@@ -30,15 +33,17 @@ export const appStore = createSlice({
             // { key: 'chkAdmContraseña', path: '/account/password', component: undefined },
             // { key: 'chkVisitanteQR', path: '/auth/visitantes-qr', component: VisitantesQr, isPublic: true, clean: true },
             // Administraciones
-            { key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
+            //{ key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
             { key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
             { key: 'cities', name:'Ciudades', path: '/ciudades', component: CityPage },
-            { key: 'medicalCoverage', name:'Coverturas Medicas', path: '/coverturasMedicas', component: MedicalCoveragePage },
+            { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturasMedicas', component: MedicalCoveragePage },
             { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },
-            //{ key: 'institut', name:'Institutos', path: '/institutos', component: InstitutPage },
-            { key: 'users', name:'Users', path: '/users/', component: UserPage },
+            { key: 'institut', name:'Institutos', path: '/institutos', component: InstitutPage },
+            { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
+            { key: 'turn', name:'Turnos', path: '/turnos/', component: TurnPage },
+            { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
-            { key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
+            //{ key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // /// Configuración
             // { key: 'empresa', path: '/empresa/', component: Empresa },
             // { key: 'auditoria', path: '/auditoria/', component: Auditoria },
