@@ -23,6 +23,13 @@ export const userIndex = async (filter, output = undefined) => {
     }
 }
 
+export const userCombo = async (filter) => {
+    let params = filter || {};
+    const { response } = await api.get(path, { params });
+    
+    return response.data.map(entity => new User(entity));
+}
+
 /**
      * Activar o desactivar múltiples registros
      * @param {boolean} active Activar o desactivar el registro

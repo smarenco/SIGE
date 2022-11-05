@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const CityTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -24,12 +24,37 @@ export const CityTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
     const columns = () => {
         return [
             {
+                title: 'Identificador',
+                dataIndex: 'identifier',
+                key: 'Identificador',
+                width: 150,
+                ellipsis: true,
+                className: 'ant-table-cell-link',
+            }, {
+                title: 'Instituto',
+                dataIndex: 'name_institut',
+                key: 'Instituto',
+                width: 150,
+                ellipsis: true,
+            }, {
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
                 width: 150,
                 ellipsis: true,
-                className: 'ant-table-cell-link',
+            }, {
+                title: 'Cuotas',
+                dataIndex: 'amount_quota',
+                key: 'Cuotas',
+                width: 100,
+                ellipsis: true,
+            }, {
+                title: 'Valor Couta',
+                dataIndex: 'value_quota',
+                key: 'ValorCouta',
+                render: (t, r) => <span>${t}</span>,
+                width: 100,
+                ellipsis: true,
             }, {
                 title: 'Baja',
                 key: 'Baja',

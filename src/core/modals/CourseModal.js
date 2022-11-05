@@ -1,10 +1,10 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CountryForm } from '../foms/CountryForm';
+import { CourseForm } from '../foms/CourseForm';
 import { useForm } from '../hooks/useForm';
 
-export const CountryModal = (props) => {
+export const CourseModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
@@ -43,11 +43,12 @@ export const CountryModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <CountryForm
+            <CourseForm
                 app={app}
                 view={view}
                 formState={formState}
                 onInputChange={onInputChange}
+                onInputChangeByName={onInputChangeByName}
                 onCancel={onCancel}
             />
         </Modal>

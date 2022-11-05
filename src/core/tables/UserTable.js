@@ -25,9 +25,8 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
         return [
             {
                 title: 'Nombre',
-                dataIndex: 'Nombre',
+                dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.IdUser)}>{t}</span>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
@@ -37,7 +36,6 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
-                className: 'ant-table-cell-link',
             }, {
                 title: '',
                 key: 'actions',

@@ -8,12 +8,27 @@ export default class City {
     /**
      * @type {number}
      */
+    account_id = undefined;
+
+    /**
+     * @type {number}
+     */
     country_id = undefined;
+
+    /**
+     * @type {number}
+     */
+    city_id = undefined;
 
     /**
      * @type {string}
      */
     name = undefined;
+
+    /**
+     * @type {string}
+     */
+    description = undefined;
 
     /**
      * @type {boolean}

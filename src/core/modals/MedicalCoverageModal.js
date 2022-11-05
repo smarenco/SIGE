@@ -1,16 +1,16 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CountryForm } from '../foms/CountryForm';
+import { MedicalCoverageForm } from '../foms/MedicalCoverageForm';
 import { useForm } from '../hooks/useForm';
 
-export const CountryModal = (props) => {
+export const MedicalCoverageModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, confirmLoading, onCancel: onCancelProp } = props;
   
-    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
+    const { formState, onInputChange, onInputChangeByName } = useForm(item);
 
     const onOk = () => {
         
@@ -43,7 +43,7 @@ export const CountryModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <CountryForm
+            <MedicalCoverageForm
                 app={app}
                 view={view}
                 formState={formState}

@@ -3,17 +3,17 @@ export default class Country {
     /**
      * @type {number}
      */
-    IdCountry = undefined;
+    id = undefined;
 
     /**
      * @type {number}
      */
-    IdAccount = undefined;
+    account_id = undefined;
 
     /**
      * @type {string}
      */
-    Name = undefined;
+    name = undefined;
 
     /**
      * @type {boolean}
@@ -31,7 +31,7 @@ export default class Country {
      * @return {int}
      */
     getId() {
-        return this.IdCountry;
+        return this.id;
     }
 
     /**

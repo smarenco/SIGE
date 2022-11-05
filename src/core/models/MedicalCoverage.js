@@ -1,4 +1,4 @@
-export default class City {
+export default class MedicalCoverage {
 
     /**
      * @type {number}
@@ -8,7 +8,7 @@ export default class City {
     /**
      * @type {number}
      */
-    country_id = undefined;
+    account_id = undefined;
 
     /**
      * @type {string}

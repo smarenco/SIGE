@@ -1,10 +1,10 @@
 import { clearObj, open } from '../common/functions';
-import Country from '../models/Country';
+import Course from '../models/Course';
 import api from "./Api";
 
-const path = 'country';
+const path = 'course';
 
-export const countryIndex = async (filter, output = undefined) => {
+export const courseIndex = async (filter, output = undefined) => {
     let params = filter || {};
     params.page = filter?.page || 1;
     params.pageSize = filter?.pageSize || 50;
@@ -18,33 +18,33 @@ export const countryIndex = async (filter, output = undefined) => {
 
     const { response } = await api.get(path, { params });
     return {
-        data: response.data.map(entity => new Country(entity)),
+        data: response.data.map(entity => new Course(entity)),
         total: response.total,
     }
 }
 
-export const countryCombo = async (filter) => {
+export const courseCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
     
-    return response.data.map(entity => new Country(entity));
+    return response.data.map(entity => new Course(entity));
 }
 
-export const countryShow = async (id) => {
+export const courseShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
-    return new Country(response);
+    return new Course(response);
 
 }
 
-export const countryCreate = async (item) => {
+export const courseCreate = async (item) => {
     return await api.post(path, item);
 }
 
-export const countryUpdate = async (id, item) => {
+export const courseUpdate = async (id, item) => {
     return await api.put(`${path}/${id}`, item);
 }
 
-export const countryDelete = async (ids) => {
+export const courseDelete = async (ids) => {
     if (!Array.isArray(ids)) {
         ids = [ids];
     }

@@ -5,10 +5,10 @@ export const APP_PATH = '';
 //export const API_URL_BASE = 'https://ddns.fusionar.com.uy:6588';
 
 //DESA
-export const API_URL = 'http://backend.fscloc';
-export const API_URL_BASE = 'http://backend.fscloc';
+export const API_URL = 'http://127.0.0.1:8000';
+export const API_URL_BASE = 'http://127.0.0.1:8000';
 
-export const APP_NAME = 'FSClock Web'
+export const APP_NAME = 'Sige Web'
 
 export const SETTING_PAGESIZES = ['10', '50', '100', '500'];
 export const DEFAULT_ROWS_PER_PAGE = 50;

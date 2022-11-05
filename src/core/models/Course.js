@@ -8,12 +8,22 @@ export default class City {
     /**
      * @type {number}
      */
-    country_id = undefined;
+    institut_id = undefined;
 
     /**
      * @type {string}
      */
     name = undefined;
+
+    /**
+     * @type {number}
+    */
+    amount_quote = undefined;
+
+    /**
+     * @type {number}
+    */
+    value_quote = undefined;
 
     /**
      * @type {boolean}

@@ -25,9 +25,8 @@ export const CountryTable = ({ data, onReload, onRowSelectedChange, setFilters, 
         return [
             {
                 title: 'Nombre',
-                dataIndex: 'Nombre',
+                dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.IdCountry)}>{t}</span>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
@@ -37,14 +36,13 @@ export const CountryTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
-                className: 'ant-table-cell-link',
             }, {
                 title: '',
                 key: 'actions',
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.IdCountry)} title='Editar'></Button>
+                        <Button key='see' icon='edit' onClick={e => onEditClick(record.id)} title='Editar'></Button>
                     </div>
                 ),
             }

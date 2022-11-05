@@ -2,6 +2,7 @@ import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
 import { UserForm } from '../foms/UserForm';
+import { useForm } from '../hooks/useForm';
 
 export const UserModal = (props) => {
 
@@ -9,12 +10,7 @@ export const UserModal = (props) => {
 
     const { view, app, open, item, onOk: onOkProp, confirmLoading, onCancel: onCancelProp } = props;
   
-    const [ formState, onInputChange ] = useState(item);
-
-    useEffect(() => {
-        onInputChange(item);
-    }, [item])
-    
+    const { formState, onInputChange, onInputChangeByName } = useForm(item); 
 
     const onOk = () => {
         

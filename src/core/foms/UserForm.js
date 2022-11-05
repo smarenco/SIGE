@@ -6,21 +6,15 @@ import LayoutH from '../components/layout/LayoutH';
 
 export const UserForm = ({ view, loading, formState, onInputChange }) => {
 
-    const onChangeInput = (e) => { 
-        const { value, name} = e.target;
-
-        onInputChange({ ...formState, [name]: value });
-    }
-
     return (
         <Form layout='vertical'>
             <Loading loading={loading}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={16}>
-                        <Input name='Nombre' disabled={view} onChange={onChangeInput} value={formState?.Nombre} />
+                        <Input name='Nombre' disabled={view} onChange={onInputChange} value={formState?.Nombre} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Apellido`} labelAlign='left' span={4}>
-                        <Input name='Apellido' disabled={view} onChange={onChangeInput} value={formState?.Apellido} />
+                        <Input name='Apellido' disabled={view} onChange={onInputChange} value={formState?.Apellido} />
                     </Form.Item>                    
                 </LayoutH>
             </Loading>

@@ -3,17 +3,17 @@ export default class User {
     /**
      * @type {number}
      */
-    IdUser = undefined;
+    id = undefined;
 
     /**
      * @type {number}
      */
-    IdAccount = undefined;
+    account_id = undefined;
 
     /**
      * @type {string}
      */
-    Name = undefined;
+    name = undefined;
 
     /**
      * @type {boolean}
@@ -31,7 +31,7 @@ export default class User {
      * @return {int}
      */
     getId() {
-        return this.IdUser;
+        return this.id;
     }
 
     /**

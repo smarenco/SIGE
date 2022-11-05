@@ -23,6 +23,13 @@ export const cityIndex = async (filter, output = undefined) => {
     }
 }
 
+export const cityCombo = async (filter) => {
+    let params = filter || {};
+    const { response } = await api.get(path, { params });
+    
+    return response.data.map(entity => new City(entity));
+}
+
 export const cityShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
     return new City(response);

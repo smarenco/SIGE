@@ -2,6 +2,7 @@ import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
 import { CityForm } from '../foms/CityForm';
+import { useForm } from '../hooks/useForm';
 
 export const CityModal = (props) => {
 
@@ -9,12 +10,7 @@ export const CityModal = (props) => {
 
     const { view, app, open, item, onOk: onOkProp, confirmLoading, onCancel: onCancelProp } = props;
   
-    const [ formState, onInputChange ] = useState(item);
-
-    useEffect(() => {
-        onInputChange(item);
-    }, [item])
-    
+    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
 
     const onOk = () => {
         
@@ -34,7 +30,7 @@ export const CityModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={900}
+            width={600}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -52,6 +48,7 @@ export const CityModal = (props) => {
                 view={view}
                 formState={formState}
                 onInputChange={onInputChange}
+                onInputChangeByName={onInputChangeByName}
                 onCancel={onCancel}
             />
         </Modal>

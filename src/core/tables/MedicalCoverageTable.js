@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const CityTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
