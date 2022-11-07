@@ -137,7 +137,6 @@ export const DocumentPage = ({ app }) => {
                 />
             </Card>
             <DocumentModal
-                requisitos={requisitos}
                 open={openModal}
                 item={item}
                 confirmLoading={confirmLoading}

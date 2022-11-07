@@ -17,13 +17,13 @@ export const DocumentForm = ({ view, loading, confirmLoading, formState, onInput
         <Form layout='vertical'>
             <Loading loading={loading}>
                 <LayoutH>
-                    <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={9}>
+                    <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={10}>
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
-                    <Form.Item labelAlign='left' span={5}>
+                    <Form.Item labelAlign='left' span={8}>
                         <Checkbox name='control_expiration' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.control_expiration}>Controla vencimiento</Checkbox>
                     </Form.Item>
-                    <Form.Item labelAlign='left' span={5}>
+                    <Form.Item labelAlign='left' span={4}>
                         <Checkbox name='required' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.required}>Obligatorio</Checkbox>
                     </Form.Item>
                 </LayoutH>

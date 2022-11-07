@@ -137,7 +137,6 @@ export const DocumentCategoryPage = ({ app }) => {
                 />
             </Card>
             <DocumentCategoryModal
-                requisitos={requisitos}
                 open={openModal}
                 item={item}
                 confirmLoading={confirmLoading}

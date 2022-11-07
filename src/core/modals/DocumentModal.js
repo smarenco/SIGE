@@ -38,7 +38,7 @@ export const DocumentModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={700}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -50,7 +50,6 @@ export const DocumentModal = (props) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
-
             <DocumentForm
                 app={app}
                 view={view}
