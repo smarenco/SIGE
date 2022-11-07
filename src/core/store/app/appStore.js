@@ -5,6 +5,8 @@ import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
 import { CityPage } from '../../pages/administrations/CityPage';
 import { CountryPage } from '../../pages/administrations/CountryPage';
 import { CoursePage } from '../../pages/administrations/CoursePage';
+import { DocumentCategoryPage } from '../../pages/administrations/DocumentCategoryPage';
+import { DocumentPage } from '../../pages/administrations/DocumentPage';
 import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutPage } from '../../pages/administrations/InstitutPage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
@@ -40,6 +42,8 @@ export const appStore = createSlice({
             { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },
             { key: 'institut', name:'Institutos', path: '/institutos', component: InstitutPage },
             { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
+            { key: 'documentCategory', name:'Categorias de documentos', path: '/categoriasDocumentos/', component: DocumentCategoryPage },
+            { key: 'document', name:'Documentos', path: '/documentos/', component: DocumentPage },
             { key: 'turn', name:'Turnos', path: '/turnos/', component: TurnPage },
             { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
             // { key: 'marcas', path: '/marcas/', component: Marcas },

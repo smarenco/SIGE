@@ -97,6 +97,8 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         <Form layout='vertical'>
             <Loading loading={loading}>
                 <Tabs
+                    style={{ marginTop: -15 }}
+                    size='small'
                     items={items} />
             </Loading>
         </Form>

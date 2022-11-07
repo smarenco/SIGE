@@ -1,21 +1,29 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { UserForm } from '../foms/UserForm';
+import { DocumentCategoryForm } from '../foms/DocumentCategoryForm';
 import { useForm } from '../hooks/useForm';
 
-export const UserModal = (props) => {
+export const DocumentCategoryModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
-    const { formState, onInputChange, onInputChangeByName } = useForm(item); 
+    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
 
     const onOk = () => {
         
-        if(!formState.Nombre || formState.Nombre.trim().length === 0){
-            //renderError(i18n.t('zone-marcation.error.name'));
+        if(!formState.name || formState.name.trim().length === 0){
+            renderError('Debe ingresar el nombre');
+            return;
+        }
+        if(!formState.from_hour || formState.from_hour.length === 0){
+            renderError('Debe ingresar la hora inicial');
+            return;
+        }
+        if(!formState.to_hour || formState.to_hour.length === 0){
+            renderError('Debe ingresar la hora final');
             return;
         }
 
@@ -30,7 +38,7 @@ export const UserModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={1100}
+            width={600}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -43,7 +51,7 @@ export const UserModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <UserForm
+            <DocumentCategoryForm
                 app={app}
                 view={view}
                 formState={formState}
