@@ -23,6 +23,10 @@ export const documentIndex = async (filter, output = undefined) => {
     }
 }
 
+export const downloadDocument = (filename) =>{
+    open(path+'/document/'+filename);
+}
+
 export const documentCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });

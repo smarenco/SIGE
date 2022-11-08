@@ -10,6 +10,11 @@ import { medicalCoverageCombo } from '../services/MedicalCoverageService';
 import { cityCombo } from '../services/CityService';
 import { countryCombo } from '../services/CountryService';
 import { documentCategoryCombo } from '../services/DocumentCategoryService';
+import { courseCombo } from '../services/CourseService';
+import { groupCombo } from '../services/GroupService';
+import { documentCombo } from '../services/DocumentService';
+import { DocumentsUserTable } from '../tables/DocumentsUserTable';
+import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -33,6 +38,14 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const [ countries, setCountry ] = useState([]);
     const [ cities, setCity ] = useState([]);
     const [ typesUsers, setTypesUsers ] = useState([]);
+    const [ groups, setGroups ] = useState([]);
+    const [ courseSelected, setCourseSelected ] = useState(undefined);
+    const [ documents, setDocuments ] = useState([]);
+    const [ documentToSee, setDocumentToSee ] = useState({});
+    const [ loadingDocument, setLoadingDocument ] = useState(false);
+    const [ openModalDocument, setOpenModalDocument ] = useState(false);
+    const [ documentCategory, setDocumentCategory ] = useState([]);
+    const [ categorySelected, setCategorySelected ] = useState(undefined);
 
     const fetchMedicalCoverages = async () => {
         try {
@@ -40,15 +53,18 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             setMedicalCoverage(medicalCoverage);
         } catch(err) { renderError(err); }
     };
-    
-    //hacer algo con estooo
-    //hacer algo con estooo
-    //hacer algo con estooo
-    //hacer algo con estooo
+
     const fetchDocumentCategory = async () => {
         try {
             const documentCategory = await documentCategoryCombo();
-            setMedicalCoverage(documentCategory);
+            setDocumentCategory(documentCategory);
+        } catch(err) { renderError(err); }
+    };
+
+    const fetchGroups = async () => {
+        try {
+            const groups = await groupCombo();
+            setGroups(groups);
         } catch(err) { renderError(err); }
     };
 
@@ -64,7 +80,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             {id: 'PRI', name: 'Administrativo/a'},
             {id: 'SEC', name: 'Profesor/a'},
             {id: 'TER', name: 'Director/a'},
-            {id: 'POS', name: 'Estudiante'},
+            {id: 'EST', name: 'Estudiante'},
         ];
 
         switch (formState.gender) {
@@ -73,7 +89,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     {id: 'PRI', name: 'Administrativo'},
                     {id: 'SEC', name: 'Profesor'},
                     {id: 'TER', name: 'Director'},
-                    {id: 'POS', name: 'Estudiante'},
+                    {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
             case 'FEME':
@@ -81,7 +97,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     {id: 'PRI', name: 'Administrativa'},
                     {id: 'SEC', name: 'Profesora'},
                     {id: 'TER', name: 'Directora'},
-                    {id: 'POS', name: 'Estudiante'},
+                    {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
             case 'NOBIN':
@@ -90,7 +106,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     {id: 'PRI', name: 'Administrative'},
                     {id: 'SEC', name: 'Profesore'},
                     {id: 'TER', name: 'Directore'},
-                    {id: 'POS', name: 'Estudiante'},
+                    {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
         }
@@ -106,9 +122,17 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         } catch(err) { renderError(err); }
     };
 
+    const fetchDocuments = async (filter) => {
+        try {
+            const documents = await documentCombo(filter);
+            setDocuments(documents);
+        } catch(err) { renderError(err); }
+    };
+
     useEffect(() => {
         fetchMedicalCoverages();
         fetchCountries();
+        fetchGroups();
     }, []);
 
     useEffect(() => {
@@ -116,30 +140,62 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.country_id]);
 
     useEffect(() => {
+        fetchDocuments({ course_id: courseSelected });
+    }, [courseSelected]);
+
+    useEffect(() => {
         changeTypes();
     }, [formState.gender]);
 
     useEffect(() => {
-        fetchDocumentCategory();
+        if(formState.type !== 'EST'){
+            fetchDocumentCategory();
+        }
     }, [formState.type]);
-    
-    // const studentToGroup = async(student_id, remove = false) => {
-    //     if (student_id && !remove) {
-    //         const studentAddedBefore = formState.students.filter((student) => student.id === student_id);
-    //         if(studentAddedBefore){
-    //             Modal.info({
-    //                 content: 'El estudiante ya fue agregado anteriormente',
-    //                 okText: 'Aceptar',
-    //             });
-    //         }else{
-    //             const student = students.filter((student) => student.id === student_id)
-    //             onInputChangeByName('students', [ ...formState.students, { ...student }]);
-    //         }
-    //     }else if(student_id && remove){
-    //         const students = formState.students.filter((student) => student.id !== student_id);
-    //         onInputChangeByName('students', students);
-    //     }
-    // }
+
+    useEffect(() => {
+        fetchDocuments({ category_id: categorySelected });
+    }, [categorySelected]);
+
+    const mergeDataSchema = (data, schema) => {
+        return schema.map(item => {
+            item.loaded = false;
+            item.observation = '';
+            item.id = null;
+            item.expiration = null;
+            item.file_name = null;
+            item.file = null;
+            item.name_desc = item.Nombre + (item.required ? ' (*)' : '');
+
+            for (let i in data) {
+                if (data[i].document_id === item.document_id) {
+                    item.loaded = true;
+                    item.expiration = data[i].expiration;
+                    item.file = data[i].file;
+                    item.file_name = data[i].file_name;
+                    item.id = data[i].id;
+                    item.observation = data[i].observation;
+                }
+            }
+            return item;
+        });
+    }
+
+    const loadRequisitoFuncionario = (id) => {
+        const documentToSee = formState.documents.filter((document) => document.id === id)[0];
+        setOpenModalDocument(true);
+        setDocumentToSee(documentToSee);
+    }
+
+    const documentToUser = (documentSee, remove = false) => {
+        const documents = formState.documents.filter((document) => document.id !== documentSee.id);
+        if (documentSee.id && !remove) {
+            onInputChangeByName('documents', [ ...documents, { ...document }]);
+        }else if(documentSee.id && remove){
+            onInputChangeByName('documents', documents);
+        }
+        
+    }
 
     const items = [
         { 
@@ -229,7 +285,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             onChange={(medical_coverage_id) => onInputChangeByName('medical_coverage_id', medical_coverage_id)} 
                             value={formState?.medicalCoverage_id}
                         >
-                            {countries.map(medicalCoverage => 
+                            {medicalCoverages.map(medicalCoverage => 
                                 <Select.Option value={medicalCoverage.id} key={medicalCoverage.id}>{medicalCoverage.name}</Select.Option>
                             )}
                         </Select>
@@ -258,25 +314,63 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             label: 'Documentos', 
             key: 'documents', 
             children: 
-            <LayoutH>
-                {/* <Form.Item label={`${!view ? '*' : ''} Agregar estudiante`} labelAlign='left' span={24}>
-                    <Select allowClear showSearch 
-                        allowClear
-                        showSearch
-                        disabled={view || confirmLoading}
-                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                        onChange={student_id => studentToGroup(student_id)}
-                    > 
-                        {students.map(student => 
-                            <Select.Option value={student.id} key={student.id}>{student.name} - {student.document}</Select.Option>
-                        )}
-                    </Select>
-                </Form.Item>
-                <StudentsGroupTable
-                    data={formState.students}
-                    studentToGroup={studentToGroup}
-                />  */}
-            </LayoutH>
+            <>
+            {/* id: 'PRI', name: 'Administrativo'},
+                    {id: 'SEC', name: 'Profesor'},
+                    {id: 'TER', name: 'Director'},
+                    {id: 'EST */}
+                <LayoutH>
+                    {formState.type === 'EST' && <Form.Item label='Cursos' labelAlign='left' span={12}>
+                        <Select 
+                            allowClear
+                            showSearch
+                            disabled={view || confirmLoading}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            onChange={course_id => setCourseSelected(course_id)}
+                        > 
+                            {groups.map(grupo => 
+                                <Select.Option value={grupo.course.id} key={grupo.course.id}>{grupo.course.name} ({grupo.name})</Select.Option>
+                            )}
+                        </Select>
+                    </Form.Item>}
+                    {formState.type !== 'EST' && <Form.Item label='Categoria' labelAlign='left' span={12}>
+                        <Select 
+                            allowClear
+                            showSearch
+                            disabled={view || confirmLoading}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            onChange={category_id => setCategorySelected(category_id)}
+                        > 
+                            {documentCategory.map(category => 
+                                <Select.Option value={category.category_id} key={category.category_id}>{category.name}</Select.Option>
+                            )}
+                        </Select>
+                    </Form.Item>}
+                </LayoutH>
+                <DocumentsUserTable
+                    dataSource={mergeDataSchema(formState.documents, [ ...documents])}
+                    loadRequisitoFuncionario={loadRequisitoFuncionario}
+                    documentToUser={documentToUser}
+                />
+                <DocumentsUserModal
+                    open={openModalDocument}
+                    loading={loadingDocument}
+                    item={documentToSee}
+                    onOkProp={document => {
+
+                        setLoadingDocument(true);
+                        formState.documents.filter(FSdocument => FSdocument.id !== document.id);
+                        const docs = [...formState.documents, document];
+
+                        onInputChangeByName('documents', docs);
+                        setLoadingDocument(false);
+                        setOpenModalDocument(false);
+                        setDocumentToSee({});
+                                                            
+                    }}
+                    onCancel={() => { setOpenModalDocument(false); setDocumentToSee({}); }}
+                />
+            </>
         },
         { 
             label: 'Especificos', 

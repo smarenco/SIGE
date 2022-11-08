@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import { message, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
 import { UserForm } from '../foms/UserForm';
@@ -14,21 +14,24 @@ export const UserModal = (props) => {
 
     const onOk = () => {
         
+        //const documents = refForm.current.getDocuments();
+
         if(!formState.Nombre || formState.Nombre.trim().length === 0){
-            //renderError(i18n.t('zone-marcation.error.name'));
             return;
         }
 
-        documents.forEach(document => {
+        let error = false;
+        /*documents.forEach(document => {
             const documentSelected = formState.document.find((req) => req.id === document.id);
             if(!documentSelected && document.required){
                 message.error('Hay documentos obligatorios que no se cargaron');
                 error = true;
                 return false;
             }
-        });
+        });*/
 
-        onOkProp(formState);
+        
+        if(!error){ onOkProp(formState); }
     }
 
     const onCancel = () => {
