@@ -19,6 +19,15 @@ export const UserModal = (props) => {
             return;
         }
 
+        documents.forEach(document => {
+            const documentSelected = formState.document.find((req) => req.id === document.id);
+            if(!documentSelected && document.required){
+                message.error('Hay documentos obligatorios que no se cargaron');
+                error = true;
+                return false;
+            }
+        });
+
         onOkProp(formState);
     }
 

@@ -56,10 +56,6 @@ export const DocumentTable = ({ data, onReload, onRowSelectedChange, setFilters,
             columns={columns()}
             rowSelection={{ onChange: onRowSelectedChange, selectedRowKeys }}
             dataSource={data}
-            style={{
-                margin: -24,
-                marginBottom: -24,
-            }}
             footer={data => 
                 <div>
                     <Button icon='reload' onClick={onReload} />

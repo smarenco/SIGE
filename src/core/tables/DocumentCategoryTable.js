@@ -56,10 +56,6 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
             columns={columns()}
             rowSelection={{ onChange: onRowSelectedChange, selectedRowKeys }}
             dataSource={data}
-            style={{
-                margin: -24,
-                marginBottom: -24,
-            }}
             footer={data => 
                 <div>
                     <Button icon='reload' onClick={onReload} />

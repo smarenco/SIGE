@@ -116,7 +116,7 @@ export const DocumentPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>C</strong>)}
+                title={(<strong>Documentos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
