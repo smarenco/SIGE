@@ -77,35 +77,35 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
 
     const changeTypes = async () => {
         let typesUsers = [
-            {id: 'PRI', name: 'Administrativo/a'},
-            {id: 'SEC', name: 'Profesor/a'},
-            {id: 'TER', name: 'Director/a'},
+            {id: 'ADM', name: 'Administrativo/a'},
+            {id: 'PRO', name: 'Profesor/a'},
+            {id: 'DIR', name: 'Director/a'},
             {id: 'EST', name: 'Estudiante'},
         ];
 
         switch (formState.gender) {
             case 'MASC':
                 typesUsers = [
-                    {id: 'PRI', name: 'Administrativo'},
-                    {id: 'SEC', name: 'Profesor'},
-                    {id: 'TER', name: 'Director'},
+                    {id: 'ADM', name: 'Administrativo'},
+                    {id: 'PRO', name: 'Profesor'},
+                    {id: 'DIR', name: 'Director'},
                     {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
             case 'FEME':
                 typesUsers = [
-                    {id: 'PRI', name: 'Administrativa'},
-                    {id: 'SEC', name: 'Profesora'},
-                    {id: 'TER', name: 'Directora'},
+                    {id: 'ADM', name: 'Administrativa'},
+                    {id: 'PRO', name: 'Profesora'},
+                    {id: 'DIR', name: 'Directora'},
                     {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
             case 'NOBIN':
             case 'PRND':
                 typesUsers = [
-                    {id: 'PRI', name: 'Administrative'},
-                    {id: 'SEC', name: 'Profesore'},
-                    {id: 'TER', name: 'Directore'},
+                    {id: 'ADM', name: 'Administrative'},
+                    {id: 'PRO', name: 'Profesore'},
+                    {id: 'DIR', name: 'Directore'},
                     {id: 'EST', name: 'Estudiante'},
                 ];
                 break;
@@ -396,7 +396,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             name='level_education'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             disabled={view || confirmLoading} 
-                            onChange={onInputChange} 
+                            onChange={(level_education) => onInputChangeByName('level_education', level_education)}
                             value={formState?.level_education}
                         >
                             {levels_educations.map(level => 

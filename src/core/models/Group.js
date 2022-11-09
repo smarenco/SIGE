@@ -13,12 +13,17 @@ export default class Group {
     /**
      * @type {number}
      */
-    teacher_id = undefined;
+    institut_id = undefined;
 
     /**
      * @type {number}
      */
     course_id = undefined;
+
+    /**
+     * @type {number}
+     */
+    teacher_id = undefined;
     
     /**
      * @type {number}
