@@ -8,7 +8,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { StudentsGroupTable } from '../tables/StudentsGroupTable';
 import { userCombo } from '../services/UserService';
 import { renderError } from '../common/functions';
-import { institutCombo } from '../services/InstitutService';
+import { instituteCombo } from '../services/InstituteService';
 import { courseCombo } from '../services/CourseService';
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
@@ -16,7 +16,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     const format = 'DD/MM/YYYY';
 
     const [ students, setStudents ] = useState([]);
-    const [ instituts, setInstituts ] = useState([]);
+    const [ institutes, setInstitutes ] = useState([]);
     const [ courses, setCourses ] = useState([]);
     const [ teachers, setTeachers ] = useState([]);
 
@@ -30,19 +30,19 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         
     };
     
-    const fetchInstituts = async () => {
+    const fetchInstitutes = async () => {
         try {
-            const instituts = await institutCombo();
-            setInstituts(instituts);
+            const institutes = await instituteCombo();
+            setInstitutes(institutes);
         } catch(err) {
             renderError(err);
         }
         
     };
 
-    const fetchCourses = async (institut_id) => {
+    const fetchCourses = async (institute_id) => {
         try {
-            const courses = await courseCombo({ institut_id });
+            const courses = await courseCombo({ institute_id });
             setCourses(courses);
         } catch(err) {
             renderError(err);
@@ -62,13 +62,13 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
 
     useEffect(() => {
         fetchStudents();
-        fetchInstituts();
+        fetchInstitutes();
         fetchTeachers();
     }, []);
     
     useEffect(() => {
-        fetchCourses(formState.institut_id);
-    }, [formState.institut_id]);
+        fetchCourses(formState.institute_id);
+    }, [formState.institute_id]);
     
     const studentToGroup = async(student_id, remove = false) => {
         if (student_id && !remove) {
@@ -101,14 +101,14 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                         <Select 
                             allowClear 
                             showSearch 
-                            name='institut_id'
+                            name='institute_id'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             disabled={view || confirmLoading} 
-                            onChange={(institut_id) => onInputChangeByName('institut_id', institut_id)}
-                            value={formState?.institut_id}
+                            onChange={(institute_id) => onInputChangeByName('institute_id', institute_id)}
+                            value={formState?.institute_id}
                         >
-                            {instituts.map(institut => 
-                                <Select.Option value={institut.id} key={institut.id}>{institut.name}</Select.Option>
+                            {institutes.map(institute => 
+                                <Select.Option value={institute.id} key={institute.id}>{institute.name}</Select.Option>
                             )}
                         </Select>
                     </Form.Item>
