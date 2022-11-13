@@ -7,7 +7,7 @@ import { countryCombo } from '../services/CountryService';
 import { renderError } from '../common/functions';
 import { cityCombo } from '../services/CityService';
 
-export const InstitutForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
+export const InstituteForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
     let [countries, setCountries ] = useState([{country_id: 1, name: 'Uruguay'}]);
     let [cities, setCities ] = useState([{city_id: 1, name: 'Montevideo'}]);

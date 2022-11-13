@@ -1,10 +1,10 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { InstitutForm } from '../foms/InstitutForm';
+import { InstituteForm } from '../foms/InstituteForm';
 import { useForm } from '../hooks/useForm';
 
-export const InstitutModal = (props) => {
+export const InstituteModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
@@ -43,7 +43,7 @@ export const InstitutModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <InstitutForm
+            <InstituteForm
                 app={app}
                 view={view}
                 formState={formState}

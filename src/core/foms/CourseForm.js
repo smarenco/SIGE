@@ -4,16 +4,16 @@ import { Form, Input, InputNumber, Select } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import { renderError } from '../common/functions';
-import { institutCombo } from '../services/InstitutService';
+import { instituteCombo } from '../services/InstituteService';
 
 export const CourseForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
-    let [instituts, setInstituts ] = useState([]);
+    let [institutes, setinstitutes ] = useState([]);
 
-    const fetchInstituts = async () => {
+    const fetchinstitutes = async () => {
         try {
-            const instituts = await institutCombo();
-            setInstituts(instituts);
+            const institutes = await instituteCombo();
+            setinstitutes(institutes);
         } catch(err) {
             renderError(err);
         }
@@ -21,7 +21,7 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
     };
 
     useEffect(() => {
-        fetchInstituts();
+        fetchinstitutes();
       }, []);
     
     return (
@@ -42,8 +42,8 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={institut_id => onInputChangeByName('institut_id', institut_id)}
                             > 
-                                {instituts.map(institut => 
-                                    <Select.Option value={institut.id} key={institut.id}>{institut.name}</Select.Option>
+                                {institutes.map(institute => 
+                                    <Select.Option value={institute.id} key={institute.id}>{institute.name}</Select.Option>
                                     )}
                             </Select>
                     </Form.Item>

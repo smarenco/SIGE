@@ -6,7 +6,7 @@ import { CityPage } from '../../pages/administrations/CityPage';
 import { CountryPage } from '../../pages/administrations/CountryPage';
 import { CoursePage } from '../../pages/administrations/CoursePage';
 import { GroupPage } from '../../pages/administrations/GroupPage';
-import { InstitutPage } from '../../pages/administrations/InstitutPage';
+import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
@@ -38,7 +38,7 @@ export const appStore = createSlice({
             { key: 'cities', name:'Ciudades', path: '/ciudades', component: CityPage },
             { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturasMedicas', component: MedicalCoveragePage },
             { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },
-            { key: 'institut', name:'Institutos', path: '/institutos', component: InstitutPage },
+            { key: 'instituts', name:'Institutos', path: '/institutos', component: InstitutePage },
             { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
             { key: 'turn', name:'Turnos', path: '/turnos/', component: TurnPage },
             { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },

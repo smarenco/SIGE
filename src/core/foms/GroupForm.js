@@ -65,7 +65,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                     <Form.Item label={`${!view ? '*' : ''} Descripcion`} labelAlign='left' span={24}>
                         <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />
                     </Form.Item>
-                </LayoutH> 
+                </LayoutH>
         },        
         { 
             label: 'Estudiantes', 
