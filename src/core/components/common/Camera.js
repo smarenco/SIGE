@@ -1,4 +1,3 @@
-import i18n from "@/i18n";
 import { Button } from "antd";
 import React from "react";
 import Loading from "./Loading";
@@ -51,8 +50,8 @@ export default class extends React.Component {
                     <button disabled={this.state.currentState !== STATE_INIT} onClick={() => this.onTakeSnapshot(this.takeSnapshot())}>Take photo</button> */}
                 </Loading>
                 <div style={{ position: 'absolute', marginTop: 25, marginLeft: -38 }}>
-                    <Button disabled={this.state.currentState !== STATE_TAKEN} onClick={this.newPhoto} style={{ marginRight: 10 }}>{i18n.t('global.new-photo')}</Button>
-                    <Button disabled={this.state.currentState !== STATE_INIT} onClick={() => this.onTakeSnapshot(this.takeSnapshot())} type="primary">{i18n.t('global.take-snapshot')}</Button>
+                    <Button disabled={this.state.currentState !== STATE_TAKEN} onClick={this.newPhoto} style={{ marginRight: 10 }}>Nueva foto</Button>
+                    <Button disabled={this.state.currentState !== STATE_INIT} onClick={() => this.onTakeSnapshot(this.takeSnapshot())} type="primary">Tomar fotografía</Button>
                 </div>
             </div>
         );

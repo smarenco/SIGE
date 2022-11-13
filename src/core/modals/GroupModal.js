@@ -38,7 +38,7 @@ export const GroupModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={800}
+            width={900}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'

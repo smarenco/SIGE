@@ -1,4 +1,4 @@
-export default class Group {
+export default class DocumentCategory {
 
     /**
      * @type {number}
@@ -8,27 +8,7 @@ export default class Group {
     /**
      * @type {number}
      */
-    turn_id = undefined;
-
-    /**
-     * @type {number}
-     */
-    institut_id = undefined;
-
-    /**
-     * @type {number}
-     */
-    course_id = undefined;
-
-    /**
-     * @type {number}
-     */
-    teacher_id = undefined;
-    
-    /**
-     * @type {number}
-     */
-    number_students = undefined;
+    account_id = undefined;
 
     /**
      * @type {string}
@@ -38,22 +18,7 @@ export default class Group {
     /**
      * @type {string}
      */
-    description = undefined;
-    
-    /**
-     * @type {array}
-     */
-    students = [];
-
-    /**
-     * @type {string}
-     */
-    from_date = undefined;
-
-    /**
-     * @type {string}
-     */
-     to_date = undefined;
+    type = undefined;
 
     /**
      * @type {boolean}

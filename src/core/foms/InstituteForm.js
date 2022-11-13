@@ -9,7 +9,7 @@ import { cityCombo } from '../services/CityService';
 
 export const InstituteForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
-    let [countries, setCountries ] = useState([{country_id: 1, name: 'Uruguay'}]);
+    let [countries, setCountries ] = useState([{country_id: 1, name: 'Uruguay'}, {country_id: 2, name: 'Argentina'}]);
     let [cities, setCities ] = useState([{city_id: 1, name: 'Montevideo'}]);
 
     const fetchCountries = async () => {
@@ -53,6 +53,7 @@ export const InstituteForm = ({ view, loading, confirmLoading, formState, onInpu
                             allowClear
                             showSearch
                             disabled={view || confirmLoading}
+                            name='country_id'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={country_id => onInputChangeByName('country_id', country_id)}
                             > 

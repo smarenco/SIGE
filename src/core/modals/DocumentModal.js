@@ -1,37 +1,33 @@
-import { message, Modal } from 'antd'
+import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { UserForm } from '../foms/UserForm';
+import { DocumentForm } from '../foms/DocumentForm';
 import { useForm } from '../hooks/useForm';
 
-export const UserModal = (props) => {
+export const DocumentModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
-    const { formState, onInputChange, onInputChangeByName } = useForm(item); 
+    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
 
     const onOk = () => {
         
-        //const documents = refForm.current.getDocuments();
-
-        if(!formState.Nombre || formState.Nombre.trim().length === 0){
+        if(!formState.name || formState.name.trim().length === 0){
+            renderError('Debe ingresar el nombre');
+            return;
+        }
+        if(!formState.from_hour || formState.from_hour.length === 0){
+            renderError('Debe ingresar la hora inicial');
+            return;
+        }
+        if(!formState.to_hour || formState.to_hour.length === 0){
+            renderError('Debe ingresar la hora final');
             return;
         }
 
-        let error = false;
-        /*documents.forEach(document => {
-            const documentSelected = formState.document.find((req) => req.id === document.id);
-            if(!documentSelected && document.required){
-                message.error('Hay documentos obligatorios que no se cargaron');
-                error = true;
-                return false;
-            }
-        });*/
-
-        
-        if(!error){ onOkProp(formState); }
+        onOkProp(formState);
     }
 
     const onCancel = () => {
@@ -42,7 +38,7 @@ export const UserModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={1100}
+            width={700}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -54,8 +50,7 @@ export const UserModal = (props) => {
             confirmLoading={confirmLoading}
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
-
-            <UserForm
+            <DocumentForm
                 app={app}
                 view={view}
                 formState={formState}
