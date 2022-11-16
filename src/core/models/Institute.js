@@ -1,4 +1,4 @@
-export default class City {
+export default class Institute {
 
     /**
      * @type {number}

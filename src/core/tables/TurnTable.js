@@ -71,7 +71,7 @@ export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 <div>
                     <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
-                    <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Busqueda: e.target.value })} /> 
+                    <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}

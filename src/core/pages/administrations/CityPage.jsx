@@ -8,6 +8,7 @@ import { AuthService } from '../../services/AuthService';
 import { CityTable } from '../../tables/CityTable';
 
 import { cityCreate, cityDelete, cityIndex, cityShow, cityUpdate } from '../../services/CityService';
+import { useEffect } from 'react';
 
 export const CityPage = ({ app }) => {
 
@@ -43,10 +44,6 @@ export const CityPage = ({ app }) => {
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new City); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
-                {/* <Button.Group style={{ marginLeft: 15 }}>
-                    <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
-                    <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
-                </Button.Group> */}
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
             </>
         );
@@ -71,36 +68,6 @@ export const CityPage = ({ app }) => {
                     loadData();
                     },
             }); break;
-            /*case 'activate': Modal.confirm({
-                title: 'Activar registro',
-                okText: 'Activar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea activar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                        await cityToggle(true, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
-            /*case 'desactivate': Modal.confirm({
-                title: 'Desactivar registro',
-                okText: 'Desactivar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea desactivar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                       await cityToggle(false, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
         }
     }
 
@@ -147,11 +114,15 @@ export const CityPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(()=>{
+        loadData();
+    },[]);
+
 
     return (
         <>
             <Card
-                title={(<strong>Cityes</strong>)}
+                title={(<strong>Ciudades</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >

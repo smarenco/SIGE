@@ -1,10 +1,10 @@
 import { clearObj, open } from '../common/functions';
-import Institut from '../models/Institut';
+import Institute from '../models/Institute';
 import api from "./Api";
 
-const path = 'institut';
+const path = 'institute';
 
-export const institutIndex = async (filter, output = undefined) => {
+export const instituteIndex = async (filter, output = undefined) => {
     let params = filter || {};
     params.page = filter?.page || 1;
     params.pageSize = filter?.pageSize || 50;
@@ -18,33 +18,33 @@ export const institutIndex = async (filter, output = undefined) => {
 
     const { response } = await api.get(path, { params });
     return {
-        data: response.data.map(entity => new Institut(entity)),
+        data: response.data.map(entity => new Institute(entity)),
         total: response.total,
     }
 }
 
-export const institutCombo = async (filter) => {
+export const instituteCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
     
-    return response.data.map(entity => new Institut(entity));
+    return response.data.map(entity => new Institute(entity));
 }
 
-export const institutShow = async (id) => {
+export const instituteShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
-    return new Institut(response);
+    return new Institute(response);
 
 }
 
-export const institutCreate = async (item) => {
+export const instituteCreate = async (item) => {
     return await api.post(path, item);
 }
 
-export const institutUpdate = async (id, item) => {
+export const instituteUpdate = async (id, item) => {
     return await api.put(`${path}/${id}`, item);
 }
 
-export const institutDelete = async (ids) => {
+export const instituteDelete = async (ids) => {
     if (!Array.isArray(ids)) {
         ids = [ids];
     }
