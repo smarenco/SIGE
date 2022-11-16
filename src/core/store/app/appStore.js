@@ -36,7 +36,7 @@ export const appStore = createSlice({
             // { key: 'chkVisitanteQR', path: '/auth/visitantes-qr', component: VisitantesQr, isPublic: true, clean: true },
             // Administraciones
             //{ key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
-            { key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
+            //{ key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
             { key: 'cities', name:'Ciudades', path: '/ciudades', component: CityPage },
             { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturasMedicas', component: MedicalCoveragePage },
             { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },

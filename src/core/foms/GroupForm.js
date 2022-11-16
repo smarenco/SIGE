@@ -10,6 +10,7 @@ import { userCombo } from '../services/UserService';
 import { renderError } from '../common/functions';
 import { institutCombo } from '../services/InstitutService';
 import { courseCombo } from '../services/CourseService';
+import { turnCombo } from '../services/TurnService';
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -19,6 +20,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     const [ instituts, setInstituts ] = useState([]);
     const [ courses, setCourses ] = useState([]);
     const [ teachers, setTeachers ] = useState([]);
+    const [ turns, setTurns ] = useState([]);
 
     const fetchStudents = async () => {
         try {
@@ -27,7 +29,6 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         } catch(err) {
             renderError(err);
         }
-        
     };
     
     const fetchInstituts = async () => {
@@ -37,7 +38,6 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         } catch(err) {
             renderError(err);
         }
-        
     };
 
     const fetchCourses = async (institut_id) => {
@@ -47,7 +47,6 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         } catch(err) {
             renderError(err);
         }
-        
     };
 
     const fetchTeachers = async () => {
@@ -57,13 +56,22 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         } catch(err) {
             renderError(err);
         }
-        
+    };
+
+    const fetchTurns = async () => {
+        try {
+            const turns = await turnCombo();
+            setTurns(turns);
+        } catch(err) {
+            renderError(err);
+        }
     };
 
     useEffect(() => {
         fetchStudents();
         fetchInstituts();
         fetchTeachers();
+        fetchTurns();
     }, []);
     
     useEffect(() => {
