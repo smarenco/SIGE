@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const PaymentMethodsTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -31,35 +31,11 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
-                title: 'Curso',
-                dataIndex: 'course_name',
-                key: 'Curso',
+                title: 'Metodo online',
+                key: 'online',
                 width: 250,
                 ellipsis: true,
-            }, {
-                title: 'Profesor/a',
-                dataIndex: 'teacher_name',
-                key: 'Profesor',
-                width: 200,
-                ellipsis: true,
-            }, {
-                title: 'Turno',
-                dataIndex: 'tourn_name',
-                key: 'Turno',
-                width: 200,
-                ellipsis: true,
-            }, {
-                title: 'Desde',
-                dataIndex: 'from_date',
-                key: 'Desde',
-                width: 200,
-                ellipsis: true,
-            }, {
-                title: 'Hasta',
-                dataIndex: 'to_date',
-                key: 'Hasta',
-                width: 200,
-                ellipsis: true,
+                render:(record) => <Tag color={!record.online ? 'green' : 'red'}>{!record.online ? 'Si' : 'No'}</Tag>,
             }, {
                 title: 'Baja',
                 key: 'Baja',

@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { CONFIG } from '../../common/consts';
+import { AbsenteeismCausesPage } from '../../pages/administrations/AbsenteeismCausesPage';
+import { AccountPage } from '../../pages/administrations/AccountPage';
 import { ActividadesPage } from '../../pages/administrations/ActividadesPage';
 import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
 import { CityPage } from '../../pages/administrations/CityPage';
@@ -10,6 +12,7 @@ import { DocumentPage } from '../../pages/administrations/DocumentPage';
 import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
+import { PaymentMethodsPage } from '../../pages/administrations/PaymentMethodsPage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
@@ -38,14 +41,17 @@ export const appStore = createSlice({
             //{ key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
             //{ key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
             { key: 'cities', name:'Ciudades', path: '/ciudades', component: CityPage },
-            { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturasMedicas', component: MedicalCoveragePage },
+            { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturas-medicas', component: MedicalCoveragePage },
             { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },
             { key: 'instituts', name:'Institutos', path: '/institutos', component: InstitutePage },
             { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
-            { key: 'documentCategory', name:'Categorias de documentos', path: '/categoriasDocumentos/', component: DocumentCategoryPage },
+            { key: 'documentCategory', name:'Categorias de documentos', path: '/categorias-documentos/', component: DocumentCategoryPage },
             { key: 'document', name:'Documentos', path: '/documentos/', component: DocumentPage },
             { key: 'turn', name:'Turnos', path: '/turnos/', component: TurnPage },
             { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
+            { key: 'absenteeismCauses', name:'Causas de ausentismos', path: '/causas-ausentismos/', component: AbsenteeismCausesPage },
+            { key: 'paymentMethods', name:'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage },
+            { key: 'Account', name:'Cuenta', path: '/cuenta/', component: AccountPage },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
             //{ key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // /// Configuración
