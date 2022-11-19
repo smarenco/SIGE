@@ -31,9 +31,39 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Nombre',
+                dataIndex: 'name',
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
                 title: 'Baja',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted ? 'green' : 'red'}>{!record.deleted ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {

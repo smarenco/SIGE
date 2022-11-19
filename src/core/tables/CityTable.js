@@ -33,7 +33,7 @@ export const CityTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
             }, {
                 title: 'Baja',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted ? 'green' : 'red'}>{!record.deleted ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {

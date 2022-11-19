@@ -63,7 +63,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
             }, {
                 title: 'Baja',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted ? 'green' : 'red'}>{!record.deleted ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {
