@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
 import React from 'react'
 
@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, typesUsers }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -24,42 +24,42 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
     const columns = () => {
         return [
             {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
+                title: 'Documento',
+                dataIndex: 'document',
+                key: 'Documento',
                 width: 250,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Nombre',
-                dataIndex: 'name',
+                render: (record) => record.name + ' ' + record.last_name ,
                 key: 'Nombre',
                 width: 250,
                 ellipsis: true,
             }, {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
-                width: 250,
+                title: 'Telefono',
+                dataIndex: 'phone',
+                key: 'Telefono',
+                width: 150,
                 ellipsis: true,
             }, {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
-                width: 250,
+                title: 'Pais',
+                key: 'Pais',
+                width: 150,
                 ellipsis: true,
+                render: (record) => record.country.name,
             }, {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
-                width: 250,
+                title: 'Ciudad',
+                key: 'Ciudad',
+                width: 150,
                 ellipsis: true,
+                render: (record) => record.city.name ,
             }, {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
-                width: 250,
+                title: 'Tipo',
+                key: 'Tipo',
+                width: 150,
                 ellipsis: true,
+                render: (record) => record.type,
             }, {
                 title: 'Baja',
                 key: 'Baja',
@@ -91,6 +91,10 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
+                    <Select style={{width: '20%'}} placeholder='Tipos de usuario...' onChange={User_type => setFilters({ User_type })}>
+                        {typesUsers.map(type => <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>)}
+                    </Select>
+                    &nbsp; 
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}
             pagination={{

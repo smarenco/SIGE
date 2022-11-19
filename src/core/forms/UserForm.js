@@ -5,16 +5,17 @@ import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import { renderError } from '../common/functions';
+import { loadTypes, renderError } from '../common/functions';
 import { medicalCoverageCombo } from '../services/MedicalCoverageService';
 import { cityCombo } from '../services/CityService';
 import { countryCombo } from '../services/CountryService';
 import { documentCategoryCombo } from '../services/DocumentCategoryService';
-import { courseCombo } from '../services/CourseService';
 import { groupCombo } from '../services/GroupService';
 import { documentCombo } from '../services/DocumentService';
 import { DocumentsUserTable } from '../tables/DocumentsUserTable';
 import { DocumentsUserModal } from '../modals/DocumentsUserModal';
+import { GroupTable } from '../tables/GroupTable';
+import Group from '../models/Group';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -75,46 +76,6 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         } catch(err) { renderError(err); }
     };
 
-    const changeTypes = async () => {
-        let typesUsers = [
-            {id: 'ADM', name: 'Administrativo/a'},
-            {id: 'PRO', name: 'Profesor/a'},
-            {id: 'DIR', name: 'Director/a'},
-            {id: 'EST', name: 'Estudiante'},
-        ];
-
-        switch (formState.gender) {
-            case 'MASC':
-                typesUsers = [
-                    {id: 'ADM', name: 'Administrativo'},
-                    {id: 'PRO', name: 'Profesor'},
-                    {id: 'DIR', name: 'Director'},
-                    {id: 'EST', name: 'Estudiante'},
-                ];
-                break;
-            case 'FEME':
-                typesUsers = [
-                    {id: 'ADM', name: 'Administrativa'},
-                    {id: 'PRO', name: 'Profesora'},
-                    {id: 'DIR', name: 'Directora'},
-                    {id: 'EST', name: 'Estudiante'},
-                ];
-                break;
-            case 'NOBIN':
-            case 'PRND':
-                typesUsers = [
-                    {id: 'ADM', name: 'Administrative'},
-                    {id: 'PRO', name: 'Profesore'},
-                    {id: 'DIR', name: 'Directore'},
-                    {id: 'EST', name: 'Estudiante'},
-                ];
-                break;
-        }
-
-        setTypesUsers(typesUsers);
-        
-    };
-
     const fetchCities = async () => {
         try {
             const city = await cityCombo();
@@ -126,6 +87,13 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         try {
             const documents = await documentCombo(filter);
             setDocuments(documents);
+        } catch(err) { renderError(err); }
+    };
+
+    const fetchTypes = async (gender) => {
+        try {
+            const types = await loadTypes(gender);
+            setTypesUsers(types);
         } catch(err) { renderError(err); }
     };
 
@@ -144,7 +112,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [courseSelected]);
 
     useEffect(() => {
-        changeTypes();
+        fetchTypes(formState.gender);
     }, [formState.gender]);
 
     useEffect(() => {
@@ -373,6 +341,19 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             </>
         },
         { 
+            label: 'Cursos', 
+            key: 'courses',
+            disabled: formState.type !== 'EST' && formState.id,
+            children: 
+            <>
+                <GroupTable
+                    data={groups}
+                    //data={[new Group({name: 'grupo re piola', course_name: 'curso re piola', teacher_name: 'Santaigo', tourn_name: 'matutino', from_date: '20/12/2022', to_date: '22/12/2022'})]}
+                    comeUserForm={true}
+                />
+            </>
+        },
+        { 
             label: 'Especificos', 
             key: 'specifics', 
             children: 
@@ -387,7 +368,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Checkbox name='trained' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.trained}>Entrenado</Checkbox>
                     </Form.Item>
                     <Form.Item label='Expectativas' labelAlign='left' span={18}>
-                        <Input name='expectation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectation} />
+                        <TextArea name='expectation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectation} />
                     </Form.Item>
                     <Form.Item label='Nivel Educacion' labelAlign='left' span={6}>
                         <Select 

@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, comeUserForm = false }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -71,7 +71,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 key: 'actions',
                 width: 100,
                 render: record => (
-                    <div style={{ width: '100%', textAlign: 'right' }}>
+                    !comeUserForm && <div style={{ width: '100%', textAlign: 'right' }}>
                         <Button key='see' icon='edit' onClick={e => onEditClick(record.id)} title='Editar'></Button>
                     </div>
                 ),
@@ -83,17 +83,17 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
         <Table
             loading={loading}
             columns={columns()}
-            rowSelection={{ onChange: onRowSelectedChange, selectedRowKeys }}
+            rowSelection={!comeUserForm && { onChange: onRowSelectedChange, selectedRowKeys }}
             dataSource={data}
             footer={data => 
-                <div>
+                !comeUserForm && <div>
                     <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}
-            pagination={{
+            pagination={!comeUserForm && {
                 style: paginationStyle,
                 onChange: onPageChangeLocal,
                 onShowSizeChange: onPageChangeLocal,
@@ -107,7 +107,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => !comeUserForm && ({ onDoubleClick: () => onEditClick(r.Id) })}
             
         />
     )
