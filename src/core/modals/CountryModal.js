@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CountryForm } from '../foms/CountryForm';
+import { CountryForm } from '../forms/CountryForm';
 import { useForm } from '../hooks/useForm';
 
 export const CountryModal = (props) => {

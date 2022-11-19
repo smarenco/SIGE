@@ -1,16 +1,16 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CityForm } from '../forms/CityForm';
+import { PaymentForm } from '../forms/PaymentForm';
 import { useForm } from '../hooks/useForm';
 
-export const CityModal = (props) => {
+export const PaymentModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
-    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
+    const { formState, onInputChange, onInputChangeByName, onInputChangeByObject } = useForm(item);    
 
     const onOk = () => {
         
@@ -43,12 +43,13 @@ export const CityModal = (props) => {
             onCancel={onCancel}
             okButtonProps={{disabled: view}}>
 
-            <CityForm
+            <PaymentForm
                 app={app}
                 view={view}
                 formState={formState}
                 onInputChange={onInputChange}
                 onInputChangeByName={onInputChangeByName}
+                onInputChangeByObject={onInputChangeByObject}
                 onCancel={onCancel}
             />
         </Modal>

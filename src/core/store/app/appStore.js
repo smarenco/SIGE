@@ -13,6 +13,7 @@ import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
 import { PaymentMethodsPage } from '../../pages/administrations/PaymentMethodsPage';
+import { PaymentPage } from '../../pages/administrations/PaymentPage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
@@ -51,7 +52,8 @@ export const appStore = createSlice({
             { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
             { key: 'absenteeismCauses', name:'Causas de ausentismos', path: '/causas-ausentismos/', component: AbsenteeismCausesPage },
             { key: 'paymentMethods', name:'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage },
-            { key: 'Account', name:'Cuenta', path: '/cuenta/', component: AccountPage },
+            { key: 'account', name:'Cuenta', path: '/cuenta/', component: AccountPage },
+            { key: 'payment', name:'Pago', path: '/pago/', component: PaymentPage },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
             //{ key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // /// Configuración

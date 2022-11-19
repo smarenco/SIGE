@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { InstituteForm } from '../foms/InstituteForm';
+import { InstituteForm } from '../forms/InstituteForm';
 import { useForm } from '../hooks/useForm';
 
 export const InstituteModal = (props) => {

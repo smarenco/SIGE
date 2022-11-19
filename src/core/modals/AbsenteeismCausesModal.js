@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { AbsenteeismCausesForm } from '../foms/AbsenteeismCausesForm';
+import { AbsenteeismCausesForm } from '../forms/AbsenteeismCausesForm';
 import { useForm } from '../hooks/useForm';
 
 export const AbsenteeismCausesModal = (props) => {

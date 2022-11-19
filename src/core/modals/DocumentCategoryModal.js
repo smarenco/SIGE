@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { DocumentCategoryForm } from '../foms/DocumentCategoryForm';
+import { DocumentCategoryForm } from '../forms/DocumentCategoryForm';
 import { useForm } from '../hooks/useForm';
 
 export const DocumentCategoryModal = (props) => {

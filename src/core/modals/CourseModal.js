@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CourseForm } from '../foms/CourseForm';
+import { CourseForm } from '../forms/CourseForm';
 import { useForm } from '../hooks/useForm';
 
 export const CourseModal = (props) => {

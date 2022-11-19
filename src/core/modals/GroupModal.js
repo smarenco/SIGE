@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { GroupForm } from '../foms/GroupForm';
+import { GroupForm } from '../forms/GroupForm';
 import { useForm } from '../hooks/useForm';
 
 export const GroupModal = (props) => {

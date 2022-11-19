@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { TurnForm } from '../foms/TurnForm';
+import { TurnForm } from '../forms/TurnForm';
 import { useForm } from '../hooks/useForm';
 
 export const TurnModal = (props) => {

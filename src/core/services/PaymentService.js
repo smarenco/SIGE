@@ -1,10 +1,10 @@
 import { clearObj, open } from '../common/functions';
-import MedicalCoverage from '../models/MedicalCoverage';
+import Payment from '../models/Payment';
 import api from "./Api";
 
-const path = 'medical_coverage';
+const path = 'payment';
 
-export const medicalCoverageIndex = async (filter, output = undefined) => {
+export const paymentIndex = async (filter, output = undefined) => {
     let params = filter || {};
     params.page = filter?.page || 1;
     params.pageSize = filter?.pageSize || 50;
@@ -18,33 +18,33 @@ export const medicalCoverageIndex = async (filter, output = undefined) => {
 
     const { response } = await api.get(path, { params });
     return {
-        data: response.data.map(entity => new MedicalCoverage(entity)),
+        data: response.data.map(entity => new Payment(entity)),
         total: response.total,
     }
 }
 
-export const medicalCoverageCombo = async (filter) => {
+export const paymentCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
     
-    return response.data.map(entity => new MedicalCoverage(entity));
+    return response.data.map(entity => new Payment(entity));
 }
 
-export const medicalCoverageShow = async (id) => {
+export const paymentShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
-    return new MedicalCoverage(response);
+    return new Payment(response);
 
 }
 
-export const medicalCoverageCreate = async (item) => {
+export const paymentCreate = async (item) => {
     return await api.post(path, item);
 }
 
-export const medicalCoverageUpdate = async (id, item) => {
+export const paymentUpdate = async (id, item) => {
     return await api.put(`${path}/${id}`, item);
 }
 
-export const medicalCoverageDelete = async (ids) => {
+export const paymentDelete = async (ids) => {
     if (!Array.isArray(ids)) {
         ids = [ids];
     }

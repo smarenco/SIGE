@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useState } from 'react'
 import { renderError } from '../common/functions';
-import { PaymentMethodsForm } from '../foms/PaymentMethodsForm';
+import { PaymentMethodsForm } from '../forms/PaymentMethodsForm';
 import { useForm } from '../hooks/useForm';
 
 export const PaymentMethodsModal = (props) => {
