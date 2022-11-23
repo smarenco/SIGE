@@ -64,8 +64,11 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
 
     const fetchGroups = async () => {
         try {
-            const groups = await groupCombo();
-            setGroups(groups);
+            if(formState.id){
+                const groups = await groupCombo({ user_type: formState.type, user_id: formState.id});
+                setGroups(groups);
+            }
+
         } catch(err) { renderError(err); }
     };
 
@@ -343,7 +346,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         { 
             label: 'Cursos', 
             key: 'courses',
-            disabled: formState.type !== 'EST' && formState.id,
+            disabled: formState.type !== 'EST' && formState.type !== 'PRO' && formState.id,
             children: 
             <>
                 <GroupTable
