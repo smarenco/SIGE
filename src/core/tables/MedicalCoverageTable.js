@@ -1,5 +1,5 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
+import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import React from 'react'
 
 const paginationStyle = {
@@ -42,7 +42,7 @@ export const MedicalCoverageTable = ({ data, onReload, onRowSelectedChange, setF
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.id)} title='Editar'></Button>
+                        <EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }

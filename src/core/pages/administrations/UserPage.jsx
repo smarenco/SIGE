@@ -33,10 +33,6 @@ export const UserPage = ({ app }) => {
         } catch(err) { renderError(err); }
     };
 
-    useEffect(() => {
-        fetchTypes();
-    }, []);
-
     const dropdownExport = () => (<Menu>
         <Menu.Item onClick={() => userIndex(filters, 'xls')}>Excel</Menu.Item>
         <Menu.Item onClick={() => userIndex(filters, 'pdf')}>PDF</Menu.Item>
@@ -125,7 +121,7 @@ export const UserPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await userIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -158,6 +154,10 @@ export const UserPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(() => {
+        loadData();
+        fetchTypes();
+    }, []);
 
     return (
         <>

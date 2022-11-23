@@ -80,7 +80,7 @@ export const GroupPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await groupIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);

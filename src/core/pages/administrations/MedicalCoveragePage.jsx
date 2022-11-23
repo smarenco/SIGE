@@ -8,6 +8,7 @@ import { AuthService } from '../../services/AuthService';
 import { MedicalCoverageTable } from '../../tables/MedicalCoverageTable';
 
 import { medicalCoverageCreate, medicalCoverageDelete, medicalCoverageIndex, medicalCoverageShow, medicalCoverageUpdate } from '../../services/MedicalCoverageService';
+import { useEffect } from 'react';
 
 export const MedicalCoveragePage = ({ app }) => {
 
@@ -41,12 +42,8 @@ export const MedicalCoveragePage = ({ app }) => {
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new MedicalCoverage); }} disabled={loading}>Nuevo</Button>
-                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
+                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys}>Editar</Button>
                 </Button.Group>
-                {/* <Button.Group style={{ marginLeft: 15 }}>
-                    <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
-                    <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
-                </Button.Group> */}
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
             </>
         );
@@ -71,36 +68,6 @@ export const MedicalCoveragePage = ({ app }) => {
                     loadData();
                     },
             }); break;
-            /*case 'activate': Modal.confirm({
-                title: 'Activar registro',
-                okText: 'Activar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea activar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                        await medicalCoverageToggle(true, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
-            /*case 'desactivate': Modal.confirm({
-                title: 'Desactivar registro',
-                okText: 'Desactivar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea desactivar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                       await medicalCoverageToggle(false, selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                },
-            }); break;*/
         }
     }
 
@@ -114,7 +81,7 @@ export const MedicalCoveragePage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await medicalCoverageIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -147,6 +114,9 @@ export const MedicalCoveragePage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>

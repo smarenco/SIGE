@@ -1,4 +1,4 @@
-import { ReloadOutlined } from '@ant-design/icons';
+import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
 import React from 'react'
 
@@ -44,7 +44,7 @@ export const DocumentTable = ({ data, onReload, onRowSelectedChange, setFilters,
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.IdCategoria)} title='Editar'></Button>
+                        <EditOutlined onClick={e => onEditClick(record.IdCategoria)}/>
                     </div>
                 ),
             }

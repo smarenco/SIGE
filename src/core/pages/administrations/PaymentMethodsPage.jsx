@@ -80,7 +80,7 @@ export const PaymentMethodsPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await paymentMethodsIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);

@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { TurnModal } from '../../modals/TurnModal';
@@ -80,7 +80,7 @@ export const TurnPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await turnIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -113,6 +113,9 @@ export const TurnPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(() => {
+        //loadData();
+    }, []);
 
     return (
         <>

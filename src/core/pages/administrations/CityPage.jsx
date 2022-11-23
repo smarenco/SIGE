@@ -81,7 +81,7 @@ export const CityPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await cityIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);

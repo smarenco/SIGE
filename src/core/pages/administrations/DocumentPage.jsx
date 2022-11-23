@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentModal } from '../../modals/DocumentModal';
@@ -79,7 +79,7 @@ export const DocumentPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await documentIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -111,7 +111,10 @@ export const DocumentPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
-
+    
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>

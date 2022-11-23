@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CourseModal } from '../../modals/CourseModal';
@@ -80,7 +80,7 @@ export const CoursePage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await courseIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -112,7 +112,10 @@ export const CoursePage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
-
+    
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>
