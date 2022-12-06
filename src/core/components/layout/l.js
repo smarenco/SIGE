@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React from 'react';
+
 
 export default class extends React.Component {
 	render() {

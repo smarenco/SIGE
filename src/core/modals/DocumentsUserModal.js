@@ -3,7 +3,7 @@ import {
     InboxOutlined,
 } from '@ant-design/icons';
 import moment from 'moment';
-import React from 'react'
+
 import { DDMMYYYY } from '../common/consts';
 import { renderError } from '../common/functions';
 import { useForm } from '../hooks/useForm';

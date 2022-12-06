@@ -1,6 +1,6 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
-import React from 'react'
+
 
 const paginationStyle = {
     marginRight: 24,
@@ -39,7 +39,7 @@ export const AbsenteeismCausesTable = ({ data, onReload, onRowSelectedChange, se
             }, {
                 title: 'Baja',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.deleted ? 'green' : 'red'}>{!record.deleted ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {

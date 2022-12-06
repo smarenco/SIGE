@@ -8,13 +8,17 @@ import { renderError } from '../common/functions';
 
 export const CityForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
 
-    let [countries, setCountries ] = useState([{country_id: 1, name: 'Uruguay'}]);
+    let [countries, setCountries ] = useState([]);
+    let [loadingCountries, setLoadingCountries ] = useState(false);
 
     const fetchCountries = async () => {
+        setLoadingCountries(true);
         try {
             const countries = await countryCombo();
             setCountries(countries);
+            setLoadingCountries(false);
         } catch(err) {
+            setLoadingCountries(false);
             renderError(err);
         }
         
@@ -26,7 +30,7 @@ export const CityForm = ({ view, loading, confirmLoading, formState, onInputChan
     
     return (
         <Form layout='vertical'>
-            <Loading loading={loading}>
+            <Loading loading={loading || loadingCountries}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={12}>
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
@@ -35,6 +39,7 @@ export const CityForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Select 
                             allowClear
                             showSearch
+                            value={formState?.country_id}
                             disabled={view || confirmLoading}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={country_id => onInputChangeByName('country_id', country_id)}

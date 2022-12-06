@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { AbsenteeismCausesModal } from '../../modals/AbsenteeismCausesModal';
@@ -79,8 +79,12 @@ export const AbsenteeismCausesPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await absenteeismCausesIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        try{
+            const { data, total } = await absenteeismCausesIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        }        
     }
 
     const loadData = () => onPageChange(1);
@@ -143,7 +147,7 @@ export const AbsenteeismCausesPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new AbsenteeismCauses); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new AbsenteeismCauses); }}
             />
         </>
     )

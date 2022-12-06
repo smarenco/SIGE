@@ -113,8 +113,12 @@ export const CountryPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await countryIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        try{
+            const { data, total } = await countryIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        }       
     }
 
     const loadData = () => onPageChange(1);
@@ -181,7 +185,7 @@ export const CountryPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new Country); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Country); }}
             />
         </>
     )

@@ -1,8 +1,8 @@
-import { clearObj, open } from '../common/functions';
+import { clearObj, open, renderError } from '../common/functions';
 import MedicalCoverage from '../models/MedicalCoverage';
 import api from "./Api";
 
-const path = 'medical_coverage';
+const path = 'medical-coverage';
 
 export const medicalCoverageIndex = async (filter, output = undefined) => {
     let params = filter || {};
@@ -16,11 +16,16 @@ export const medicalCoverageIndex = async (filter, output = undefined) => {
         return;
     }
 
-    const { response } = await api.get(path, { params });
-    return {
-        data: response.data.map(entity => new MedicalCoverage(entity)),
-        total: response.total,
+    try{
+        const { response } = await api.get(path, { params });
+        return {
+            data: response.data.map(entity => new MedicalCoverage(entity)),
+            total: response.total,
+        }
+    }catch(err) {
+        renderError(err);
     }
+    
 }
 
 export const medicalCoverageCombo = async (filter) => {

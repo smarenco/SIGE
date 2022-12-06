@@ -1,5 +1,5 @@
 import { Button, Modal, Table } from 'antd';
-import React from 'react'
+
 
 export const StudentsGroupTable = ({ data, loading, studentToGroup }) => {
     

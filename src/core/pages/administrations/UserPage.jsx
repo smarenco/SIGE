@@ -190,7 +190,7 @@ export const UserPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new User); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new User); }}
             />
         </>
     )

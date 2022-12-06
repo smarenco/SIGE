@@ -1,6 +1,6 @@
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import React from 'react'
+
 
 const paginationStyle = {
     marginRight: 24,
@@ -34,7 +34,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
             }, {
                 title: 'Estado',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.deleted ? 'green' : 'red'}>{!record.deleted ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',

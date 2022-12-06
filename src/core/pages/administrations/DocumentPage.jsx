@@ -78,8 +78,12 @@ export const DocumentPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await documentIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        try{
+            const { data, total } = await documentIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        } 
     }
 
     const loadData = () => onPageChange(1);
@@ -145,7 +149,7 @@ export const DocumentPage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onOk={onModalOk}
-                onCancel={() => { setOpenModal(false); setItem(new Document); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Document); }}
             />
         </>
     )
