@@ -123,7 +123,7 @@ export const DocumentCategoryPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>C</strong>)}
+                title={(<strong>Categoria documentos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >

@@ -32,31 +32,25 @@ export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, s
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Instituto',
-                dataIndex: 'name_institut',
+                dataIndex: 'institute_name',
                 key: 'Instituto',
                 width: 150,
                 ellipsis: true,
             }, {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
-                width: 250,
-                ellipsis: true,
-            }, {
                 title: 'Cuotas',
-                dataIndex: 'amount_quota',
+                dataIndex: 'quotas',
                 key: 'Cuotas',
                 width: 100,
                 ellipsis: true,
             }, {
                 title: 'Valor Couta',
-                dataIndex: 'value_quota',
+                dataIndex: 'quota_value',
                 key: 'ValorCouta',
                 render: (t, r) => <span>${t}</span>,
                 width: 150,
                 ellipsis: true,
             }, {
-                title: 'Baja',
+                title: 'Estado',
                 key: 'Baja',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
@@ -102,7 +96,7 @@ export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, s
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )

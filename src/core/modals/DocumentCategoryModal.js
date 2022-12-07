@@ -16,12 +16,9 @@ export const DocumentCategoryModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-        if(!formState.from_hour || formState.from_hour.length === 0){
-            renderError('Debe ingresar la hora inicial');
-            return;
-        }
-        if(!formState.to_hour || formState.to_hour.length === 0){
-            renderError('Debe ingresar la hora final');
+
+        if(!formState.type || formState.type.trim().length === 0){
+            renderError('Debe seleccionar el tipo');
             return;
         }
 

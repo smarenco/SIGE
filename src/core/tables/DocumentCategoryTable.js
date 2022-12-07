@@ -27,7 +27,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.IdCategoria)}>{t}</span>,
+                render: (t, r) => <span onDoubleClick={e => onEditClick(r.id)}>{t}</span>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
@@ -44,7 +44,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <EditOutlined onClick={e => onEditClick(record.IdCategoria)} />
+                        <EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }

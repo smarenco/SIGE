@@ -20,11 +20,6 @@ export default class DocumentCategory {
      */
     type = undefined;
 
-    /**
-     * @type {boolean}
-     */
-    Baja = false;
-
     constructor(item) {
         for (let key in item) {
             this[key] = item[key];

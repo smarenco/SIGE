@@ -30,7 +30,7 @@ export const CourseModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={800}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'

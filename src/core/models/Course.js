@@ -1,4 +1,4 @@
-export default class City {
+export default class Course {
 
     /**
      * @type {number}
@@ -8,7 +8,7 @@ export default class City {
     /**
      * @type {number}
      */
-    institut_id = undefined;
+    institute_id = undefined;
 
     /**
      * @type {string}
@@ -16,19 +16,39 @@ export default class City {
     name = undefined;
 
     /**
-     * @type {number}
+     * @type {string}
     */
-    amount_quote = undefined;
+     identifier = undefined;
 
     /**
      * @type {number}
     */
-    value_quote = undefined;
+    quota_value = undefined;
 
     /**
-     * @type {boolean}
-     */
-    Baja = false;
+     * @type {number}
+    */
+    quotas = undefined;
+
+    /**
+     * @type {number}
+    */
+    tuition = undefined;
+
+    /**
+     * @type {number}
+    */
+    tuition_value = undefined;
+
+    /**
+     * @type {number}
+    */
+    certificate_cost = undefined;
+
+    /**
+     * @type {number}
+    */
+    documental_category_id = undefined;
 
     constructor(item) {
         for (let key in item) {
