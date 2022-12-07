@@ -15,7 +15,7 @@ export const AbsenteeismCausesForm = ({ view, loading, confirmLoading, formState
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
                     <Form.Item labelAlign='left' span={8} style={{marginTop: 30}}>
-                        <Checkbox name='apply_absenteeism' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.apply_absenteeism}>Aplica ausentismo</Checkbox>
+                        <Checkbox name='apply_absenteeism' disabled={view || confirmLoading} onChange={e => onInputChangeByName('apply_absenteeism', e.target.checked)} checked={formState?.apply_absenteeism}>Aplica ausentismo</Checkbox>
                     </Form.Item>
                 </LayoutH>
             </Loading>

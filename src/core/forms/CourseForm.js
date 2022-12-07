@@ -7,12 +7,13 @@ import { renderError } from '../common/functions';
 import { instituteCombo } from '../services/InstituteService';
 import { documentCategoryCombo } from '../services/DocumentCategoryService';
 
-export const CourseForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {    
+export const CourseForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName, onInputChangeByObject }) => {    
 
     let [institutes, setInstitutes ] = useState([]);
     let [loadingInstitutes, setLoadingInstitutes ] = useState(false);
     let [documental_categories, setDocumental_categories ] = useState([]);
     let [loadingDocuments, setLoadingDocuments ] = useState(false);
+    let [disabledTuition_value, setDisabledTuition_value ] = useState(true);
 
     const fetchInstitutes = async () => {
         setLoadingInstitutes(true);
@@ -41,7 +42,17 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
     useEffect(() => {
         fetchInstitutes();
         fetchDocumental_categories();
+
+        if(formState?.tuition){
+            setDisabledTuition_value(false)
+        }
+
       }, []);
+
+    const onChangeTuition = (tuition) => {
+        setDisabledTuition_value(!tuition)
+        onInputChangeByObject({ tuition, tuition_value: undefined });
+    };
     
     return (
         <Form layout='vertical'>
@@ -68,7 +79,7 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
                                     )}
                             </Select>
                     </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Categoria documentos`} labelAlign='left' span={8}>
+                    <Form.Item label={`Categoria documentos`} labelAlign='left' span={8}>
                         <Select 
                             allowClear
                             showSearch
@@ -90,10 +101,10 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
                         <InputNumber name='quota_value' disabled={view || confirmLoading} onChange={quota_value => onInputChangeByName('quota_value', quota_value)} value={formState?.quota_value} />
                     </Form.Item>
                     <Form.Item labelAlign='left' span={4}>
-                        <Checkbox name='tuition' disabled={view || confirmLoading} onChange={e => onInputChangeByName('tuition', e.target.checked)} value={formState?.tuition}>Matricula</Checkbox>
+                        <Checkbox style={{marginTop: 33}} name='tuition' disabled={view || confirmLoading} onChange={e => onChangeTuition(e.target.checked)} checked={formState?.tuition}>Matricula</Checkbox>
                     </Form.Item>
                     <Form.Item label={`Valor matricula`} labelAlign='left' span={4}>
-                        <InputNumber name='tuition_value' disabled={view || confirmLoading} onChange={tuition_value => onInputChangeByName('tuition_value', tuition_value)} value={formState?.tuition_value} />
+                        <InputNumber name='tuition_value' disabled={view || confirmLoading || disabledTuition_value} onChange={tuition_value => onInputChangeByName('tuition_value', tuition_value)} value={formState?.tuition_value} />
                     </Form.Item>
                     <Form.Item label={`Costo Certificado`} labelAlign='left' span={6}>
                         <InputNumber name='certificate_cost' disabled={view || confirmLoading} onChange={certificate_cost => onInputChangeByName('certificate_cost', certificate_cost)} value={formState?.certificate_cost} />

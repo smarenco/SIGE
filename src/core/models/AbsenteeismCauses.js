@@ -28,9 +28,4 @@ export default class AbsenteeismCauses {
     getId() {
         return this.id;
     }
-
-    /**
-     * @return {boolean}
-     */
-    isActive = () => !this.Baja;
 }

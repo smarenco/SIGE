@@ -35,13 +35,7 @@ export const AbsenteeismCausesTable = ({ data, onReload, onRowSelectedChange, se
                 key: 'apply_absenteeism',
                 width: 250,
                 ellipsis: true,
-                render:(record) => <Tag color={!record.apply_absenteeism ? 'green' : 'red'}>{!record.apply_absenteeism ? 'Si' : 'No'}</Tag>,
-            }, {
-                title: 'Baja',
-                key: 'Baja',
-                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
-                width: 150,
-                ellipsis: true,
+                render:(record) => <Tag color={!record.apply_absenteeism ? 'green' : 'red'}>{record.apply_absenteeism ? 'Si' : 'No'}</Tag>,
             }, {
                 title: '',
                 key: 'actions',

@@ -94,13 +94,14 @@ export const AbsenteeismCausesPage = ({ app }) => {
         try {
             const item = await absenteeismCausesShow(id)
             setItem(item); setOpenModal(true);
+            setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {
