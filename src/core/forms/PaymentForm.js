@@ -137,18 +137,18 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         <Switch name='apply_surcharge' disabled={view || confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => onInputChangeByName('apply_surcharge', apply_surcharge)} checked={formState?.apply_surcharge} />
                     </Form.Item>
                     <Form.Item label='Cantidad de cuotas' labelAlign='left' span={6}>
-                        <InputNumber name='amount_coute' disabled={view || confirmLoading} onChange={(amount_coute) => onInputChangeByName('amount_coute', amount_coute)} value={formState?.amount_coute} />
+                        <InputNumber min={0} name='amount_coute' disabled={view || confirmLoading} onChange={(amount_coute) => onInputChangeByName('amount_coute', amount_coute)} value={formState?.amount_coute} />
                     </Form.Item>
                 </LayoutH>
                 <LayoutH>
                     <Form.Item label='Descuento' labelAlign='left' span={6}>
-                        <InputNumber style={{borderColor: 'green'}} name='discount' disabled={view || confirmLoading || !formState?.apply_discount} onChange={(discount) => onInputChangeByName('discount', discount)} value={formState?.discount} />
+                        <InputNumber min={0} style={{borderColor: 'green'}} name='discount' disabled={view || confirmLoading || !formState?.apply_discount} onChange={(discount) => onInputChangeByName('discount', discount)} value={formState?.discount} />
                     </Form.Item>
                     <Form.Item label='Recargo' labelAlign='left' span={6}>
-                        <InputNumber style={{borderColor: 'red'}} name='surcharge' disabled={view || confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => onInputChangeByName('surcharge', surcharge)} value={formState?.surcharge} />
+                        <InputNumber min={0} style={{borderColor: 'red'}} name='surcharge' disabled={view || confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => onInputChangeByName('surcharge', surcharge)} value={formState?.surcharge} />
                     </Form.Item>
                     <Form.Item label='Valor Couta' labelAlign='left' span={6}>
-                        <InputNumber name='value_coute' disabled={view || confirmLoading} onChange={(value_coute) => onInputChangeByName('value_coute', value_coute)} value={formState?.value_coute} />
+                        <InputNumber min={0} name='value_coute' disabled={view || confirmLoading} onChange={(value_coute) => onInputChangeByName('value_coute', value_coute)} value={formState?.value_coute} />
                     </Form.Item>
                     <Form.Item label='Total' labelAlign='left' span={6}>
                         <Tag color='green'>{total}</Tag>

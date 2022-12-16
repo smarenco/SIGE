@@ -15,7 +15,6 @@ import { documentCombo } from '../services/DocumentService';
 import { DocumentsUserTable } from '../tables/DocumentsUserTable';
 import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 import { GroupTable } from '../tables/GroupTable';
-import Group from '../models/Group';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     

@@ -82,7 +82,7 @@ export const AccountPage = ({ app }) => {
                                 <Input name='contact_phone' disabled={confirmLoading} onChange={onInputChange} value={item?.contact_phone} />
                             </Form.Item>
                             <Form.Item label='Día limite pago' labelAlign='left' span={8}>
-                                <InputNumber name='limit_pay_day' disabled={confirmLoading} onChange={(limit_pay_day) => onInputChangeByName('limit_pay_day', limit_pay_day)} value={item?.limit_pay_day} />
+                                <InputNumber min={0} name='limit_pay_day' disabled={confirmLoading} onChange={(limit_pay_day) => onInputChangeByName('limit_pay_day', limit_pay_day)} value={item?.limit_pay_day} />
                             </Form.Item>
                         </LayoutH>
                     </Loading>

@@ -20,6 +20,11 @@ export default class DocumentCategory {
      */
     type = undefined;
 
+    /**
+     * @type {array}
+     */
+    documents = [];
+
     constructor(item) {
         for (let key in item) {
             this[key] = item[key];
