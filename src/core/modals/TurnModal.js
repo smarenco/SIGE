@@ -18,11 +18,11 @@ export const TurnModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-        if(!formState.from_hour || formState.from_hour.length === 0){
+        if(!formState.start_time || formState.start_time.length === 0){
             renderError('Debe ingresar la hora inicial');
             return;
         }
-        if(!formState.to_hour || formState.to_hour.length === 0){
+        if(!formState.finish_time || formState.finish_time.length === 0){
             renderError('Debe ingresar la hora final');
             return;
         }

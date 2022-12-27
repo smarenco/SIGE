@@ -1,5 +1,7 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { HHmm } from '../common/consts';
 
 
 const paginationStyle = {
@@ -32,16 +34,16 @@ export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Desde',
-                dataIndex: 'from_hour',
                 key: 'Desde',
                 width: 250,
                 ellipsis: true,
+                render: (r) => moment(r.start_time).format(HHmm)
             }, {
                 title: 'Hasta',
-                dataIndex: 'to_hour',
                 key: 'Hasta',
                 width: 200,
                 ellipsis: true,
+                render: (r) => moment(r.finish_time).format(HHmm)
             }, {
                 title: 'Baja',
                 key: 'Baja',

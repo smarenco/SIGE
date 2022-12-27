@@ -18,12 +18,12 @@ export default class Turn {
     /**
      * @type {string}
      */
-    from_hour = undefined;
+    start_time = undefined;
 
     /**
      * @type {string}
      */
-     to_hour = undefined;
+    finish_time = undefined;
 
     /**
      * @type {boolean}

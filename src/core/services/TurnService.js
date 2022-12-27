@@ -1,3 +1,5 @@
+import moment from 'moment';
+import { HHmm } from '../common/consts';
 import { clearObj, open } from '../common/functions';
 import Turn from '../models/Turn';
 import api from "./Api";
@@ -37,11 +39,17 @@ export const turnShow = async (id) => {
 }
 
 export const turnCreate = async (item) => {
-    return await api.post(path, item);
+    let params = { ...item };
+    params.start_time = moment(params.start_time).format(HHmm);
+    params.finish_time = moment(params.finish_time).format(HHmm);
+    return await api.post(path, params);
 }
 
 export const turnUpdate = async (id, item) => {
-    return await api.put(`${path}/${id}`, item);
+    let params = { ...item };
+    params.start_time = moment(params.start_time).format(HHmm);
+    params.finish_time = moment(params.finish_time).format(HHmm);
+    return await api.put(`${path}/${id}`, params);
 }
 
 export const turnDelete = async (ids) => {
