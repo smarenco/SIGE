@@ -93,8 +93,9 @@ export const CoursePage = ({ app }) => {
         setLoading(true);
         try {
             const item = await courseShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }

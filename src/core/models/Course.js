@@ -50,6 +50,16 @@ export default class Course {
     */
     documental_category_id = undefined;
 
+    /**
+     * @type {array}
+    */
+    students = [];
+
+    /**
+     * @type {array}
+    */
+    teachers = [];
+
     constructor(item) {
         for (let key in item) {
             this[key] = item[key];

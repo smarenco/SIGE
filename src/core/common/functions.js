@@ -6,27 +6,27 @@ import { API_URL } from "../../env";
 
 export const loadTypes = async (gender) => {
     let typesUsers = [
-        {id: 'ADM', name: 'Administrativo/a'},
-        {id: 'PRO', name: 'Profesor/a'},
+        {id: 'administrative', name: 'Administrativo/a'},
+        {id: 'teacher', name: 'Profesor/a'},
         {id: 'DIR', name: 'Director/a'},
-        {id: 'EST', name: 'Estudiante'},
+        {id: 'student', name: 'Estudiante'},
     ];
 
     switch (gender) {
         case 'MASC':
             typesUsers = [
-                {id: 'ADM', name: 'Administrativo'},
-                {id: 'PRO', name: 'Profesor'},
+                {id: 'administrative', name: 'Administrativo'},
+                {id: 'teacher', name: 'Profesor'},
                 {id: 'DIR', name: 'Director'},
-                {id: 'EST', name: 'Estudiante'},
+                {id: 'student', name: 'Estudiante'},
             ];
             break;
         case 'FEME':
             typesUsers = [
-                {id: 'ADM', name: 'Administrativa'},
-                {id: 'PRO', name: 'Profesora'},
+                {id: 'administrative', name: 'Administrativa'},
+                {id: 'teacher', name: 'Profesora'},
                 {id: 'DIR', name: 'Directora'},
-                {id: 'EST', name: 'Estudiante'},
+                {id: 'student', name: 'Estudiante'},
             ];
             break;
     }

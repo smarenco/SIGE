@@ -59,7 +59,7 @@ export const InstituteForm = ({ view, loading, confirmLoading, formState, onInpu
     
     return (
         <Form layout='vertical'>
-            <Loading loading={loading}>
+            <Loading loading={loading || loadingCountries}>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={14}>
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
