@@ -5,8 +5,8 @@ export const APP_PATH = '';
 //export const API_URL_BASE = 'https://ddns.fusionar.com.uy:6588';
 
 //DESA
-export const API_URL = 'http://127.0.0.1:8000';
-export const API_URL_BASE = 'http://127.0.0.1:8000';
+export const API_URL = 'http://sige.backend';
+export const API_URL_BASE = 'http://sige.backend';
 
 export const APP_NAME = 'Sige Web'
 
