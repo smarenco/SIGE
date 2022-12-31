@@ -8,6 +8,7 @@ import { AuthService } from '../../services/AuthService';
 import { GroupTable } from '../../tables/GroupTable';
 
 import { addStudent, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate } from '../../services/GroupService';
+import { useEffect } from 'react';
 
 export const GroupPage = ({ app }) => {
 
@@ -93,14 +94,14 @@ export const GroupPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await groupShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -116,6 +117,10 @@ export const GroupPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
+
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>

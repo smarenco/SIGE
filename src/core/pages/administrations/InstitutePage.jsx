@@ -93,8 +93,9 @@ export const InstitutePage = ({ app }) => {
         setLoading(true);
         try {
             const item = await instituteShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }

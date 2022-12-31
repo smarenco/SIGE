@@ -13,7 +13,7 @@ export default class Group {
     /**
      * @type {number}
      */
-    institut_id = undefined;
+    institute_id = undefined;
 
     /**
      * @type {number}
@@ -21,9 +21,14 @@ export default class Group {
     course_id = undefined;
 
     /**
-     * @type {number}
+     * @type {array}
      */
-    teacher_id = undefined;
+    teachers = [];
+
+    /**
+     * @type {array}
+     */
+    students = [];
     
     /**
      * @type {number}
@@ -39,21 +44,16 @@ export default class Group {
      * @type {string}
      */
     description = undefined;
-    
-    /**
-     * @type {array}
-     */
-    students = [];
 
     /**
      * @type {string}
      */
-    from_date = undefined;
+    start_date = undefined;
 
     /**
      * @type {string}
      */
-     to_date = undefined;
+     finish_date = undefined;
 
     /**
      * @type {boolean}

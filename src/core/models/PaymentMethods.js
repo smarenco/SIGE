@@ -13,7 +13,12 @@ export default class AbsenteeismCauses {
     /**
      * @type {boolean}
      */
-     online = undefined;
+    online = undefined;
+
+    /**
+     * @type {boolean}
+     */
+    associate = undefined;
 
     constructor(item) {
         for (let key in item) {

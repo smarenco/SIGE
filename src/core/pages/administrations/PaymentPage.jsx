@@ -94,8 +94,9 @@ export const PaymentPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await paymentShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }

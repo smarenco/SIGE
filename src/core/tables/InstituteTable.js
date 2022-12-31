@@ -95,7 +95,7 @@ export const InstituteTable = ({ data, onReload, onRowSelectedChange, setFilters
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )
