@@ -33,7 +33,7 @@ export const DocumentCategoryModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={750}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'

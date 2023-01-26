@@ -102,8 +102,8 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
             return;
         }
         
-        let formStatestudents = formState.students;
-        const studentExists = formStatestudents.filter(student => student.id === userStudentSelected);
+        let formStateStudents = formState.students;
+        const studentExists = formStateStudents.filter(student => student.id === userStudentSelected);
 
         if(studentExists.length > 0){
             alertError('Estudiante ya agregado');
@@ -115,8 +115,8 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
             return false;
         }
 
-        formStatestudents.push(students.filter(student => student.id === userStudentSelected)[0]);
-        onInputChangeByName('students', formStatestudents);
+        formStateStudents.push(students.filter(student => student.id === userStudentSelected)[0]);
+        onInputChangeByName('students', formStateStudents);
     }
 
     const deleteStudent = (idStudent) =>{

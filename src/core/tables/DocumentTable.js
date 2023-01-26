@@ -27,7 +27,20 @@ export const DocumentTable = ({ data, onReload, onRowSelectedChange, setFilters,
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.IdCategoria)}>{t}</span>,
+                width: 150,
+                ellipsis: true,
+                className: 'ant-table-cell-link',
+            }, {
+                title: 'Controla vencimiento',
+                key: 'expiration_control',
+                render: (record) => <Tag color={!record.expiration_control ? 'green' : 'red'}>{!record.expiration_control ? 'Si' : 'No'}</Tag>,
+                width: 150,
+                ellipsis: true,
+                className: 'ant-table-cell-link',
+            }, {
+                title: 'Obligatorio',
+                key: 'required',
+                render: (record) => <Tag color={!record.required ? 'green' : 'red'}>{!record.required ? 'Si' : 'No'}</Tag>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
@@ -44,7 +57,7 @@ export const DocumentTable = ({ data, onReload, onRowSelectedChange, setFilters,
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <EditOutlined onClick={e => onEditClick(record.IdCategoria)}/>
+                        <EditOutlined onClick={e => onEditClick(record.id)}/>
                     </div>
                 ),
             }

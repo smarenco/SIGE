@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
 export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
@@ -16,7 +16,7 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
                 title: 'Requerido',
                 key: 'Requerido',
                 render: (record) => <Tag color={!record.required ? 'green' : 'red'}>{!record.required ? 'Si' : 'No'}</Tag>,
-                width: 250,
+                width: 100,
                 ellipsis: true,
             }, {
                 title: 'Controla vencimiento',

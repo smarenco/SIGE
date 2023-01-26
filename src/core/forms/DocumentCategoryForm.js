@@ -1,6 +1,7 @@
 
 import { Button, Form, Input, Select, Tabs } from 'antd'
 import { useEffect, useState } from 'react';
+import { typesCategories } from '../common/consts';
 import { alertError, renderError } from '../common/functions';
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
@@ -13,14 +14,6 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
     let [loadingDocuments, setLoadingDocuments ] = useState(false);
     let [documentSelected, setDocumentSelected ] = useState(undefined);
 
-    const typesDocuments = [
-        {id: 'PRI', name: 'Administrativo/a'},
-        {id: 'SEC', name: 'Profesor/a'},
-        {id: 'TER', name: 'Director/a'},
-        {id: 'POS', name: 'Estudiante'},
-        {id: 'CUR', name: 'Curso'},
-    ];
-
     const addDocument = () =>{
         if(!documentSelected){
             alertError('Debe seleccionar un documento');
@@ -28,27 +21,27 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
         }
 
         let formStateDocument = formState.documents;
-        const studentExists = formStateDocument.filter(student => student.id === documentSelected);
+        const documentExists = formStateDocument.filter(document => document.id === documentSelected);
 
-        if(studentExists.length > 0){
+        if(documentExists.length > 0){
             alertError('Documento ya agregado');
             return false;
         }
 
-        formStateDocument.push(documents.filter(student => student.id === documentSelected)[0]);
+        formStateDocument.push(documents.filter(document => document.id === documentSelected)[0]);
         onInputChangeByName('documents', formStateDocument);
     }
 
     const deleteDocument = (idDocument) =>{
-        let formStateDocuments = formState.documents.filter(student => student.id !== idDocument);
+        let formStateDocuments = formState.documents.filter(document => document.id !== idDocument);
         onInputChangeByName('documents', formStateDocuments);
     }
 
     const fetchDocuments = async () => {
         setLoadingDocuments(true);
         try {
-            const teachers = await documentCombo({Category: formState?.id});
-            setDocuments(teachers);
+            const documents = await documentCombo();
+            setDocuments(documents);
             setLoadingDocuments(false);
         } catch(err) {
             setLoadingDocuments(false);
@@ -69,7 +62,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={14}>
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Tipo categoria`} labelAlign='left' span={5}>
+                    <Form.Item label={`${!view ? '*' : ''} Tipo categoria`} labelAlign='left' span={7}>
                         <Select 
                             allowClear 
                             showSearch 
@@ -79,7 +72,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                             onChange={(type) => onInputChangeByName('type', type)} 
                             value={formState?.type}
                         >
-                            {typesDocuments.map(type => 
+                            {typesCategories.map(type => 
                                 <Select.Option value={type.id} key={type.id}>{type.name}</Select.Option>
                             )}
                         </Select>
@@ -101,7 +94,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                                 onChange={documentSelected => setDocumentSelected(documentSelected)}
                                 > 
                                     {documents.map(document => 
-                                        <Select.Option key={document.id} value={document.id}>{document.description}</Select.Option>
+                                        <Select.Option key={document.id} value={document.id}>{document.name}</Select.Option>
                                     )}
                                 </Select>
                         </Form.Item>

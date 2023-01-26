@@ -100,7 +100,6 @@ export const DocumentPage = ({ app }) => {
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {

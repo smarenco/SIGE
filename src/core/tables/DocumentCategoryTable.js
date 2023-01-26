@@ -27,7 +27,6 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.id)}>{t}</span>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
