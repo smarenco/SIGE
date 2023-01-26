@@ -1,5 +1,5 @@
-import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Table } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
 export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
 
@@ -14,14 +14,14 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Requerido',
-                dataIndex: 'required',
                 key: 'Requerido',
+                render: (record) => <Tag color={!record.required ? 'green' : 'red'}>{!record.required ? 'Si' : 'No'}</Tag>,
                 width: 250,
                 ellipsis: true,
             }, {
                 title: 'Controla vencimiento',
-                dataIndex: 'control_expiration',
-                key: 'control_expiration',
+                key: 'expiration_control',
+                render: (record) => <Tag color={!record.expiration_control ? 'green' : 'red'}>{!record.expiration_control ? 'Si' : 'No'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {
@@ -37,11 +37,10 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
         ];
     }
 
-    console.log(data);
     return (
         <Table
             columns={columns()}
-            dataSource={data}
+            dataSource={[ ...data ]}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.id}
         />
