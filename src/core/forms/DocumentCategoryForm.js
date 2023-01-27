@@ -20,7 +20,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
             return;
         }
 
-        let formStateDocument = formState.documents;
+        let formStateDocument = formState.document_category_document;
         const documentExists = formStateDocument.filter(document => document.id === documentSelected);
 
         if(documentExists.length > 0){
@@ -29,12 +29,12 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
         }
 
         formStateDocument.push(documents.filter(document => document.id === documentSelected)[0]);
-        onInputChangeByName('documents', formStateDocument);
+        onInputChangeByName('document_category_document', formStateDocument);
     }
 
     const deleteDocument = (idDocument) =>{
-        let formStateDocuments = formState.documents.filter(document => document.id !== idDocument);
-        onInputChangeByName('documents', formStateDocuments);
+        let formStateDocuments = formState.document_category_document.filter(document => document.id !== idDocument);
+        onInputChangeByName('document_category_document', formStateDocuments);
     }
 
     const fetchDocuments = async () => {
@@ -101,7 +101,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                         <Button style={{marginTop: 30}} type='Primary' onClick={addDocument}>Agregar Documento</Button>
                     </LayoutH>
                     <DocumentCategoryDocumentTable
-                        data={formState.documents}
+                        data={formState.document_category_document}
                         onDeleteDocument={deleteDocument}
                     />
                 </>
