@@ -11,9 +11,10 @@ import { courseCombo } from '../services/CourseService';
 import { turnCombo } from '../services/TurnService';
 import { GroupStudentTable } from '../tables/GroupStudentTable';
 import { GroupTeacherTable } from '../tables/GroupTeacherTable';
-import { CourseDocumentTable } from '../tables/CourseDocumentTable';
 import { DDMMYYYY } from '../common/consts';
 import { instituteCombo } from '../services/InstituteService';
+import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumentTable';
+import { documentCategoryShow } from '../services/DocumentCategoryService';
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -36,7 +37,6 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
 
     let [documents, setDocuments ] = useState([]);
     let [loadingDocuments, setLoadingDocuments ] = useState(false);
-    let [documentSelected, setDocumentSelected ] = useState(undefined);
 
     const fetchStudents = async () => {
         setLoadingStudents(true);
@@ -66,6 +66,10 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         setLoadingCourses(true);
         try {
             const courses = await courseCombo();
+            if(formState.course_id){
+                const documental_category_id = courses.filter(course => course.id === formState.course_id)[0]?.documental_category_id;
+                fetchDocumentsCategoryDocuments(documental_category_id);
+            }
             setCourses(courses); setLoadingCourses(false);
         } catch(err) {
             setLoadingCourses(false);
@@ -147,6 +151,34 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         onInputChangeByName('teachers', formStateTeachers);
     }
 
+    const onChangeCourse = (course_id) => {
+        onInputChangeByName('course_id', course_id);
+        if(course_id){
+            const documental_category_id = courses.filter(course => course.id === course_id)[0]?.documental_category_id;
+            fetchDocumentsCategoryDocuments(documental_category_id);
+        }else{
+            setDocuments([]);
+        }
+        
+    }
+
+    const fetchDocumentsCategoryDocuments = async (Documental_category_id) => {
+        setLoadingDocuments(true);
+        try {
+            if(Documental_category_id){
+                const documentCategory = await documentCategoryShow(Documental_category_id);
+                setDocuments(documentCategory.document_category_document);
+            }else{
+                setDocuments([]);
+            }
+            
+            setLoadingDocuments(false);
+        } catch(err) {
+            setLoadingDocuments(false);
+            renderError(err);
+        }
+    };
+
     useEffect(() => {
         fetchStudents();
         fetchTeachers();
@@ -188,7 +220,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             disabled={view || confirmLoading || loadingCourses}
                             loading={loadingCourses} 
-                            onChange={(course_id) => onInputChangeByName('course_id', course_id)}
+                            onChange={onChangeCourse}
                             value={formState?.course_id}
                         >
                             {courses.map(course => 
@@ -202,8 +234,8 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                             showSearch 
                             name='institute_id'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading || loadingCourses}
-                            loading={loadingCourses} 
+                            disabled={view || confirmLoading || loadingInstitutes}
+                            loading={loadingInstitutes} 
                             onChange={(institute_id) => onInputChangeByName('institute_id', institute_id)}
                             value={formState?.institute_id}
                         >
@@ -283,16 +315,18 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
             label: 'Documentos', 
             key: 'info_documents', 
             children: 
-                <CourseDocumentTable
-                    data={formState.documents}
-                    //onDeleteDocument={deleteDocument}
-                />
+                <Loading loading={loadingDocuments}>
+                    <DocumentCategoryDocumentTable
+                        data={documents}
+                        view={true}
+                    />
+                </Loading>
         }
     ];
     
     return (
         <Form layout='vertical'>
-            <Loading loading={loading || loadingDocuments}>
+            <Loading loading={loading || loadingTurns || loadingCourses || loadingInstitutes}>
                 <Tabs
                     style={{ marginTop: -15 }}
                     size='small'

@@ -1,7 +1,7 @@
 import { Table, Tag } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 
-export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
+export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view }) => {
 
     const columns = () => {
         return [
@@ -28,11 +28,13 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
                 title: '',
                 key: 'actions',
                 width: 100,
-                render: record => (
-                    <div style={{ width: '100%', textAlign: 'right' }}>
-                        <DeleteOutlined onClick={e => onDeleteDocument(record.id)} />
-                    </div>
-                ),
+                render: record => {
+                    if(!view){
+                        <div style={{ width: '100%', textAlign: 'right' }}>
+                            <DeleteOutlined onClick={e => onDeleteDocument(record.id)} />
+                        </div>
+                    }
+                },
             }
         ];
     }
