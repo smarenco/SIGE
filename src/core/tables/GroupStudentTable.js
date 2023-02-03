@@ -1,7 +1,7 @@
 import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
 import { DeleteOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 
-export const CourseTeacherTable = ({ data, onDeleteTeacher }) => {
+export const GroupStudentTable = ({ data, onDeleteStudent }) => {
 
     const columns = () => {
         return [
@@ -30,20 +30,20 @@ export const CourseTeacherTable = ({ data, onDeleteTeacher }) => {
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <DeleteOutlined onClick={e => onDeleteTeacher(record.id)} />
+                        <DeleteOutlined onClick={e => onDeleteStudent(record.id)} />
                     </div>
                 ),
             }
         ];
     }
 
-    console.log(data);
     return (
         <Table
             columns={columns()}
-            dataSource={data}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            dataSource={[ ...data ]}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: '440px' }}
             rowKey={record => record.id}
+            pagination={false}
         />
     )
 }

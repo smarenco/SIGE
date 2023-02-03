@@ -18,22 +18,12 @@ export default class Document {
     /**
      * @type {boolean}
      */
-    control_expiration = undefined;
+    expiration_control = undefined;
 
     /**
      * @type {boolean}
      */
     required = undefined;
-
-    /**
-     * @type {array}
-     */
-    documents = undefined;
-
-    /**
-     * @type {boolean}
-     */
-    Baja = false;
 
     constructor(item) {
         for (let key in item) {

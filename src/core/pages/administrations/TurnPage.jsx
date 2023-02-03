@@ -93,14 +93,14 @@ export const TurnPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await turnShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {

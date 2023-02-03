@@ -24,11 +24,6 @@ export const CourseModal = (props) => {
             return;
         }
 
-        if(!formState.institute_id || formState.institute_id.length === 0){
-            renderError('Debe seleccionar el instituto');
-            return;
-        }
-
         if(!formState.quotas || formState.quotas.length === 0){
             renderError('Debe ingresar la cantidad de cuotas');
             return;
@@ -55,7 +50,7 @@ export const CourseModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={900}
+            width={700}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'

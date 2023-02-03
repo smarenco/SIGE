@@ -1,7 +1,7 @@
-import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Table, Tag } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
-export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
+export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view }) => {
 
     const columns = () => {
         return [
@@ -14,36 +14,38 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument }) => {
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Requerido',
-                dataIndex: 'required',
                 key: 'Requerido',
-                width: 250,
+                render: (record) => <Tag color={!record.required ? 'green' : 'red'}>{!record.required ? 'Si' : 'No'}</Tag>,
+                width: 100,
                 ellipsis: true,
             }, {
                 title: 'Controla vencimiento',
-                dataIndex: 'control_expiration',
-                key: 'control_expiration',
+                key: 'expiration_control',
+                render: (record) => <Tag color={!record.expiration_control ? 'green' : 'red'}>{!record.expiration_control ? 'Si' : 'No'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {
                 title: '',
                 key: 'actions',
                 width: 100,
-                render: record => (
-                    <div style={{ width: '100%', textAlign: 'right' }}>
-                        <DeleteOutlined onClick={e => onDeleteDocument(record.id)} />
-                    </div>
-                ),
+                render: record => {
+                    if(!view){
+                        <div style={{ width: '100%', textAlign: 'right' }}>
+                            <DeleteOutlined onClick={e => onDeleteDocument(record.id)} />
+                        </div>
+                    }
+                },
             }
         ];
     }
 
-    console.log(data);
     return (
         <Table
             columns={columns()}
-            dataSource={data}
+            dataSource={[ ...data ]}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.id}
+            pagination={false}
         />
     )
 }

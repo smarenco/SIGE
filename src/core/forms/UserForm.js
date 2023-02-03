@@ -15,24 +15,9 @@ import { documentCombo } from '../services/DocumentService';
 import { DocumentsUserTable } from '../tables/DocumentsUserTable';
 import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 import { GroupTable } from '../tables/GroupTable';
+import { DDMMYYYY, genders, levels_educations } from '../common/consts';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
-    
-    const format = 'DD/MM/YYYY';
-
-    const levels_educations = [
-        {id: 'PRI', name: 'Primaria'},
-        {id: 'SEC', name: 'Secundaria'},
-        {id: 'TER', name: 'Terciaria'},
-        {id: 'POS', name: 'Posgrado'},
-    ];
-
-    const genders = [
-        {id: 'FEME', name: 'Femenino'},
-        {id: 'MASC', name: 'Masculino'},
-        {id: 'NOBIN', name: 'No Binario'},
-        {id: 'PRND', name: 'Prefiero no decirlo'},
-    ];
 
     const [ medicalCoverages, setMedicalCoverage ] = useState([]);
     const [ countries, setCountry ] = useState([]);
@@ -183,7 +168,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Input name='last_name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.last_name} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Fecha nacimiento`} labelAlign='left' span={4}>
-                        <DatePicker name='birth_day' onChange={(birth_day) => onInputChangeByName('birth_day', birth_day)} format={format} value={formState?.birth_day ? moment(formState?.birth_day, format)  : undefined}/>
+                        <DatePicker name='birth_day' onChange={(birth_day) => onInputChangeByName('birth_day', birth_day)} format={DDMMYYYY} value={formState?.birth_day ? moment(formState?.birth_day, DDMMYYYY)  : undefined}/>
                     </Form.Item>
                     <Form.Item label='Genero' labelAlign='left' span={4}>
                         <Select 

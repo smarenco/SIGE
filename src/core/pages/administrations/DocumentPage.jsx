@@ -92,14 +92,14 @@ export const DocumentPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await documentShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {

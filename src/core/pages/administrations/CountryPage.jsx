@@ -127,8 +127,9 @@ export const CountryPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await countryShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }

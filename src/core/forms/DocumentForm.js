@@ -5,13 +5,6 @@ import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 
 export const DocumentForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
-        
-    const typesUsers = [
-        {id: 'PRI', name: 'Administrativo/a'},
-        {id: 'SEC', name: 'Profesor/a'},
-        {id: 'TER', name: 'Director/a'},
-        {id: 'POS', name: 'Estudiante'},
-    ];
 
     return (
         <Form layout='vertical'>
@@ -21,10 +14,10 @@ export const DocumentForm = ({ view, loading, confirmLoading, formState, onInput
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
                     </Form.Item>
                     <Form.Item labelAlign='left' span={8}>
-                        <Checkbox name='control_expiration' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.control_expiration}>Controla vencimiento</Checkbox>
+                        <Checkbox style={{marginTop: 33}} name='expiration_control' disabled={view || confirmLoading} onChange={e => onInputChangeByName('expiration_control', e.target.checked)} checked={formState?.expiration_control}>Controla vencimiento</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={4}>
-                        <Checkbox name='required' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.required}>Obligatorio</Checkbox>
+                        <Checkbox style={{marginTop: 33}} name='required' disabled={view || confirmLoading} onChange={e => onInputChangeByName('required', e.target.checked)} checked={formState?.required}>Obligatorio</Checkbox>
                     </Form.Item>
                 </LayoutH>
             </Loading>

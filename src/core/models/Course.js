@@ -60,6 +60,11 @@ export default class Course {
     */
     teachers = [];
 
+    /**
+     * @type {object}
+    */
+    documental_category = {};
+
     constructor(item) {
         for (let key in item) {
             this[key] = item[key];

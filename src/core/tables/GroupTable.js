@@ -1,5 +1,7 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { DDMMYYYY } from '../common/consts';
 
 
 const paginationStyle = {
@@ -27,44 +29,38 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 200,
+                width: 210,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Curso',
                 dataIndex: 'course_name',
                 key: 'Curso',
-                width: 250,
+                width: 200,
                 ellipsis: true,
             }, {
-                title: 'Profesor/a',
-                dataIndex: 'teacher_name',
-                key: 'Profesor',
-                width: 200,
+                title: 'Instituto',
+                dataIndex: 'institute_name',
+                key: 'Instituto',
+                width: 180,
                 ellipsis: true,
             }, {
                 title: 'Turno',
-                dataIndex: 'tourn_name',
+                dataIndex: 'turn_name',
                 key: 'Turno',
-                width: 200,
+                width: 150,
                 ellipsis: true,
             }, {
                 title: 'Desde',
-                dataIndex: 'from_date',
                 key: 'Desde',
-                width: 200,
+                width: 110,
+                render: (r) => moment(r.start_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: 'Hasta',
-                dataIndex: 'to_date',
                 key: 'Hasta',
-                width: 200,
-                ellipsis: true,
-            }, {
-                title: 'Baja',
-                key: 'Baja',
-                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
-                width: 150,
+                width: 110,
+                render: (r) => moment(r.finish_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: '',
@@ -107,7 +103,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => !comeUserForm && ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => !comeUserForm && ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )

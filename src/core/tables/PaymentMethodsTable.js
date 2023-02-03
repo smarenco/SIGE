@@ -27,18 +27,24 @@ export const PaymentMethodsTable = ({ data, onReload, onRowSelectedChange, setFi
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 200,
+                width: 250,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Metodo online',
                 key: 'online',
-                width: 250,
+                width: 150,
                 ellipsis: true,
-                render:(record) => <Tag color={!record.online ? 'green' : 'red'}>{!record.online ? 'Si' : 'No'}</Tag>,
+                render:(record) => <Tag color={record.online ? 'green' : 'red'}>{record.online ? 'Si' : 'No'}</Tag>,
             }, {
-                title: 'Baja',
-                key: 'Baja',
+                title: 'Asociado',
+                key: 'Asociado',
+                render: (record) => <Tag color={record.associate ? 'green' : 'red'}>{record.associate ? 'Si' : 'No'}</Tag>,
+                width: 150,
+                ellipsis: true,
+            }, {
+                title: 'Estado',
+                key: 'Estado',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
@@ -83,7 +89,7 @@ export const PaymentMethodsTable = ({ data, onReload, onRowSelectedChange, setFi
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )

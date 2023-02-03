@@ -8,6 +8,7 @@ import { AuthService } from '../../services/AuthService';
 import { AbsenteeismCausesTable } from '../../tables/AbsenteeismCausesTable';
 
 import { absenteeismCausesCreate, absenteeismCausesDelete, absenteeismCausesIndex, absenteeismCausesShow, absenteeismCausesUpdate } from '../../services/AbsenteeismCausesService';
+import { useEffect } from 'react';
 
 export const AbsenteeismCausesPage = ({ app }) => {
 
@@ -117,6 +118,10 @@ export const AbsenteeismCausesPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
+
+    useEffect(() => {
+        loadData();
+    },[]);
 
     return (
         <>

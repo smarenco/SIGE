@@ -23,7 +23,7 @@ export default class DocumentCategory {
     /**
      * @type {array}
      */
-    documents = [];
+    document_category_document = [];
 
     constructor(item) {
         for (let key in item) {

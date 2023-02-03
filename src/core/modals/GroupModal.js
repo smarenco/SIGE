@@ -18,11 +18,27 @@ export const GroupModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-        if(!formState.from_date || formState.from_date.length === 0){
+        if(!formState.turn_id || formState.turn_id.length === 0){
+            renderError('Debe ingresar un turno');
+            return;
+        }
+        if(!formState.course_id || formState.course_id.length === 0){
+            renderError('Debe ingresar un curso');
+            return;
+        }
+        if(!formState.institute_id || formState.institute_id.length === 0){
+            renderError('Debe ingresar un instituto');
+            return;
+        }
+        if(!formState.number_students || formState.number_students.length === 0){
+            renderError('Debe ingresar la cantidad de cupos');
+            return;
+        }
+        if(!formState.start_date || formState.start_date.length === 0){
             renderError('Debe ingresar la fecha inicial');
             return;
         }
-        if(!formState.to_date || formState.to_date.length === 0){
+        if(!formState.finish_date || formState.finish_date.length === 0){
             renderError('Debe ingresar la fecha final');
             return;
         }
