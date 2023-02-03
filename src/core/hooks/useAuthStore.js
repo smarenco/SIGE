@@ -8,18 +8,18 @@ export const useAuthStore = () => {
     const dispatch = useDispatch();
 
 
-    const startLogin = async({ email, password }) => {
+    const startLogin = async({ username, password }) => {
         dispatch( onChecking() );
 
         try {
-            //const { data } = await sigeApi.post('/auth', { email, password })
+            console.log(username, password)
+            const { data } = await sigeApi.post('/auth/login', { username, password })
 
-            //localStorage.setItem('token', data.token);
-            localStorage.setItem('token',  'wtrewr36534fg3453');
+            localStorage.setItem('token', data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
 
-            //dispatch( onLogin( { name: data.name, uid: data.uid} ) );
-            dispatch( onLogin( { name: 'Santiago', uid: 123} ) );
+            //resolver porque la desestructuración de la response en data, no se queda con data y hay que hacer data.data
+            dispatch( onLogin( { name: data.data.user.names, uid: data.data.user.id} ) );
             
         } catch (err) {
             console.log(err)

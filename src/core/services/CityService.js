@@ -17,6 +17,7 @@ export const cityIndex = async (filter, output = undefined) => {
     }
 
     const { response } = await api.get(path, { params });
+    console.log(response)
     return {
         data: response.data.map(entity => new City(entity)),
         total: response.total,

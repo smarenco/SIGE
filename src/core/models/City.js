@@ -8,6 +8,11 @@ export default class City {
     /**
      * @type {number}
      */
+    account_id = undefined;
+
+    /**
+     * @type {number}
+     */
     country_id = undefined;
 
     /**

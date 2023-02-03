@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import React from 'react';
+
 
 export default class SiderLeft extends React.Component {
   render() {

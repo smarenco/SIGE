@@ -3,7 +3,7 @@ import { Button, Modal, Table } from 'antd';
 import {
     ExclamationCircleOutlined,
   } from '@ant-design/icons';
-import React from 'react'
+
 import ButtonGroup from 'antd/lib/button/button-group';
 import { DDMMYYYY } from "../common/consts";
 import { downloadDocument } from "../services/DocumentService";

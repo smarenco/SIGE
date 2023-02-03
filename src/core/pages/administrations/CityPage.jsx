@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CityModal } from '../../modals/CityModal';
@@ -80,8 +80,12 @@ export const CityPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await cityIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        try{
+            const { data, total } = await cityIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        }       
     }
 
     const loadData = () => onPageChange(1);
@@ -90,8 +94,9 @@ export const CityPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await cityShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
@@ -107,11 +112,13 @@ export const CityPage = ({ app }) => {
             }
 
             setOpenModal(false); loadData();
+            setConfirmLoading(false)
         } catch(err) {
+            setConfirmLoading(false)
             renderError(err);
         }
 
-        setConfirmLoading(false)        
+                
     }
 
     useEffect(()=>{
@@ -149,7 +156,7 @@ export const CityPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new City); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new City); }}
             />
         </>
     )

@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentCategoryModal } from '../../modals/DocumentCategoryModal';
@@ -78,8 +78,12 @@ export const DocumentCategoryPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await documentCategoryIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        try{
+            const { data, total } = await documentCategoryIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});  
+        }catch(err){
+            setLoading(false);
+        }        
     }
 
     const loadData = () => onPageChange(1);
@@ -88,14 +92,15 @@ export const DocumentCategoryPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await documentCategoryShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
+
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -111,12 +116,15 @@ export const DocumentCategoryPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
-
+    
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>
             <Card
-                title={(<strong>C</strong>)}
+                title={(<strong>Categoria documentos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
@@ -142,7 +150,7 @@ export const DocumentCategoryPage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onOk={onModalOk}
-                onCancel={() => { setOpenModal(false); setItem(new DocumentCategory); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new DocumentCategory); }}
             />
         </>
     )

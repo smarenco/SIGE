@@ -1,7 +1,7 @@
 import api from "./Api";
 import { useSelector } from "react-redux"
 import { ACCESS_TOKEN, CONFIG, MENU, PARAMS, SESSION, USER } from "../common/consts";
-import User from "../models/User";
+// import User from "../models/User";
 
 export const AuthService = () => {
 
@@ -140,17 +140,17 @@ export const AuthService = () => {
 
     const hasPermission = (IdFuncion) => {
         return true;
-        let user = JSON.parse(localStorage.getItem(USER));
-        if (!user) {
-            return false;
-        }
-        if (!Array.isArray(user.funciones) || !(user.funciones?.length > 0)) {
-            return false;
-        }
-        if (IdFuncion === 'chkHome') {
-            return true;
-        }
-        return user.funciones.filter(fun => fun.idFuncion === IdFuncion)?.length > 0;
+        // let user = JSON.parse(localStorage.getItem(USER));
+        // if (!user) {
+        //     return false;
+        // }
+        // if (!Array.isArray(user.funciones) || !(user.funciones?.length > 0)) {
+        //     return false;
+        // }
+        // if (IdFuncion === 'chkHome') {
+        //     return true;
+        // }
+        // return user.funciones.filter(fun => fun.idFuncion === IdFuncion)?.length > 0;
     }
 
     /**

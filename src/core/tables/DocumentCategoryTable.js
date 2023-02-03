@@ -1,5 +1,6 @@
+import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import React from 'react'
+
 
 const paginationStyle = {
     marginRight: 24,
@@ -26,14 +27,13 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                render: (t, r) => <span onDoubleClick={e => onEditClick(r.IdCategoria)}>{t}</span>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Estado',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
@@ -43,7 +43,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.IdCategoria)} title='Editar'></Button>
+                        <EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }
@@ -58,9 +58,9 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
             dataSource={data}
             footer={data => 
                 <div>
-                    <Button icon='reload' onClick={onReload} />
+                    <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
-                    <Input placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Busqueda: e.target.value })} onKeyDown={e => { if (e.keyCode === 13) onReload(); }} /> 
+                    <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}

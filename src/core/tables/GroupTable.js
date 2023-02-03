@@ -1,6 +1,8 @@
-import { Button, Checkbox, Input, Layout, Table, Tag } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
-import React from 'react'
+import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { DDMMYYYY } from '../common/consts';
+
 
 const paginationStyle = {
     marginRight: 24,
@@ -11,7 +13,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, comeUserForm = false }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -27,52 +29,46 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
-                width: 200,
+                width: 210,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Curso',
                 dataIndex: 'course_name',
                 key: 'Curso',
-                width: 250,
+                width: 200,
                 ellipsis: true,
             }, {
-                title: 'Profesor/a',
-                dataIndex: 'teacher_name',
-                key: 'Profesor',
-                width: 200,
+                title: 'Instituto',
+                dataIndex: 'institute_name',
+                key: 'Instituto',
+                width: 180,
                 ellipsis: true,
             }, {
                 title: 'Turno',
-                dataIndex: 'tourn_name',
+                dataIndex: 'turn_name',
                 key: 'Turno',
-                width: 200,
+                width: 150,
                 ellipsis: true,
             }, {
                 title: 'Desde',
-                dataIndex: 'from_date',
                 key: 'Desde',
-                width: 200,
+                width: 110,
+                render: (r) => moment(r.start_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: 'Hasta',
-                dataIndex: 'to_date',
                 key: 'Hasta',
-                width: 200,
-                ellipsis: true,
-            }, {
-                title: 'Baja',
-                key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
-                width: 150,
+                width: 110,
+                render: (r) => moment(r.finish_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: '',
                 key: 'actions',
                 width: 100,
                 render: record => (
-                    <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.id)} title='Editar'></Button>
+                    !comeUserForm && <div style={{ width: '100%', textAlign: 'right' }}>
+                        <EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }
@@ -83,17 +79,17 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
         <Table
             loading={loading}
             columns={columns()}
-            rowSelection={{ onChange: onRowSelectedChange, selectedRowKeys }}
+            rowSelection={!comeUserForm && { onChange: onRowSelectedChange, selectedRowKeys }}
             dataSource={data}
             footer={data => 
-                <div>
+                !comeUserForm && <div>
                     <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}
-            pagination={{
+            pagination={!comeUserForm && {
                 style: paginationStyle,
                 onChange: onPageChangeLocal,
                 onShowSizeChange: onPageChangeLocal,
@@ -107,7 +103,7 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => !comeUserForm && ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )

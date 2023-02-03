@@ -11,7 +11,7 @@ export const HHmm = 'HH:mm';
 
 export const NO_AVATAR = `${API_URL}/assets/no-avatar.png`;
 
-export const ACCESS_TOKEN = "access_token";
+export const ACCESS_TOKEN = "token";
 export const SESSION = "session";
 export const USER = "user";
 export const PARAMS = "params";
@@ -33,3 +33,25 @@ export const colors = {
     purple: '#722ed1',
     grey: '#616161',
 };
+
+export const levels_educations = [
+    {id: 'PRI', name: 'Primaria'},
+    {id: 'SEC', name: 'Secundaria'},
+    {id: 'TER', name: 'Terciaria'},
+    {id: 'POS', name: 'Posgrado'},
+];
+
+export const genders = [
+    {id: 'FEME', name: 'Femenino'},
+    {id: 'MASC', name: 'Masculino'},
+    {id: 'NOBIN', name: 'No Binario'},
+    {id: 'PRND', name: 'Prefiero no decirlo'},
+];
+
+export const typesCategories = [
+    {id: 'ADM', name: 'Administrativo/a'},
+    {id: 'PRO', name: 'Profesor/a'},
+    {id: 'DIR', name: 'Director/a'},
+    {id: 'EST', name: 'Estudiante'},
+    {id: 'CUR', name: 'Curso'},
+]; 

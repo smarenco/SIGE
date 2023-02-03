@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { InstituteForm } from '../foms/InstituteForm';
+import { InstituteForm } from '../forms/InstituteForm';
 import { useForm } from '../hooks/useForm';
 
 export const InstituteModal = (props) => {
@@ -10,12 +10,20 @@ export const InstituteModal = (props) => {
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
-    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
+    const { formState, onInputChange, onInputChangeByName, onInputChangeByObject } = useForm(item);    
 
     const onOk = () => {
         
         if(!formState.name || formState.name.trim().length === 0){
             renderError('Debe ingresar el nombre');
+            return;
+        }
+        if(!formState.country_id || formState.country_id.length === 0){
+            renderError('Debe ingresar el pais');
+            return;
+        }
+        if(!formState.city_id || formState.city_id.length === 0){
+            renderError('Debe ingresar la ciudad');
             return;
         }
 
@@ -30,7 +38,7 @@ export const InstituteModal = (props) => {
         <Modal
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={800}
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
@@ -49,6 +57,7 @@ export const InstituteModal = (props) => {
                 formState={formState}
                 onInputChange={onInputChange}
                 onInputChangeByName={onInputChangeByName}
+                onInputChangeByObject={onInputChangeByObject}
                 onCancel={onCancel}
             />
         </Modal>

@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentModal } from '../../modals/DocumentModal';
@@ -78,8 +78,12 @@ export const DocumentPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await documentIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        try{
+            const { data, total } = await documentIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        } 
     }
 
     const loadData = () => onPageChange(1);
@@ -88,14 +92,14 @@ export const DocumentPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await documentShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -111,7 +115,10 @@ export const DocumentPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
-
+    
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>
@@ -142,7 +149,7 @@ export const DocumentPage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onOk={onModalOk}
-                onCancel={() => { setOpenModal(false); setItem(new Document); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Document); }}
             />
         </>
     )

@@ -1,5 +1,5 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { TurnModal } from '../../modals/TurnModal';
@@ -79,8 +79,12 @@ export const TurnPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await turnIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        try{
+            const { data, total } = await turnIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            setLoading(false);
+        }
     }
 
     const loadData = () => onPageChange(1);
@@ -89,14 +93,14 @@ export const TurnPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await turnShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
 
     const onModalOk = async(obj) => {
-        console.log('guardar')
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -113,6 +117,9 @@ export const TurnPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(() => {
+        //loadData();
+    }, []);
 
     return (
         <>
@@ -144,7 +151,7 @@ export const TurnPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new Turn); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Turn); }}
             />
         </>
     )

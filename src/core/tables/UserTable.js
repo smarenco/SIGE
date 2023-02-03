@@ -1,6 +1,6 @@
-import { Button, Checkbox, Input, Layout, Table, Tag } from 'antd';
-import { ReloadOutlined } from '@ant-design/icons';
-import React from 'react'
+import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
+import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
+
 
 const paginationStyle = {
     marginRight: 24,
@@ -11,7 +11,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, typesUsers }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -24,16 +24,46 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
     const columns = () => {
         return [
             {
-                title: 'Nombre',
-                dataIndex: 'name',
-                key: 'Nombre',
+                title: 'Documento',
+                dataIndex: 'document',
+                key: 'Documento',
                 width: 250,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
+                title: 'Nombre',
+                render: (record) => record.name + ' ' + record.last_name ,
+                key: 'Nombre',
+                width: 250,
+                ellipsis: true,
+            }, {
+                title: 'Telefono',
+                dataIndex: 'phone',
+                key: 'Telefono',
+                width: 150,
+                ellipsis: true,
+            }, {
+                title: 'Pais',
+                key: 'Pais',
+                width: 150,
+                ellipsis: true,
+                render: (record) => record.country.name,
+            }, {
+                title: 'Ciudad',
+                key: 'Ciudad',
+                width: 150,
+                ellipsis: true,
+                render: (record) => record.city.name ,
+            }, {
+                title: 'Tipo',
+                key: 'Tipo',
+                width: 150,
+                ellipsis: true,
+                render: (record) => record.type,
+            }, {
                 title: 'Baja',
                 key: 'Baja',
-                render: (record) => <Tag color={!record.Baja ? 'green' : 'red'}>{!record.Baja ? 'Vigente' : 'Anulado'}</Tag>,
+                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {
@@ -42,7 +72,7 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <Button key='see' icon='edit' onClick={e => onEditClick(record.IdUser)} title='Editar'></Button>
+                        <EditOutlined onClick={e => onEditClick(record.IdUser)} />
                     </div>
                 ),
             }
@@ -61,6 +91,10 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
+                    <Select style={{width: '20%'}} placeholder='Tipos de usuario...' onChange={User_type => setFilters({ User_type })}>
+                        {typesUsers.map(type => <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>)}
+                    </Select>
+                    &nbsp; 
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
                 </div>}
             pagination={{
@@ -77,7 +111,7 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.Id) })}
+            onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
             
         />
     )

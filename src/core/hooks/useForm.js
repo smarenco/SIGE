@@ -39,6 +39,12 @@ export const useForm = ( initialForm = {}, formValidations = {}) => {
         });
     }
 
+    const onInputChangeByObject = (obj) => {
+        setFormState({
+            ...formState, ...obj
+        });
+    }
+
     const onResetForm = () => {
         setFormState( initialForm );
     }
@@ -64,6 +70,7 @@ export const useForm = ( initialForm = {}, formValidations = {}) => {
         onInputChange,
         onResetForm,
         onInputChangeByName,
+        onInputChangeByObject,
 
         ...formValidation,
         isFormValid

@@ -2,7 +2,7 @@ import { clearObj, open } from '../common/functions';
 import DocumentCategory from '../models/DocumentCategory';
 import api from "./Api";
 
-const path = 'documentCategory';
+const path = 'documental-category';
 
 export const documentCategoryIndex = async (filter, output = undefined) => {
     let params = filter || {};

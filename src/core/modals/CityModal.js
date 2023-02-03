@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { CityForm } from '../foms/CityForm';
+import { CityForm } from '../forms/CityForm';
 import { useForm } from '../hooks/useForm';
 
 export const CityModal = (props) => {
@@ -18,7 +18,7 @@ export const CityModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-
+        console.log(formState)
         onOkProp(formState);
     }
 

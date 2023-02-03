@@ -3,6 +3,38 @@ import { Form, message, Modal } from "antd";
 import { HHmm, DDMMYYYY, ACCESS_TOKEN, LOCALE } from "./consts";
 import { API_URL } from "../../env";
 
+
+export const loadTypes = async (gender) => {
+    let typesUsers = [
+        {id: 'administrative', name: 'Administrativo/a'},
+        {id: 'teacher', name: 'Profesor/a'},
+        {id: 'DIR', name: 'Director/a'},
+        {id: 'student', name: 'Estudiante'},
+    ];
+
+    switch (gender) {
+        case 'MASC':
+            typesUsers = [
+                {id: 'administrative', name: 'Administrativo'},
+                {id: 'teacher', name: 'Profesor'},
+                {id: 'DIR', name: 'Director'},
+                {id: 'student', name: 'Estudiante'},
+            ];
+            break;
+        case 'FEME':
+            typesUsers = [
+                {id: 'administrative', name: 'Administrativa'},
+                {id: 'teacher', name: 'Profesora'},
+                {id: 'DIR', name: 'Directora'},
+                {id: 'student', name: 'Estudiante'},
+            ];
+            break;
+    }
+
+    return typesUsers;
+    
+};
+
 export const renderFormItem = (key, label, initialValue, component) => {
     let labelExt, valuePropName = 'value';
     if (typeof initialValue === 'boolean') {

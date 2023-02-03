@@ -21,9 +21,9 @@ export default class DocumentCategory {
     type = undefined;
 
     /**
-     * @type {boolean}
+     * @type {array}
      */
-    Baja = false;
+    document_category_document = [];
 
     constructor(item) {
         for (let key in item) {

@@ -1,7 +1,7 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { DocumentForm } from '../foms/DocumentForm';
+import { DocumentForm } from '../forms/DocumentForm';
 import { useForm } from '../hooks/useForm';
 
 export const DocumentModal = (props) => {
@@ -18,15 +18,7 @@ export const DocumentModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-        if(!formState.from_hour || formState.from_hour.length === 0){
-            renderError('Debe ingresar la hora inicial');
-            return;
-        }
-        if(!formState.to_hour || formState.to_hour.length === 0){
-            renderError('Debe ingresar la hora final');
-            return;
-        }
-
+        
         onOkProp(formState);
     }
 

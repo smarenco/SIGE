@@ -1,7 +1,7 @@
 import { message, Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { renderError } from '../common/functions';
-import { UserForm } from '../foms/UserForm';
+import { UserForm } from '../forms/UserForm';
 import { useForm } from '../hooks/useForm';
 
 export const UserModal = (props) => {

@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { alertError, renderError } from '../../common/functions';
+import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
@@ -19,12 +19,20 @@ export const UserPage = ({ app }) => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const [typesUsers, setTypesUsers] = useState([]);
 
     const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
     
+    const fetchTypes = async (gender) => {
+        try {
+            const types = await loadTypes(gender);
+            setTypesUsers(types);
+        } catch(err) { renderError(err); }
+    };
+
     const dropdownExport = () => (<Menu>
         <Menu.Item onClick={() => userIndex(filters, 'xls')}>Excel</Menu.Item>
         <Menu.Item onClick={() => userIndex(filters, 'pdf')}>PDF</Menu.Item>
@@ -113,7 +121,7 @@ export const UserPage = ({ app }) => {
         setLoading(true);
 
         const { data, total } = await userIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({});
+        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
     }
 
     const loadData = () => onPageChange(1);
@@ -122,8 +130,9 @@ export const UserPage = ({ app }) => {
         setLoading(true);
         try {
             const item = await userShow(id)
-            setItem(item); setOpenModal(true);
+            setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
+            setLoading(false);
             renderError(err);
         }
     }
@@ -146,6 +155,10 @@ export const UserPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
+    useEffect(() => {
+        loadData();
+        fetchTypes();
+    }, []);
 
     return (
         <>
@@ -162,6 +175,7 @@ export const UserPage = ({ app }) => {
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
+                    typesUsers={typesUsers}
                     pagination={{
                         pageSize: pageSize,
                         page: page,
@@ -177,7 +191,7 @@ export const UserPage = ({ app }) => {
                 onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setOpenModal(false); setItem(new User); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new User); }}
             />
         </>
     )

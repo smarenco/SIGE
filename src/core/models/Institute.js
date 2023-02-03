@@ -28,6 +28,16 @@ export default class Institute {
     /**
      * @type {string}
      */
+    phone = undefined;
+
+    /**
+     * @type {string}
+     */
+    direction = undefined;
+
+    /**
+     * @type {string}
+     */
     description = undefined;
 
     /**

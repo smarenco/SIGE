@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Circle, GoogleApiWrapper, Map, Marker } from 'google-maps-react';
 import { GOOGLE_MAP_KEY } from '@/env';
 
