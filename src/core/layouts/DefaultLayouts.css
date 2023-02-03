@@ -10,11 +10,12 @@
   color: #1890ff;
 }
 
-.logo {
-  height: 32px;
-  margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
-  background-image: url('./logo.png');
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 64px;
 }
 
 .site-layout .site-layout-background {

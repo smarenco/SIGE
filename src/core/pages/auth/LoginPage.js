@@ -1,85 +1,25 @@
 import { Modal } from 'antd';
-import { useEffect } from 'react';
-import { alertError } from '../../common/functions';
-import { useAuthStore } from '../../hooks/useAuthStore';
-import { useForm } from '../../hooks/useForm';
+// import { alertError } from '../../common/functions';
+import LoginForm from '../../forms/auth/LoginForm';
 import './LoginPage.css';
 
-const loginFormFields = {
-    loginEmail: '',
-    loginPassword: '',
-}
-
-const registerFormFields = {
-    registerName: '',
-    registerEmail: '',
-    registerPassword: '',
-    registerPassword2: '',
-}
-
 export const LoginPage = () => {
-
-
-    const { startLogin, errorMessage } = useAuthStore();
-
-    const { loginEmail, loginPassword, onInputChange:onLoginInputChange } = useForm(loginFormFields);
-
-    const loginSubmit = ( event ) => {
-        event.preventDefault();
-        startLogin( { username: loginEmail, password: loginPassword} );
-    }
-
-    useEffect(() => {
-        console.log(errorMessage)
-      if( errorMessage !== undefined ){
-        alertError('Error en la autenticacion', errorMessage);
-      }
-    
-    }, [errorMessage])
-
     const error = (title, content) => {
         Modal.error({
-          title,
-          content,
+            title,
+            content,
         });
-      };
-    
+    };
+
     return (
-        <div className="container login-container">
-            <div className="row">
-                <div className="col-md-6 login-form-1">
-                    <h3>Ingreso</h3>
-                    <form onSubmit={loginSubmit}>
-                        <div className="form-group mb-2">
-                            <input 
-                                type="email"
-                                className="form-control"
-                                placeholder="Correo"
-                                name='loginEmail'
-                                value={loginEmail}
-                                onChange={onLoginInputChange}
-                            
-                            />
-                        </div>
-                        <div className="form-group mb-2">
-                            <input
-                                type="password"
-                                className="form-control"
-                                placeholder="Contraseña"
-                                name='loginPassword'
-                                value={loginPassword}
-                                onChange={onLoginInputChange}
-                            />
-                        </div>
-                        <div className="form-group mb-2">
-                            <input 
-                                type="submit"
-                                className="btnSubmit"
-                                value="Login" 
-                            />
-                        </div>
-                    </form>
-                </div>
+        <div className='login-background'>
+            <div className='login-aside'>
+                <img width={100} src={require('../../../assets/logo1.png')} alt='logo-urusige'/>
+                <h2 style={{width: '100%', marginTop: 20, textAlign: 'center'}}>Bienvenides a <span style={{color: '#95c66e', fontWeight: 'bold'}}>URU</span><span style={{color: '#2995d3', fontWeight: 'bold'}}>SIGE</span></h2>
+                <LoginForm handleError={error} />
+            </div>
+            <div className='login-cover'>
+            <span>.</span>
             </div>
         </div>
     )

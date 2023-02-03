@@ -37,7 +37,7 @@ instance.interceptors.response.use(handleSuccess, handleError);
 
 const access_token = localStorage.getItem(ACCESS_TOKEN);
 if (typeof access_token === 'string') {
-    instance.defaults.headers.common['X-FS-AUTH-TOKEN'] = access_token;
+    instance.defaults.headers.common['X-SUY-AUTH-TOKEN'] = access_token;
 }
 
 export default instance;

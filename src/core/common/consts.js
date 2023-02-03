@@ -11,7 +11,7 @@ export const HHmm = 'HH:mm';
 
 export const NO_AVATAR = `${API_URL}/assets/no-avatar.png`;
 
-export const ACCESS_TOKEN = "access_token";
+export const ACCESS_TOKEN = "token";
 export const SESSION = "session";
 export const USER = "user";
 export const PARAMS = "params";
