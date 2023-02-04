@@ -1,14 +1,11 @@
+import moment from "moment";
+
 export default class Payment {
 
     /**
      * @type {number}
      */
     id = undefined;
-
-    /**
-     * @type {number}
-     */
-    account_id = undefined;
 
     /**
      * @type {number}
@@ -33,7 +30,7 @@ export default class Payment {
     /**
      * @type {date}
      */
-    date = undefined;
+    payment_date = moment();
 
     /**
      * @type {boolean}
@@ -66,6 +63,11 @@ export default class Payment {
     canceled = false;
 
     /**
+     * @type {date}
+     */
+    canceled_date = false;
+
+    /**
      * @type {number}
      */
     amount_coute = 1;
@@ -73,7 +75,7 @@ export default class Payment {
     /**
      * @type {number}
      */
-    value_coute = false;
+    quota_value = false;
 
     constructor(item) {
         for (let key in item) {

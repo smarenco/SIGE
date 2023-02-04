@@ -8,14 +8,24 @@ export const PaymentModal = (props) => {
 
     const [ready, setReady] = useState(false)
 
-    const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
+    const { app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
     const { formState, onInputChange, onInputChangeByName, onInputChangeByObject } = useForm(item);    
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
+        if(!formState.student_id || formState.student_id.length === 0){
+            renderError('Debe ingresar el estudiante');
+            return;
+        }
+
+        if(!formState.course_id || formState.course_id.length === 0){
+            renderError('Debe ingresar el curso');
+            return;
+        }
+
+        if(!formState.method_payment_id || formState.method_payment_id.length === 0){
+            renderError('Debe ingresar el metodo de pago');
             return;
         }
 
@@ -28,12 +38,12 @@ export const PaymentModal = (props) => {
 
     return (
         <Modal
-            title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
+            title={`${item.getId() ? 'Detalle' : 'Nuevo registro'}`}
             open={open}
-            width={600}
+            width={700}
             destroyOnClose={true}
             okText='Guardar'
-            cancelText='Cancelar'
+            cancelText={!!item.getId() ? 'Cerrar' : 'Cancelar'}
             cancelButtonProps={{ disabled: confirmLoading }}
             loading={loading}
             onOk={onOk}
@@ -41,11 +51,11 @@ export const PaymentModal = (props) => {
             closable={!confirmLoading}
             confirmLoading={confirmLoading}
             onCancel={onCancel}
-            okButtonProps={{disabled: view}}>
+            okButtonProps={{disabled: !!item.getId()}}>
 
             <PaymentForm
                 app={app}
-                view={view}
+                view={!!item.getId()}
                 formState={formState}
                 onInputChange={onInputChange}
                 onInputChangeByName={onInputChangeByName}

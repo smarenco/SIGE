@@ -51,6 +51,7 @@ export const appStore = createSlice({
             { key: 'paymentMethods', name:'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage },
             { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
             { key: 'document', name:'Documentos', path: '/documentos/', component: DocumentPage },
+            
             { key: 'payment', name:'Pago', path: '/pago/', component: PaymentPage },
             { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
             { key: 'account', name:'Cuenta', path: '/cuenta/', component: AccountPage },

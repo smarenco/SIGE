@@ -1,5 +1,5 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
 
 
 const paginationStyle = {
@@ -29,24 +29,30 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 width: 130,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
-                render: (record) => record.user.document
+                render: (record) => record.student.document
             }, {
                 title: 'Nombre',
                 key: 'Nombre',
                 width: 200,
                 ellipsis: true,
-                render: (record) => record.user.name
+                render: (record) => record.student.name
+            }, {
+                title: 'Curso',
+                key: 'Curso',
+                width: 170,
+                ellipsis: true,
+                render: (record) => record.course.name
             }, {
                 title: 'Coutas',
                 dataIndex: 'amount_coute',
                 key: 'Coutas',
-                width: 100,
+                width: 80,
                 ellipsis: true,
             }, {
                 title: 'Valor Couta',
-                dataIndex: 'value_coute',
+                dataIndex: 'quota_value',
                 key: 'Coutas',
-                width: 120,
+                width: 110,
                 ellipsis: true,
             }, {
                 title: 'Descuento',
@@ -58,27 +64,27 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 title: 'Recargo',
                 dataIndex: 'surcharge',
                 key: 'Recargo',
-                width: 100,
+                width: 90,
                 ellipsis: true,
             }, {
                 title: 'Total',
                 key: 'Total',
-                width: 100,
+                width: 80,
                 ellipsis: true,
-                render: (record) => (record.amount_coute * record.value_coute) + record.surcharge - record.discount,
+                render: (record) => (record.amount_coute * record.quota_value) + record.surcharge - record.discount,
             }, {
-                title: 'Cancelado',
+                title: 'Estado',
                 key: 'canceled',
                 render: (record) => <Tag color={!record.canceled ? 'green' : 'red'}>{!record.canceled ? 'Vigente' : 'Anulado'}</Tag>,
-                width: 100,
+                width: 90,
                 ellipsis: true,
             }, {
                 title: '',
                 key: 'actions',
-                width: 100,
+                width: 60,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <EditOutlined onClick={e => onEditClick(record.id)} />
+                        <EyeOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }
