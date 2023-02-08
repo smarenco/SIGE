@@ -1,0 +1,27 @@
+.loader{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    animation: animate 3s linear infinite;
+}
+.loader-message{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 150%);
+    color: rgb(80, 80, 80);
+}
+
+@keyframes animate {
+    0%
+    {
+        transform: translate(-50%, -50%) perspective(400px) rotateY(0deg) ;
+    }
+    100%
+    {
+        transform: translate(-50%, -50%) perspective(400px) rotateY(360deg) ;
+    }
+}

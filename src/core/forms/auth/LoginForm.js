@@ -28,7 +28,6 @@ const LoginForm = ({ handleError }) => {
     }, [errorMessage, handleError])
 
   const handleOnSubmit = (event) => {
-    console.log(loginEmail, loginPassword)
     startLogin({ username: loginEmail, password: loginPassword });
   }
 

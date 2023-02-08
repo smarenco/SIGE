@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -7,9 +7,12 @@ import {
   Route,
 } from "react-router-dom";
 import { APP_PATH } from '../../env';
+import Loading from '../components/common/Loading';
 import { useAuthStore } from '../hooks/useAuthStore';
 import DefaultLayout from '../layouts/DefaultLayout';
 import { LoginPage } from '../pages/auth/LoginPage';
+import { RegisterPage } from '../pages/auth/RegisterPage';
+import { ResetPasswordPage } from '../pages/auth/ResetPasswordPage';
 import "./App.css";
 export const AppRouter = () => {
 
@@ -24,7 +27,7 @@ export const AppRouter = () => {
 
     if( status === 'checking'){
       return (
-        <h3>Cargando...</h3>
+        <Loading message='Comprobando información...' />
       )
     }
 
@@ -45,7 +48,9 @@ export const AppRouter = () => {
             status === 'not-authenticated' 
             ?
                 <Routes>
-                    <Route path='/auth/*' element={ <LoginPage /> } />
+                    <Route path='/auth/login' element={ <LoginPage /> } />
+                    <Route path='/auth/register' element={ <RegisterPage /> } />
+                    <Route path='/auth/resetPassword' element={ <ResetPasswordPage type='recovery' /> } />
                     <Route path='/*' element={ <Navigate to="auth/login" /> } />
                 </Routes>
             : 

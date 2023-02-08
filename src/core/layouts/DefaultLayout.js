@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'antd/dist/antd.min.css';
 import './DefaultLayouts.css';
 import {
+    DownOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     // UploadOutlined,
@@ -9,27 +10,59 @@ import {
     // VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import { Layout, Menu } from 'antd';
-// import { useDispatch } from 'react-redux';
-// import { APP_PATH } from '../../env';
-
+import { Avatar, Button, Dropdown, Layout, Menu, message } from 'antd';
+import {
+    LogoutOutlined
+} from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
+import { useAuthStore } from '../hooks/useAuthStore';
 const { Header, Sider, Content } = Layout;
 
 
 const DefaultLayout = ({ component, app }) => {
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
     const [collapsed, setCollapsed] = useState(false);
+    const { startLogout } = useAuthStore();
+    
+    const handleLogout = () => {
+        dispatch(startLogout());
+    }
+    
+    const items = (
+        <Menu>
+          <Menu.Item>Mi Perfil</Menu.Item>
+          <Menu.Item onClick={handleLogout}>Salir <LogoutOutlined /></Menu.Item>
+        </Menu>
+      );
 
-    // const handleLogout = () => {
-	// 	dispatch(startLogout())
-	// }
+    const [messageApi, contextHolder] = message.useMessage();
+
+    // const info = (message) => {
+    //     messageApi.info(message);
+    // };
+    // const error = (message) => {
+    //     messageApi.info(message);
+    // };
+    const success = (message) => {
+        messageApi.success(message);
+    };
+
+    useEffect(() => {
+        success('Bienvenide a URUSIGE');
+    }, []);
 
     return (
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
+            {contextHolder}
             <Layout>
                 <Sider trigger={null} collapsible collapsed={collapsed}>
                     <div className='logo-container'>
-                        <img width={120} src={require('../../assets/logo2.png')} alt='logo-urusige' />
+                        {
+                            collapsed ?
+                                <img width={35} src={require('../../assets/logo1.png')} alt='logo-urusige' />
+                                :
+                                <img width={120} src={require('../../assets/logo2.png')} alt='logo-urusige' />
+                        }
                     </div>
                     <Menu
                         theme="dark"
@@ -59,6 +92,14 @@ const DefaultLayout = ({ component, app }) => {
                             className: 'trigger',
                             onClick: () => setCollapsed(!collapsed),
                         })}
+
+                        <Dropdown overlay={items}>
+                            <Button type='text' style={{float: 'right', top: 15, right: 20}}>
+                                <Avatar size='small' src={require('../../assets/logo1.png')} icon={<UserOutlined />} />
+                                <DownOutlined /> 
+                            </Button>
+                        </Dropdown>
+                        
                     </Header>
                     <Content
                         className="site-layout-background"

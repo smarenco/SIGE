@@ -1,20 +1,15 @@
 import React from 'react'
-import { Spin } from 'antd';
+import './loading.css'
 
-const styleSpinner = {
-    textAlign: 'center',
-    padding: '30px 50px',
-    margin: '20px 0',
+const Loading = ({ message }) => {
+  return (
+    <>
+      <div className='loader'>
+        <img width={70} src={require('../../../assets/logo1.png')} alt='logo-urusige' />
+      </div>
+      <h3 className='loader-message'>{message}</h3>
+    </>
+  )
 }
 
-export default class extends React.Component {
-
-    render() {
-        if (this.props.loading) {
-            return (<div style={{ ...styleSpinner, ...this.props.style }}><Spin tip={this.props.tip || 'Cargando...'} /></div>);
-        } else {
-            return this.props.children;
-        }
-    }
-
-}
+export default Loading
