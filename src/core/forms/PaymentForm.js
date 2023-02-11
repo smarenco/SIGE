@@ -81,23 +81,22 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     }, [formState.apply_surcharge]);
 
     useEffect(() => {
-        let { surcharge, discount, amount_coute, quota_value } = formState;
+        let { surcharge, discount, amount_coute, value_cuote } = formState;
         surcharge = !isNaN(parseInt(surcharge)) ? parseInt(surcharge) : 0;
         discount = !isNaN(parseInt(discount)) ? parseInt(discount) : 0;
         amount_coute = !isNaN(parseInt(amount_coute)) ? parseInt(amount_coute) : 0;
-        quota_value = !isNaN(parseInt(quota_value)) ? parseInt(quota_value) : 0;
+        value_cuote = !isNaN(parseInt(value_cuote)) ? parseInt(value_cuote) : 0;
         
-        console.log(surcharge, discount, amount_coute, quota_value)
         let total = 0;
-        total = amount_coute * quota_value;
+        total = amount_coute * value_cuote;
         total = total + surcharge - discount;
 
         setTotal(total);
-    }, [formState.surcharge, formState.discount, formState.amount_coute, formState.quota_value]);
+    }, [formState.surcharge, formState.discount, formState.amount_coute, formState.value_cuote]);
 
     const onChangeCourse = (course_id) =>{
         let course = courses.filter(course => course.id === course_id)[0];
-        onInputChangeByObject({course_id, quota_value: course.quota_value});
+        onInputChangeByObject({course_id, value_cuote: course.value_cuote});
     }
 
     return (
@@ -152,7 +151,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                 </LayoutH>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
-                        <DatePicker disabled={view} name='payment_date' onChange={(payment_date) => onInputChangeByName('payment_date', payment_date)} format={DDMMYYYY} value={formState?.payment_date ? moment(formState?.payment_date)  : undefined}/>
+                        <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', date)} format={DDMMYYYY} value={formState?.date ? moment(formState?.date)  : undefined}/>
                     </Form.Item>
                     <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
                         <Switch name='apply_discount' disabled={view || confirmLoading} onChange={(apply_discount) => onInputChangeByName('apply_discount', apply_discount)} checked={formState?.apply_discount} />
@@ -172,7 +171,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         <InputNumber min={0} style={{borderColor: 'red'}} name='surcharge' disabled={view || confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => onInputChangeByName('surcharge', surcharge)} value={formState?.surcharge} />
                     </Form.Item>
                     <Form.Item label='Valor Couta' labelAlign='left' span={6}>
-                        <InputNumber min={0} name='quota_value' disabled={view || confirmLoading} onChange={(quota_value) => onInputChangeByName('quota_value', quota_value)} value={formState?.quota_value} />
+                        <InputNumber min={0} name='value_cuote' disabled={view || confirmLoading} onChange={(value_cuote) => onInputChangeByName('value_cuote', value_cuote)} value={formState?.value_cuote} />
                     </Form.Item>
                     <Form.Item label='Observacion' labelAlign='left' span={22}>
                         <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
