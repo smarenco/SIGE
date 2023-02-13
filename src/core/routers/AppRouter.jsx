@@ -27,7 +27,7 @@ export const AppRouter = () => {
 
     if( status === 'checking'){
       return (
-        <Loading message='Comprobando información...' />
+        <Loading message='Comprobando información...' size={70} />
       )
     }
 
