@@ -33,13 +33,12 @@ export const useAuthStore = () => {
         if (!token) return dispatch(onLogout());
 
         try {
-            //const { data } = await sigeApi.get('/auth/renew');
+            const { data } = await sigeApi.get('/auth/renew');
 
-            //localStorage.setItem('token', data.token);
-            //localStorage.setItem('token-init-date', new Date().getTime());
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('token-init-date', new Date().getTime());
 
-            //dispatch( onLogin( { name: data.name, uid: data.uid} ) );
-            dispatch(onLogin({ name: 'Santiago', uid: 123 }));
+            dispatch( onLogin( { name: data.name, uid: data.uid} ) );
 
         } catch (err) {
             localStorage.clear();
