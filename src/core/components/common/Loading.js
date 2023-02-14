@@ -2,7 +2,6 @@ import React from 'react'
 import './loading.css'
 
 const Loading = ({ loading = true, message = '', size = 20}) => {
-  console.log(loading)
   return (
     <>
       <div className='loader' style={{display: loading ? 'block' : 'none', width: size, height: size}}>
