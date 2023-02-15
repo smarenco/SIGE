@@ -11,7 +11,7 @@ import { turnCreate, turnDelete, turnIndex, turnShow, turnUpdate } from '../../s
 
 export const TurnPage = ({ app }) => {
 
-    const [item, setItem] = useState(new Turn);
+    const [item, setItem] = useState(new Turn());
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
@@ -118,7 +118,7 @@ export const TurnPage = ({ app }) => {
     }
 
     useEffect(() => {
-        //loadData();
+        loadData();
     }, []);
 
     return (

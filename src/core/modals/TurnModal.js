@@ -9,7 +9,7 @@ export const TurnModal = (props) => {
     const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
-  
+
     const { formState, onInputChange, onInputChangeByName } = useForm(item);    
 
     const onOk = () => {
@@ -54,6 +54,7 @@ export const TurnModal = (props) => {
             <TurnForm
                 app={app}
                 view={view}
+                loading={loading}
                 formState={formState}
                 onInputChange={onInputChange}
                 onInputChangeByName={onInputChangeByName}

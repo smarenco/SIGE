@@ -37,13 +37,13 @@ export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 key: 'Desde',
                 width: 250,
                 ellipsis: true,
-                render: (r) => moment(r.start_time).format(HHmm)
+                render: (r) => moment(r.start_time, HHmm).format(HHmm)
             }, {
                 title: 'Hasta',
                 key: 'Hasta',
                 width: 200,
                 ellipsis: true,
-                render: (r) => moment(r.finish_time).format(HHmm)
+                render: (r) => moment(r.finish_time, HHmm).format(HHmm)
             }, {
                 title: 'Baja',
                 key: 'Baja',

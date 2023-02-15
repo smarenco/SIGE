@@ -1,6 +1,6 @@
 import { Button, Card, Dropdown, Menu, Modal } from 'antd'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentMethodsModal } from '../../modals/PaymentMethodsModal';
 import PaymentMethods from '../../models/PaymentMethods';
@@ -11,7 +11,7 @@ import { paymentMethodsCreate, paymentMethodsDelete, paymentMethodsIndex, paymen
 
 export const PaymentMethodsPage = ({ app }) => {
 
-    const [item, setItem] = useState(new PaymentMethods);
+    const [item, setItem] = useState(new PaymentMethods());
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
@@ -117,6 +117,10 @@ export const PaymentMethodsPage = ({ app }) => {
 
         setConfirmLoading(false)        
     }
+
+    useEffect(() => {
+        loadData();
+    }, []);
 
     return (
         <>
