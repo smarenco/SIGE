@@ -9,6 +9,7 @@ import { AbsenteeismCausesTable } from '../../tables/AbsenteeismCausesTable';
 
 import { absenteeismCausesCreate, absenteeismCausesDelete, absenteeismCausesIndex, absenteeismCausesShow, absenteeismCausesUpdate } from '../../services/AbsenteeismCausesService';
 import { useEffect } from 'react';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 
 export const AbsenteeismCausesPage = ({ app }) => {
 
@@ -27,24 +28,43 @@ export const AbsenteeismCausesPage = ({ app }) => {
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
     
-    const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => absenteeismCausesIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => absenteeismCausesIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => absenteeismCausesIndex(filters, 'csv')}>CSV</Menu.Item>
-    </Menu>);
+    const items = [
+        {
+            label: 'Excel',
+            key: '1',
+            icon: <FileExcelOutlined />,
+            onClick: () => absenteeismCausesIndex(filters, 'xls')
+        },
+        {
+            label: 'PDF',
+            key: '2',
+            icon: <FilePdfOutlined />,
+            onClick: () => absenteeismCausesIndex(filters, 'pdf')
+        },
+        {
+            label: 'CSV',
+            key: '3',
+            icon: <FileTextOutlined />,
+            onClick: () => absenteeismCausesIndex(filters, 'csv')
+        }
+    ];
+
+    const menuProps = {
+        items
+    };
 
     const renderExtraTable = () => {
 
         return (
             <>
-                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={loading}>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new AbsenteeismCauses); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }

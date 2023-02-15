@@ -5,6 +5,7 @@ import { alertError, renderError } from '../../common/functions';
 import { CountryModal } from '../../modals/CountryModal';
 import Country from '../../models/Country';
 import { AuthService } from '../../services/AuthService';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { CountryTable } from '../../tables/CountryTable';
 
 import { countryCreate, countryDelete, countryIndex, countryShow, countryUpdate } from '../../services/CountryService';
@@ -26,17 +27,36 @@ export const CountryPage = ({ app }) => {
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
     
-    const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => countryIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => countryIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => countryIndex(filters, 'csv')}>CSV</Menu.Item>
-    </Menu>);
+    const items = [
+        {
+            label: 'Excel',
+            key: '1',
+            icon: <FileExcelOutlined />,
+            onClick: () => countryIndex(filters, 'xls')
+        },
+        {
+            label: 'PDF',
+            key: '2',
+            icon: <FilePdfOutlined />,
+            onClick: () => countryIndex(filters, 'pdf')
+        },
+        {
+            label: 'CSV',
+            key: '3',
+            icon: <FileTextOutlined />,
+            onClick: () => countryIndex(filters, 'csv')
+        }
+    ];
+
+    const menuProps = {
+        items
+    };
 
     const renderExtraTable = () => {
 
         return (
             <>
-                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={loading}>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
@@ -47,7 +67,7 @@ export const CountryPage = ({ app }) => {
                     <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
                     <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
                 </Button.Group> */}
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }

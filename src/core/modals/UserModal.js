@@ -40,6 +40,7 @@ export const UserModal = (props) => {
 
     return (
         <Modal
+            bodyStyle={{ paddingTop: 10}}
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
             width={1100}

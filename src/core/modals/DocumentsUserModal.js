@@ -32,6 +32,7 @@ export const DocumentsUserModal = (props) => {
 
     return (
         <Modal
+            bodyStyle={{ paddingTop: 10}}
             title={`Documento: ${formState.name}`}
             visible={visible}
             width={600}

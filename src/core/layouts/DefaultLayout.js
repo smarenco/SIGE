@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import 'antd/dist/antd.min.css';
+// import 'antd/dist/antd.css';
 import './DefaultLayouts.css';
 import {
     DownOutlined,
@@ -10,7 +10,7 @@ import {
     // VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Link } from "react-router-dom";
-import { Avatar, Button, Dropdown, Layout, Menu, message } from 'antd';
+import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
 import {
     LogoutOutlined
 } from '@ant-design/icons';
@@ -23,17 +23,33 @@ const DefaultLayout = ({ component, app }) => {
     const dispatch = useDispatch();
     const [collapsed, setCollapsed] = useState(false);
     const { startLogout } = useAuthStore();
-    
+
     const handleLogout = () => {
         dispatch(startLogout());
     }
-    
-    const items = (
-        <Menu>
-          <Menu.Item>Mi Perfil</Menu.Item>
-          <Menu.Item onClick={handleLogout}>Salir <LogoutOutlined /></Menu.Item>
-        </Menu>
-      );
+
+    const handleMyProfile = (e) => {
+        console.log(e);
+    }
+
+    const items = [
+        {
+            label: 'Mi Perfil',
+            key: '1',
+            icon: <UserOutlined />,
+            onClick: handleMyProfile
+        },
+        {
+            label: 'Cerrar Sesión',
+            key: '2',
+            icon: <LogoutOutlined />,
+            onClick: handleLogout
+        }
+    ];
+
+    const menuProps = {
+        items
+    };
 
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -72,7 +88,7 @@ const DefaultLayout = ({ component, app }) => {
                             if (!route.isPublic) {
                                 return {
                                     key: i,
-                                    icon: <UserOutlined />,
+                                    icon: route?.icon,
                                     label: <Link to={route.path}>{route.name}</Link>,
                                 }
                             } else {
@@ -92,14 +108,14 @@ const DefaultLayout = ({ component, app }) => {
                             className: 'trigger',
                             onClick: () => setCollapsed(!collapsed),
                         })}
-
-                        <Dropdown overlay={items}>
-                            <Button type='text' style={{float: 'right', top: 15, right: 20}}>
-                                <Avatar size='small' src={require('../../assets/logo1.png')} icon={<UserOutlined />} />
-                                <DownOutlined /> 
-                            </Button>
-                        </Dropdown>
-                        
+                        <Space wrap style={{ float: 'right', top: 10, marginRight: 20 }}>
+                            <Dropdown menu={menuProps} >
+                                <Button type='text' >
+                                    <Avatar size='small' style={{ transform: 'translateY(-2px)' }} src={require('../../assets/logo1.png')} icon={<UserOutlined />} />
+                                    <DownOutlined />
+                                </Button>
+                            </Dropdown>
+                        </Space>
                     </Header>
                     <Content
                         className="site-layout-background"
