@@ -7,6 +7,7 @@ import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
 import { userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 
 export const UserPage = ({ app }) => {
 
@@ -33,17 +34,36 @@ export const UserPage = ({ app }) => {
         } catch(err) { renderError(err); }
     };
 
-    const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => userIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => userIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => userIndex(filters, 'csv')}>CSV</Menu.Item>
-    </Menu>);
+    const items = [
+        {
+            label: 'Excel',
+            key: '1',
+            icon: <FileExcelOutlined />,
+            onClick: () => userIndex(filters, 'xls')
+        },
+        {
+            label: 'PDF',
+            key: '2',
+            icon: <FilePdfOutlined />,
+            onClick: () => userIndex(filters, 'pdf')
+        },
+        {
+            label: 'CSV',
+            key: '3',
+            icon: <FileTextOutlined />,
+            onClick: () => userIndex(filters, 'csv')
+        }
+    ];
+
+    const menuProps = {
+        items
+    };
 
     const renderExtraTable = () => {
 
         return (
             <>
-                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={loading}>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
@@ -54,7 +74,7 @@ export const UserPage = ({ app }) => {
                     <Button key="activate" onClick={() => onExtraTableClick('activate')} disabled={loading || selectedRowKeys.length === 0}>Activar</Button>
                     <Button key="desactivate" onClick={() => onExtraTableClick('desactivate')} disabled={loading || selectedRowKeys.length === 0}>Desactivar</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }

@@ -5,6 +5,7 @@ import { alertError, renderError } from '../../common/functions';
 import { InstituteModal } from '../../modals/InstituteModal';
 import Institute from '../../models/Institute';
 import { AuthService } from '../../services/AuthService';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { InstituteTable } from '../../tables/InstituteTable';
 
 import { instituteCreate, instituteDelete, instituteIndex, instituteShow, instituteUpdate } from '../../services/InstituteService';
@@ -26,24 +27,43 @@ export const InstitutePage = ({ app }) => {
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
     
-    const dropdownExport = () => (<Menu>
-        <Menu.Item onClick={() => instituteIndex(filters, 'xls')}>Excel</Menu.Item>
-        <Menu.Item onClick={() => instituteIndex(filters, 'pdf')}>PDF</Menu.Item>
-        <Menu.Item onClick={() => instituteIndex(filters, 'csv')}>CSV</Menu.Item>
-    </Menu>);
+    const items = [
+        {
+            label: 'Excel',
+            key: '1',
+            icon: <FileExcelOutlined />,
+            onClick: () => instituteIndex(filters, 'xls')
+        },
+        {
+            label: 'PDF',
+            key: '2',
+            icon: <FilePdfOutlined />,
+            onClick: () => instituteIndex(filters, 'pdf')
+        },
+        {
+            label: 'CSV',
+            key: '3',
+            icon: <FileTextOutlined />,
+            onClick: () => instituteIndex(filters, 'csv')
+        }
+    ];
+
+    const menuProps = {
+        items
+    };
 
     const renderExtraTable = () => {
 
         return (
             <>
-                <Dropdown overlay={dropdownExport()} placement="bottomLeft" disabled={loading}>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new Institute); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} type='danger' ghost>Eliminar</Button>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }

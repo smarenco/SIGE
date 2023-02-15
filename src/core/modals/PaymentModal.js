@@ -38,6 +38,7 @@ export const PaymentModal = (props) => {
 
     return (
         <Modal
+            bodyStyle={{ paddingTop: 10}}
             title={`${item.getId() ? 'Detalle' : 'Nuevo registro'}`}
             open={open}
             width={700}

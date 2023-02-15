@@ -1,3 +1,4 @@
+import { AimOutlined, ApartmentOutlined, BankOutlined, ClockCircleOutlined, HddOutlined, HeartOutlined, HomeOutlined, IdcardOutlined, MedicineBoxOutlined, PayCircleOutlined, SettingOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 import { createSlice } from '@reduxjs/toolkit';
 import { CONFIG } from '../../common/consts';
 import { AbsenteeismCausesPage } from '../../pages/administrations/AbsenteeismCausesPage';
@@ -31,7 +32,7 @@ export const appStore = createSlice({
 
         },
         routes: [
-            { key: 'chkHome', name:'Home' ,path: '/', component: HomePage },
+            { key: 'chkHome', name:'Home' ,path: '/', component: HomePage, icon: <HomeOutlined /> },
             // Sesión
             { key: 'chkLogin', path: '/auth', component: LoginPage, isPublic: true, clean: true },
             // { key: 'chkLoginByToken', path: '/auth/login-by-token', component: AuthLoginByToken, isPublic: true, clean: true },
@@ -41,20 +42,19 @@ export const appStore = createSlice({
             // Administraciones
             //{ key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
             //{ key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
-            { key: 'cities', name:'Ciudades', path: '/ciudades', component: CityPage },
-            { key: 'medicalCoverage', name:'Coberturas Medicas', path: '/coberturas-medicas', component: MedicalCoveragePage },
-            { key: 'courses', name:'Cursos', path: '/cursos', component: CoursePage },
-            { key: 'instituts', name:'Institutos', path: '/institutos', component: InstitutePage },
-            { key: 'absenteeismCauses', name:'Causas de ausentismos', path: '/causas-ausentismos/', component: AbsenteeismCausesPage },
-            { key: 'documentCategory', name:'Categorias de documentos', path: '/categorias-documentos/', component: DocumentCategoryPage },
-            { key: 'turn', name:'Turnos', path: '/turnos/', component: TurnPage },
-            { key: 'paymentMethods', name:'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage },
-            { key: 'group', name:'Grupos', path: '/grupos/', component: GroupPage },
-            { key: 'document', name:'Documentos', path: '/documentos/', component: DocumentPage },
-            
-            { key: 'payment', name:'Pago', path: '/pago/', component: PaymentPage },
-            { key: 'users', name:'Usuarios', path: '/usuarios/', component: UserPage },
-            { key: 'account', name:'Cuenta', path: '/cuenta/', component: AccountPage },
+            { key: 'cities', name: 'Ciudades', path: '/ciudades', component: CityPage, icon: <AimOutlined /> },
+            { key: 'medicalCoverage', name: 'Coberturas Medicas', path: '/coberturas-medicas', component: MedicalCoveragePage, icon: <HeartOutlined /> },
+            { key: 'courses', name: 'Cursos', path: '/cursos', component: CoursePage, icon: <ApartmentOutlined /> },
+            { key: 'instituts', name: 'Institutos', path: '/institutos', component: InstitutePage, icon: <BankOutlined /> },
+            { key: 'absenteeismCauses', name: 'Causas de ausentismos', path: '/causas-ausentismos/', component: AbsenteeismCausesPage, icon: <MedicineBoxOutlined /> },
+            { key: 'documentCategory', name: 'Categorias de documentos', path: '/categorias-documentos/', component: DocumentCategoryPage, icon: <HddOutlined /> },
+            { key: 'turn', name: 'Turnos', path: '/turnos/', component: TurnPage, icon: <ClockCircleOutlined /> },
+            { key: 'paymentMethods', name: 'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
+            { key: 'group', name: 'Grupos', path: '/grupos/', component: GroupPage, icon: <UsergroupAddOutlined /> },
+            { key: 'document', name: 'Documentos', path: '/documentos/', component: DocumentPage, icon: <IdcardOutlined /> },
+            { key: 'payment', name: 'Pago', path: '/pago/', component: PaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'users', name: 'Usuarios', path: '/usuarios/', component: UserPage, icon: <UserOutlined /> },
+            { key: 'account', name: 'Cuenta', path: '/cuenta/', component: AccountPage, icon: <SettingOutlined /> },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
             //{ key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // /// Configuración
