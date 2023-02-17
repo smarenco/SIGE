@@ -1,5 +1,7 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import { EditOutlined, EyeOutlined, ReloadOutlined } from '@ant-design/icons';
+import { EyeOutlined, ReloadOutlined } from '@ant-design/icons';
+import moment from 'moment';
+import { DDMMYYYY } from '../common/consts';
 
 
 const paginationStyle = {
@@ -35,7 +37,13 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 key: 'Nombre',
                 width: 200,
                 ellipsis: true,
-                render: (record) => record.student.name
+                render: (record) => record.student.names
+            }, {
+                title: 'Fecha pago',
+                key: 'Date',
+                width: 115,
+                ellipsis: true,
+                render: (record) => moment(record.date).format(DDMMYYYY)
             }, {
                 title: 'Curso',
                 key: 'Curso',
@@ -48,7 +56,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 key: 'Coutas',
                 width: 80,
                 ellipsis: true,
-            }, {
+            }/*, {
                 title: 'Valor Couta',
                 dataIndex: 'quota_value',
                 key: 'Coutas',
@@ -66,12 +74,12 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 key: 'Recargo',
                 width: 90,
                 ellipsis: true,
-            }, {
+            }*/, {
                 title: 'Total',
                 key: 'Total',
+                dataIndex: 'total',
                 width: 80,
                 ellipsis: true,
-                render: (record) => (record.amount_coute * record.quota_value) + record.surcharge - record.discount,
             }, {
                 title: 'Estado',
                 key: 'canceled',

@@ -1,12 +1,10 @@
 import { Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { renderError } from '../common/functions';
 import { PaymentForm } from '../forms/PaymentForm';
 import { useForm } from '../hooks/useForm';
 
 export const PaymentModal = (props) => {
-
-    const [ready, setReady] = useState(false)
 
     const { app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   
@@ -24,8 +22,13 @@ export const PaymentModal = (props) => {
             return;
         }
 
-        if(!formState.method_payment_id || formState.method_payment_id.length === 0){
+        if(!formState.payment_method_id || formState.payment_method_id.length === 0){
             renderError('Debe ingresar el metodo de pago');
+            return;
+        }
+
+        if(!formState.date || formState.date.length === 0){
+            renderError('Debe ingresar una fecha de pago');
             return;
         }
 

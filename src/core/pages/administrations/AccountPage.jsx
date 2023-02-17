@@ -8,7 +8,6 @@ import { AuthService } from '../../services/AuthService';
 import { accountUpdate, accountShow } from '../../services/AccountService';
 import LayoutH from '../../components/layout/LayoutH';
 import Loading from '../../components/common/Loading';
-import { EditOutlined } from '@ant-design/icons';
 
 export const AccountPage = ({ app }) => {
 

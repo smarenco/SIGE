@@ -10,7 +10,7 @@ export default class Payment {
     /**
      * @type {number}
      */
-    method_payment_id = undefined;
+    payment_method_id = undefined;
 
     /**
      * @type {number}
@@ -30,7 +30,7 @@ export default class Payment {
     /**
      * @type {date}
      */
-    payment_date = moment();
+    date = moment();
 
     /**
      * @type {boolean}
@@ -40,7 +40,12 @@ export default class Payment {
     /**
      * @type {number}
      */
-    discount = 0;
+    discount = undefined;
+
+    /**
+     * @type {number}
+     */
+    total = undefined;
 
     /**
      * @type {boolean}
@@ -50,7 +55,7 @@ export default class Payment {
     /**
      * @type {number}
      */
-    surcharge = 0;
+    surcharge = undefined;
 
     /**
      * @type {string}
@@ -75,7 +80,7 @@ export default class Payment {
     /**
      * @type {number}
      */
-    quota_value = false;
+    value_cuote = false;
 
     constructor(item) {
         for (let key in item) {

@@ -1,7 +1,7 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { alertError, loadTypes, renderError } from '../../common/functions';
+import { loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';

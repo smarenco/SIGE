@@ -1,7 +1,7 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useState } from 'react';
-import { alertError, renderError } from '../../common/functions';
+import { renderError } from '../../common/functions';
 import { CityModal } from '../../modals/CityModal';
 import City from '../../models/City';
 import { AuthService } from '../../services/AuthService';

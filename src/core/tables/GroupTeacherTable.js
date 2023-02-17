@@ -1,5 +1,5 @@
-import { Button, Checkbox, Input, Select, Table, Tag } from 'antd';
-import { DeleteOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Table } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 
 export const GroupTeacherTable = ({ data, onDeleteTeacher }) => {
 

@@ -1,12 +1,10 @@
 import { Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { renderError } from '../common/functions';
 import { CountryForm } from '../forms/CountryForm';
 import { useForm } from '../hooks/useForm';
 
 export const CountryModal = (props) => {
-
-    const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   

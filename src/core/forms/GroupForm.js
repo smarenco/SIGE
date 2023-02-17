@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Form, Input, Select, DatePicker, Tabs, Modal, Button, InputNumber } from 'antd'
+import { Form, Input, Select, DatePicker, Tabs, Button, InputNumber } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';
@@ -326,13 +326,13 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     
     return (
         <Form layout='vertical'>
-            <Loading loading={loading || loadingTurns || loadingCourses || loadingInstitutes}>
+            {/*<Loading loading={loading || loadingTurns || loadingCourses || loadingInstitutes}>*/}
                 <Tabs
                     style={{ marginTop: -15 }}
                     size='small'
                     items={items}
                 />
-            </Loading>
+            {/*</Loading>*/}
         </Form>
     )
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Form, Input, Select, DatePicker, Tabs, Modal, Checkbox, Divider, Card } from 'antd'
+import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';

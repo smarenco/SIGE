@@ -1,12 +1,9 @@
-import { message, Modal } from 'antd'
-import React, { useEffect, useState } from 'react'
-import { renderError } from '../common/functions';
+import { Modal } from 'antd'
+import React from 'react'
 import { UserForm } from '../forms/UserForm';
 import { useForm } from '../hooks/useForm';
 
 export const UserModal = (props) => {
-
-    const [ready, setReady] = useState(false)
 
     const { view, app, open, item, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
   

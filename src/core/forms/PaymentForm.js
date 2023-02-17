@@ -19,13 +19,16 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     const [students, setStudents ] = useState([]);
     const [loadingCourses, setLoadingCourses ] = useState([]);
     const [courses, setCourses ] = useState([]);
-    const [total, setTotal ] = useState([]);
 
     const fetchCourses = async () => {
         setLoadingCourses(true);
         try {
-            const courses = await courseCombo({ user_id: formState.user_id });
-            setCourses(courses);
+            if(formState.student_id){
+                const courses = await courseCombo({ student_id: formState.student_id });
+                setCourses(courses);
+            }else{
+                setCourses([]);
+            }
             setLoadingCourses(false);
         } catch(err) {
             setLoadingCourses(false);
@@ -64,7 +67,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
 
     useEffect(() => {
         fetchCourses();
-    }, [formState.user_id]);
+    }, [formState.student_id]);
 
     useEffect(() => {
         onInputChangeByObject(
@@ -91,17 +94,17 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
         total = amount_coute * value_cuote;
         total = total + surcharge - discount;
 
-        setTotal(total);
+        onInputChangeByName('total', total);
     }, [formState.surcharge, formState.discount, formState.amount_coute, formState.value_cuote]);
 
     const onChangeCourse = (course_id) =>{
         let course = courses.filter(course => course.id === course_id)[0];
-        onInputChangeByObject({course_id, value_cuote: course.value_cuote});
+        onInputChangeByObject({course_id, value_cuote: course.quota_value});
     }
 
     return (
         <Form layout='vertical'>
-            <Loading loading={loading}>
+            {/*<Loading loading={loading}>*/}
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Estudiante`} labelAlign='left' span={15}>
                         <Select
@@ -109,6 +112,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                             showSearch
                             disabled={view || confirmLoading || loadingStudents}
                             loading={loadingStudents}
+                            value={formState.student_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={student_id => onInputChangeByName('student_id', student_id)}
                             > 
@@ -123,8 +127,9 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                             showSearch
                             disabled={view || confirmLoading || loadingMethodsPayment}
                             loading={loadingMethodsPayment}
+                            value={formState.payment_method_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={method_payment_id => onInputChangeByName('method_payment_id', method_payment_id)}
+                            onChange={payment_method_id => onInputChangeByName('payment_method_id', payment_method_id)}
                             > 
                                 {methodsPayment.map(methodPayment => 
                                     <Select.Option value={methodPayment.id} key={methodPayment.id}>{methodPayment.name}</Select.Option>
@@ -135,8 +140,9 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view || confirmLoading || loadingCourses}
+                            disabled={view || confirmLoading || loadingCourses || courses.length === 0}
                             loading={loadingCourses}
+                            value={formState.course_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={onChangeCourse}
                             > 
@@ -177,11 +183,11 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
                     </Form.Item>
                     <div span={24} style={{textAlign: 'right'}}>
-                        <h2 style={{marginRight: 40}}>Total  ${total}</h2>
+                        <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
                         {formState.canceled && <h2 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el 02/05/2201{formState?.canceled_date} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h2>}
                     </div>
                 </LayoutH>
-            </Loading>
+            {/*</Loading>*/}
         </Form>
     )
 }
