@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { Button, Checkbox, DatePicker, Input, Table, Tag } from 'antd';
 import { EyeOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { DDMMYYYY } from '../common/consts';
@@ -111,8 +111,13 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
-                    <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver solo cancelados</Checkbox>
+                    <DatePicker placeholder='Desde' onChange={StartDate => setFilters({ StartDate })} />
+                    &nbsp;
+                    <DatePicker placeholder='Hasta' onChange={EndtDate => setFilters({ EndtDate })} />
+                    &nbsp;
+                    <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked })}>Ver solo cancelados</Checkbox>
                 </div>}
+                
             pagination={{
                 style: paginationStyle,
                 onChange: onPageChangeLocal,

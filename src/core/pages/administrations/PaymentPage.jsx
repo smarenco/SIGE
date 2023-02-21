@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Checkbox, DatePicker, Dropdown, Input, Menu, Modal } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentModal } from '../../modals/PaymentModal';
 import Payment from '../../models/Payment';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons';
 import { PaymentTable } from '../../tables/PaymentTable';
 
 import { paymentCreate, paymentDelete, paymentIndex, paymentShow, paymentUpdate } from '../../services/PaymentService';
@@ -64,7 +64,6 @@ export const PaymentPage = ({ app }) => {
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new Payment); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Ver</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }
@@ -153,7 +152,6 @@ export const PaymentPage = ({ app }) => {
             >
               <PaymentTable
                     data={data}
-                    onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
                     setFilters={onFilterTable}
                     selectedRowKeys={selectedRowKeys}
