@@ -2,6 +2,7 @@ import { Button, Checkbox, DatePicker, Input, Table, Tag } from 'antd';
 import { EyeOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { DDMMYYYY } from '../common/consts';
+import { DEFAULT_ROWS_PER_PAGE } from '../../env';
 
 
 const paginationStyle = {
@@ -13,7 +14,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, setFilters, selectedRowKeys, loading, onPageChange, paginationProps, onEditClick: onEdit, onCancelPaymentClick : onCancelPayment }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -21,6 +22,10 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
     
     const onEditClick = (id) => {
         onEdit(id);
+    }
+
+    const onCancelPaymentClick = (id) => {
+        onCancelPayment(id);
     }
     
     const columns = () => {
@@ -56,25 +61,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 key: 'Coutas',
                 width: 80,
                 ellipsis: true,
-            }/*, {
-                title: 'Valor Couta',
-                dataIndex: 'quota_value',
-                key: 'Coutas',
-                width: 110,
-                ellipsis: true,
             }, {
-                title: 'Descuento',
-                dataIndex: 'discount',
-                key: 'Descuento',
-                width: 100,
-                ellipsis: true,
-            }, {
-                title: 'Recargo',
-                dataIndex: 'surcharge',
-                key: 'Recargo',
-                width: 90,
-                ellipsis: true,
-            }*/, {
                 title: 'Total',
                 key: 'Total',
                 dataIndex: 'total',
@@ -93,6 +80,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
                         <EyeOutlined onClick={e => onEditClick(record.id)} />
+                        {record.Cancelable && <Button onClick={e => onCancelPaymentClick(record.id)}>Anular</Button>}
                     </div>
                 ),
             }
@@ -109,13 +97,13 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 <div>
                     <Button icon={<ReloadOutlined />} onClick={onReload} />
                     &nbsp;
-                    <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
+                    <Input style={{width: '20%'}} value={filters?.Search} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
-                    <DatePicker placeholder='Desde' onChange={StartDate => setFilters({ StartDate })} />
+                    <DatePicker placeholder='Desde' format={DDMMYYYY} value={filters?.StartDate ? moment(filters.StartDate, DDMMYYYY) : undefined} onChange={StartDate => setFilters({ StartDate })} />
                     &nbsp;
-                    <DatePicker placeholder='Hasta' onChange={EndtDate => setFilters({ EndtDate })} />
+                    <DatePicker placeholder='Hasta' format={DDMMYYYY} value={filters?.EndDate ? moment(filters.EndDate, DDMMYYYY) : undefined} onChange={EndDate => setFilters({ EndDate })} />
                     &nbsp;
-                    <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked })}>Ver solo cancelados</Checkbox>
+                    <Checkbox checked={filters?.ShowDeleted} onChange={e => setFilters({ ShowDeleted: e.target.checked })}>Ver solo cancelados</Checkbox>
                 </div>}
                 
             pagination={{
@@ -128,7 +116,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, 
                 hideOnSinglePage: false,
                 size: 'normal',
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} elementos`,
-                ...pagination,
+                ...paginationProps,
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}

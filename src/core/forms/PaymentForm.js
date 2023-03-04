@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { DatePicker, Form, Input, InputNumber, Select, Switch, Tag } from 'antd'
+import { Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import { renderError } from '../common/functions';
@@ -8,7 +8,7 @@ import { userCombo } from '../services/UserService';
 import { courseCombo } from '../services/CourseService';
 import TextArea from 'antd/lib/input/TextArea';
 import { paymentMethodsCombo } from '../services/PaymentMethodsService';
-import { DDMMYYYY } from '../common/consts';
+import { DDMMYYYY, DDMMYYYYHHmm, MMYYYY } from '../common/consts';
 import moment from 'moment';
 
 export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName, onInputChangeByObject }) => {    
@@ -19,6 +19,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     const [students, setStudents ] = useState([]);
     const [loadingCourses, setLoadingCourses ] = useState([]);
     const [courses, setCourses ] = useState([]);
+    const [cuotes, setCuotes ] = useState([]);
 
     const fetchCourses = async () => {
         setLoadingCourses(true);
@@ -97,97 +98,142 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
         onInputChangeByName('total', total);
     }, [formState.surcharge, formState.discount, formState.amount_coute, formState.value_cuote]);
 
-    const onChangeCourse = (course_id) =>{
+    const onChangeCourse = (course_id) => {
         let course = courses.filter(course => course.id === course_id)[0];
-        onInputChangeByObject({course_id, value_cuote: course.quota_value});
+
+        let fechaInicial = moment(formState.UltimaCuota);
+        //console.log('fechaInicial '+ fechaInicial)
+        let cuotes = []; 
+        for(let i=1; i <= 6; i++){
+
+            fechaInicial.add(1, 'M');
+            let format = moment(fechaInicial).format(DDMMYYYY);
+            cuotes.push({'format': format, 'date': moment(fechaInicial)});
+        }
+
+        onInputChangeByObject({course_id, value_cuote: course.quota_value, cuotes, amount_coute: 0});
+    }
+
+    const onChangeCuotes = (values) => {       
+        onInputChangeByObject({cuotes: values, amount_coute: values.length});
     }
 
     return (
-        <Form layout='vertical'>
-            {/*<Loading loading={loading}>*/}
-                <LayoutH>
-                    <Form.Item label={`${!view ? '*' : ''} Estudiante`} labelAlign='left' span={15}>
-                        <Select
-                            allowClear
-                            showSearch
-                            disabled={view || confirmLoading || loadingStudents}
-                            loading={loadingStudents}
-                            value={formState.student_id}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={student_id => onInputChangeByName('student_id', student_id)}
-                            > 
-                                {students.map(student => 
-                                    <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
-                                    )}
-                            </Select>
-                    </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Metodo de pago`} labelAlign='left' span={9}>
-                        <Select 
-                            allowClear
-                            showSearch
-                            disabled={view || confirmLoading || loadingMethodsPayment}
-                            loading={loadingMethodsPayment}
-                            value={formState.payment_method_id}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={payment_method_id => onInputChangeByName('payment_method_id', payment_method_id)}
-                            > 
-                                {methodsPayment.map(methodPayment => 
-                                    <Select.Option value={methodPayment.id} key={methodPayment.id}>{methodPayment.name}</Select.Option>
-                                    )}
-                            </Select>
-                    </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Curso`} labelAlign='left' span={15}>
-                        <Select 
-                            allowClear
-                            showSearch
-                            disabled={view || confirmLoading || loadingCourses || courses.length === 0}
-                            loading={loadingCourses}
-                            value={formState.course_id}
-                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={onChangeCourse}
-                            > 
-                                {courses.map(course => 
-                                    <Select.Option value={course.id} key={course.id}>{course.name}</Select.Option>
-                                    )}
-                            </Select>
-                    </Form.Item>
-                    <Form.Item label='Referencia' labelAlign='left' span={9}>
-                        <Input name='reference' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.reference} />
-                    </Form.Item>
-                </LayoutH>
-                <LayoutH>
-                    <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
-                        <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', date)} format={DDMMYYYY} value={formState?.date ? moment(formState?.date)  : undefined}/>
-                    </Form.Item>
-                    <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
-                        <Switch name='apply_discount' disabled={view || confirmLoading} onChange={(apply_discount) => onInputChangeByName('apply_discount', apply_discount)} checked={formState?.apply_discount} />
-                    </Form.Item>
-                    <Form.Item label='Aplica recargo' labelAlign='left' span={8}>
-                        <Switch name='apply_surcharge' disabled={view || confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => onInputChangeByName('apply_surcharge', apply_surcharge)} checked={formState?.apply_surcharge} />
-                    </Form.Item>
-                    <Form.Item label='Cantidad de cuotas' labelAlign='left' span={8}>
-                        <InputNumber min={0} name='amount_coute' disabled={view || confirmLoading} onChange={(amount_coute) => onInputChangeByName('amount_coute', amount_coute)} value={formState?.amount_coute} />
-                    </Form.Item>
-                </LayoutH>
-                <LayoutH>
-                    <Form.Item label='Descuento' labelAlign='left' span={8}>
-                        <InputNumber min={0} style={{borderColor: 'green'}} name='discount' disabled={view || confirmLoading || !formState?.apply_discount} onChange={(discount) => onInputChangeByName('discount', discount)} value={formState?.discount} />
-                    </Form.Item>
-                    <Form.Item label='Recargo' labelAlign='left' span={8}>
-                        <InputNumber min={0} style={{borderColor: 'red'}} name='surcharge' disabled={view || confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => onInputChangeByName('surcharge', surcharge)} value={formState?.surcharge} />
-                    </Form.Item>
-                    <Form.Item label='Valor Couta' labelAlign='left' span={6}>
-                        <InputNumber min={0} name='value_cuote' disabled={view || confirmLoading} onChange={(value_cuote) => onInputChangeByName('value_cuote', value_cuote)} value={formState?.value_cuote} />
-                    </Form.Item>
-                    <Form.Item label='Observacion' labelAlign='left' span={22}>
-                        <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
-                    </Form.Item>
-                    <div span={24} style={{textAlign: 'right'}}>
-                        <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
-                        {formState.canceled && <h2 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el 02/05/2201{formState?.canceled_date} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h2>}
+        loadingStudents || loadingCourses || loadingMethodsPayment ? <Loading /> : <Form layout='vertical'>
+            <LayoutH>
+                <div span={15}>
+                    <LayoutH>
+                        <Form.Item label={`${!view ? '*' : ''} Estudiante`} labelAlign='left' span={15}>
+                            <Select
+                                allowClear
+                                showSearch
+                                disabled={view || confirmLoading || loadingStudents}
+                                loading={loadingStudents}
+                                value={formState.student_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={student_id => onInputChangeByName('student_id', student_id)}
+                                > 
+                                    {students.map(student => 
+                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label={`${!view ? '*' : ''} Metodo de pago`} labelAlign='left' span={9}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={view || confirmLoading || loadingMethodsPayment}
+                                loading={loadingMethodsPayment}
+                                value={formState.payment_method_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={payment_method_id => onInputChangeByName('payment_method_id', payment_method_id)}
+                                > 
+                                    {methodsPayment.map(methodPayment => 
+                                        <Select.Option value={methodPayment.id} key={methodPayment.id}>{methodPayment.name}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label={`${!view ? '*' : ''} Curso`} labelAlign='left' span={15}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={view || confirmLoading || loadingCourses || courses.length === 0}
+                                loading={loadingCourses}
+                                value={formState.course_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={onChangeCourse}
+                                > 
+                                    {courses.map(course => 
+                                        <Select.Option value={course.id} key={course.id}>{course.name}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label='Referencia' labelAlign='left' span={9}>
+                            <Input name='reference' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.reference} />
+                        </Form.Item>
+                    </LayoutH>
+                    <LayoutH>
+                        <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
+                            <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', moment(date))} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
+                        </Form.Item>
+                        <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
+                            <Switch name='apply_discount' disabled={view || confirmLoading} onChange={(apply_discount) => onInputChangeByName('apply_discount', apply_discount)} checked={formState?.apply_discount} />
+                        </Form.Item>
+                        <Form.Item label='Aplica recargo' labelAlign='left' span={8}>
+                            <Switch name='apply_surcharge' disabled={view || confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => onInputChangeByName('apply_surcharge', apply_surcharge)} checked={formState?.apply_surcharge} />
+                        </Form.Item>
+                        <Form.Item label='Cantidad de cuotas' labelAlign='left' span={8}>
+                            <InputNumber min={0} name='amount_coute' disabled={view || confirmLoading} onChange={(amount_coute) => onInputChangeByName('amount_coute', amount_coute)} value={formState?.amount_coute} />
+                        </Form.Item>
+                    </LayoutH>
+                    <LayoutH>
+                        <Form.Item label='Descuento' labelAlign='left' span={8}>
+                            <InputNumber min={0} style={{borderColor: 'green'}} name='discount' disabled={view || confirmLoading || !formState?.apply_discount} onChange={(discount) => onInputChangeByName('discount', discount)} value={formState?.discount} />
+                        </Form.Item>
+                        <Form.Item label='Recargo' labelAlign='left' span={8}>
+                            <InputNumber min={0} style={{borderColor: 'red'}} name='surcharge' disabled={view || confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => onInputChangeByName('surcharge', surcharge)} value={formState?.surcharge} />
+                        </Form.Item>
+                        <Form.Item label='Valor Couta' labelAlign='left' span={6}>
+                            <InputNumber min={0} name='value_cuote' disabled={view || confirmLoading} onChange={(value_cuote) => onInputChangeByName('value_cuote', value_cuote)} value={formState?.value_cuote} />
+                        </Form.Item>
+                        <Form.Item label='Observacion' labelAlign='left' span={22}>
+                            <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
+                        </Form.Item>
+                    </LayoutH>
+                </div>
+                <div span={9} style={{width:'80%', float:'right'}}>                            
+                    <div style={{
+                        overflowY: 'auto',
+                        maxHeight: 300,
+                        marginBottom: 10,
+                        border: '1px solid rgba(0, 0, 0, 0.1)',
+                        borderStyle: cuotes.length ? 'dashed' : 'solid',
+                        borderRadius: 2,
+                        padding: '6px 10px',
+                        background: 'rgba(0, 0, 0, 0.025)',
+                    }}> 
+                        <Form.Item label={`${!view ? '*' : ''} Cuotes`} span={20} labelAlign='left'>
+                            <Checkbox.Group
+                                disabled={view || confirmLoading}
+                                className='checkbox-options-vertical'
+                                values={formState?.Cuotes}
+                                onChange={onChangeCuotes}
+                                options={cuotes.map((cuote, index) => {
+                                    return {
+                                        label: cuote.format,
+                                        value: cuote.date,
+                                        key: index,
+                                    };
+                                })}
+                            />
+                        </Form.Item>
                     </div>
-                </LayoutH>
-            {/*</Loading>*/}
+                </div>
+                <div span={24} style={{textAlign: 'right'}}>
+                    <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
+                    {formState.canceled && <h2 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el 02/05/2201{formState?.canceled_date} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h2>}
+                </div>
+            </LayoutH>
         </Form>
     )
 }

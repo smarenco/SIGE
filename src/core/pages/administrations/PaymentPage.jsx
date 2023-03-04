@@ -1,179 +1,308 @@
-import { Button, Card, Checkbox, DatePicker, Dropdown, Input, Menu, Modal } from 'antd'
-
-import { useState } from 'react';
-import { alertError, renderError } from '../../common/functions';
-import { PaymentModal } from '../../modals/PaymentModal';
+import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch } from 'antd'
+import { useState, useEffect } from 'react';
 import Payment from '../../models/Payment';
-import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons';
-import { PaymentTable } from '../../tables/PaymentTable';
 
-import { paymentCreate, paymentDelete, paymentIndex, paymentShow, paymentUpdate } from '../../services/PaymentService';
-import { useEffect } from 'react';
+import { paymentCreate, paymentUpdate } from '../../services/PaymentService';
+import moment from 'moment';
+import { DDMMYYYY, DDMMYYYYHHmm } from '../../common/consts';
+import { courseCombo } from '../../services/CourseService';
+import { userCombo } from '../../services/UserService';
+import { paymentMethodsCombo } from '../../services/PaymentMethodsService';
+import { useForm } from '../../hooks/useForm';
+import { renderError } from '../../common/functions';
+import LayoutH from '../../components/layout/LayoutH';
+import TextArea from 'antd/es/input/TextArea';
 
 export const PaymentPage = ({ app }) => {
 
-    const [item, setItem] = useState(new Payment);
-    const [filters, setFilters] = useState({});
-    const [data, setData] = useState([]);
-    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
-    const [total, setTotal] = useState(0);
-    const [rowSelected, setRowSelected] = useState({selectedRowKeys: [], selectedRows: []});
-    const [openModal, setOpenModal] = useState(false);
-    const [loading, setLoading] = useState(false);
+    const [formState, setFormState] = useState(new Payment);    
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    const { user } = AuthService();
-
-    const { page, pageSize } = dataPage;
-    const { selectedRowKeys, selectedRows } = rowSelected;
+    const [loadingMethodsPayment, setLoadingMethodsPayment ] = useState([]);
+    const [methodsPayment, setMethodsPayment ] = useState([]);
+    const [loadingStudents, setLoadingStudents ] = useState([]);
+    const [students, setStudents ] = useState([]);
+    const [loadingCourses, setLoadingCourses ] = useState([]);
+    const [courses, setCourses ] = useState([]);
+    const [cuotess, setCuotes ] = useState([]);
     
-    const items = [
-        {
-            label: 'Excel',
-            key: '1',
-            icon: <FileExcelOutlined />,
-            onClick: () => paymentIndex(filters, 'xls')
-        },
-        {
-            label: 'PDF',
-            key: '2',
-            icon: <FilePdfOutlined />,
-            onClick: () => paymentIndex(filters, 'pdf')
-        },
-        {
-            label: 'CSV',
-            key: '3',
-            icon: <FileTextOutlined />,
-            onClick: () => paymentIndex(filters, 'csv')
+    const onOk = async() => {
+        
+        if(!formState.student_id || formState.student_id.length === 0){
+            renderError('Debe ingresar el estudiante');
+            return;
         }
-    ];
 
-    const menuProps = {
-        items
-    };
-
-    const renderExtraTable = () => {
-
-        return (
-            <>
-                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
-                </Dropdown>
-                <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Payment); }} disabled={loading}>Nuevo</Button>
-                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Ver</Button>
-                </Button.Group>
-            </>
-        );
-    }
-
-    const onExtraTableClick = (action) => {
-        switch (action) {
-            case 'edit': loadItem(selectedRowKeys[0]); break;
-            case 'delete': Modal.confirm({
-                title: 'Eliminar registro',
-                okType: 'danger',
-                okText: 'Eliminar',
-                cancelText: 'Cancelar',
-                content: `¿Seguro que desea eliminar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
-                    setLoading(true);
-                    try {
-                        await paymentDelete(selectedRowKeys)
-                    } catch(err) {
-                        renderError(err);
-                    }                        
-                    loadData();
-                    },
-            }); break;
+        if(!formState.course_id || formState.course_id.length === 0){
+            renderError('Debe ingresar el curso');
+            return;
         }
-    }
 
-    const onFilterTable = (filter) => {
-        setFilters({ ...filters, ...filter });
-    }
-
-    const onPageChange = async (page, pageSize) => {
-        pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
-        setLoading(true);
-
-        try{
-            const { data, total } = await paymentIndex({ page, pageSize, ...filters });
-            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
-        }catch(err){
-            setLoading(false);
+        if(!formState.payment_method_id || formState.payment_method_id.length === 0){
+            renderError('Debe ingresar el metodo de pago');
+            return;
         }
-    }
 
-    const loadData = () => onPageChange(1);
-
-    const loadItem = async(id) => {
-        setLoading(true);
-        try {
-            const item = await paymentShow(id)
-            setItem(item); setOpenModal(true); setLoading(false);
-        } catch(err) {
-            setLoading(false);
-            renderError(err);
+        if(!formState.date || formState.date.length === 0){
+            renderError('Debe ingresar una fecha de pago');
+            return;
         }
-    }
 
-    const onModalOk = async(obj) => {
-        console.log('guardar')
-        setConfirmLoading(true);
-        try {
-            if (item.id) {
-                await paymentUpdate(obj.id, obj);
-            } else {
-                await paymentCreate(obj);
+        let error = false;
+        let fechaInicial = moment(formState.cuotes[0]);
+        let cuotes = [];
+        let formStateCuotes = [ ...formState.cuotes];
+        let fechaComparacion = '';
+
+        for(let i=0; i < formStateCuotes.length; i++){
+            if(i === 0){
+                let primerMes = cuotess[0];
+                //console.log(primerMes.date+ ' !== ' +formStateCuotes[i])
+                if(primerMes.date !== formStateCuotes[i]){
+                    error = true;
+                    renderError('Debe seleccionar el primer mes');
+                    break;
+                }
+            }else{
+                fechaComparacion = fechaInicial.add(1, 'M');
+                //console.log(moment(fechaComparacion).format(DDMMYYYY)+ ' !== ' +moment(formStateCuotes[i]).format(DDMMYYYY))
+                if(moment(fechaComparacion).format(DDMMYYYY) !== moment(formStateCuotes[i]).format(DDMMYYYY)){
+                    error = true;
+                    renderError('Las coutas deben ser consecutivas');
+                    break;
+                }
+            }
+            cuotes.push(moment(formStateCuotes[i]));
+        }
+
+        if(!error){
+            setConfirmLoading(true);
+            try {
+                await paymentCreate(formState);
+            } catch(err) {
+                renderError(err);
             }
 
-            setOpenModal(false); loadData();
-        } catch(err) {
-            renderError(err);
+            setConfirmLoading(false);
         }
-
-        setConfirmLoading(false)        
     }
 
-    useEffect(()=>{
-        //loadData();
-    },[]);
+    const fetchCourses = async () => {
+        setLoadingCourses(true);
+        try {
+            if(formState.student_id){
+                const courses = await courseCombo({ student_id: formState.student_id });
+                setCourses(courses);
+            }else{
+                setCourses([]);
+            }
+            setLoadingCourses(false);
+        } catch(err) {
+            setLoadingCourses(false);
+            renderError(err);
+        }
+    };
 
+    const fetchStudents = async () => {
+        setLoadingStudents(true);
+        try {
+            const students = await userCombo({ type: 'EST'});
+            setStudents(students);
+            setLoadingStudents(false);
+        } catch(err) {
+            setLoadingStudents(false);
+            renderError(err);
+        }
+    };
+
+    const fetchMethodsPayment = async () => {
+        setLoadingMethodsPayment(true);
+        try {
+            const methodsPayment = await paymentMethodsCombo();
+            setMethodsPayment(methodsPayment);
+            setLoadingMethodsPayment(false);
+        } catch(err) {
+            setLoadingMethodsPayment(false);
+            renderError(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchMethodsPayment();
+        fetchStudents();
+    }, []);
+
+    useEffect(() => {
+        fetchCourses();
+    }, [formState.student_id]);
+
+    useEffect(() => {
+        setFormState({
+            ...formState, 
+            apply_surcharge: false, 
+            surcharge: undefined, 
+            discount: undefined, 
+        });
+    }, [formState.apply_discount]);
+
+    useEffect(() => {
+        setFormState({...formState, surcharge: undefined });
+    }, [formState.apply_surcharge]);
+
+    useEffect(() => {
+        let { surcharge, discount, amount_coute, value_cuote } = formState;
+        surcharge = !isNaN(parseInt(surcharge)) ? parseInt(surcharge) : 0;
+        discount = !isNaN(parseInt(discount)) ? parseInt(discount) : 0;
+        amount_coute = !isNaN(parseInt(amount_coute)) ? parseInt(amount_coute) : 0;
+        value_cuote = !isNaN(parseInt(value_cuote)) ? parseInt(value_cuote) : 0;
+        
+        let total = 0;
+        total = amount_coute * value_cuote;
+        total = total + surcharge - discount;
+
+        setFormState({...formState, total});
+    }, [formState.surcharge, formState.discount, formState.amount_coute, formState.value_cuote]);
+
+    const onChangeCourse = (course_id) =>{
+        let course = {}, cuotes = [];
+        if(course_id){
+            course = courses.filter(course => course.id === course_id)[0];
+
+            let fechaInicial = moment(course?.cuotes[course?.cuotes.length -1].cuote);
+            console.log('fechaInicial '+ fechaInicial)
+            
+            for(let i=1; i <= 6; i++){
+
+                fechaInicial.add(1, 'M');
+                let format = moment(fechaInicial).format(DDMMYYYY);
+                cuotes.push({'format': format, 'date': moment(fechaInicial)});
+            }
+        }
+
+        setFormState({...formState, course_id, value_cuote: course?.quota_value, cuotes: [], amount_coute: 0});
+        setCuotes(cuotes);
+    }
+    
+    const onChangeCuotes = (values) => {       
+        setFormState({...formState, cuotes: values, amount_coute: values.length});
+    }
 
     return (
-        <>
-            <Card
-                title={(<strong>Pagos</strong>)}
-                className='ant-section'
-                extra={renderExtraTable()}
-            >
-              <PaymentTable
-                    data={data}
-                    onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
-                    setFilters={onFilterTable}
-                    selectedRowKeys={selectedRowKeys}
-                    loading={loading}
-                    onPageChange={onPageChange}
-                    pagination={{
-                        pageSize: pageSize,
-                        page: page,
-                        total: total,
-                    }}
-                    onEditClick={loadItem}
-              />
-            </Card>
-            <PaymentModal
-                app={app}
-                open={openModal}
-                item={item}
-                onOk={onModalOk}
-                confirmLoading={confirmLoading}
-                loading={loading}
-                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Payment); }}
-            />
-        </>
+        <Form layout='vertical'>
+            <LayoutH>
+                <div span={24}>
+                    <LayoutH>
+                        <Form.Item label={`Estudiante *`} labelAlign='left' span={15}>
+                            <Select
+                                allowClear
+                                showSearch
+                                disabled={confirmLoading || loadingStudents}
+                                loading={loadingStudents}
+                                value={formState.student_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={student_id => setFormState({...formState, student_id})}
+                                > 
+                                    {students.map(student => 
+                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label={`Metodo de pago *`} labelAlign='left' span={9}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={confirmLoading || loadingMethodsPayment}
+                                loading={loadingMethodsPayment}
+                                value={formState.payment_method_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={payment_method_id => setFormState({...formState, payment_method_id})}
+                                > 
+                                    {methodsPayment.map(methodPayment => 
+                                        <Select.Option value={methodPayment.id} key={methodPayment.id}>{methodPayment.name}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label={`Curso *`} labelAlign='left' span={15}>
+                            <Select 
+                                allowClear
+                                showSearch
+                                disabled={confirmLoading || loadingCourses || courses.length === 0}
+                                loading={loadingCourses}
+                                value={formState.course_id}
+                                filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                                onChange={onChangeCourse}
+                                > 
+                                    {courses.map(course => 
+                                        <Select.Option value={course.id} key={course.id}>{course.name}</Select.Option>
+                                        )}
+                                </Select>
+                        </Form.Item>
+                        <Form.Item label='Referencia' labelAlign='left' span={9}>
+                            <Input name='reference' disabled={confirmLoading} onChange={(e) => setFormState({...formState, reference: e.target.value})} value={formState?.reference} />
+                        </Form.Item>
+                    </LayoutH>
+                    <LayoutH>
+                        <div span={24} style={{
+                                overflowY: 'auto',
+                                marginBottom: 10,
+                                border: '1px solid rgba(0, 0, 0, 0.1)',
+                                borderStyle: cuotess.length ? 'dashed' : 'solid',
+                                borderRadius: 2,
+                                padding: '6px 10px',
+                                background: 'rgba(0, 0, 0, 0.025)',
+                            }}> 
+                                <Form.Item label={`* Cuotas`} span={24} labelAlign='left'>
+                                    <Checkbox.Group
+                                        className='checkbox-options-horizontal'
+                                        values={formState?.cuotes}
+                                        onChange={onChangeCuotes}
+                                        options={cuotess.map((cuote, index) => {
+                                            return {
+                                                label: cuote.format,
+                                                value: cuote.date,
+                                                key: index,
+                                            };
+                                        })}
+                                    />
+                                </Form.Item>
+                        </div>
+                    </LayoutH>
+                    <LayoutH>
+                        <Form.Item label={`Fecha de pago *`} labelAlign='left' span={22}>
+                            <DatePicker name='date' onChange={(date) => setFormState({...formState, date: moment(date)})} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
+                        </Form.Item>
+                        <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
+                            <Switch name='apply_discount' disabled={confirmLoading} onChange={(apply_discount) => setFormState({...formState, apply_discount})} checked={formState?.apply_discount} />
+                        </Form.Item>
+                        <Form.Item label='Aplica recargo' labelAlign='left' span={8}>
+                            <Switch name='apply_surcharge' disabled={confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => setFormState({...formState, apply_surcharge})} checked={formState?.apply_surcharge} />
+                        </Form.Item>
+                        <Form.Item label='Cantidad de cuotas' labelAlign='left' span={8}>
+                            <InputNumber min={0} name='amount_coute' disabled={confirmLoading} onChange={(amount_coute) => setFormState({...formState, amount_coute})} value={formState?.amount_coute} />
+                        </Form.Item>
+                    </LayoutH>
+                    <LayoutH>
+                        <Form.Item label='Descuento' labelAlign='left' span={8}>
+                            <InputNumber min={0} style={{borderColor: 'green'}} name='discount' disabled={confirmLoading || !formState?.apply_discount} onChange={(discount) => setFormState({...formState, discount})} value={formState?.discount} />
+                        </Form.Item>
+                        <Form.Item label='Recargo' labelAlign='left' span={8}>
+                            <InputNumber min={0} style={{borderColor: 'red'}} name='surcharge' disabled={confirmLoading || formState?.apply_discount || !formState?.apply_surcharge} onChange={(surcharge) => setFormState({...formState, surcharge})} value={formState?.surcharge} />
+                        </Form.Item>
+                        <Form.Item label='Valor Couta' labelAlign='left' span={6}>
+                            <InputNumber min={0} name='value_cuote' disabled={confirmLoading} onChange={(value_cuote) => setFormState({...formState, value_cuote})} value={formState?.value_cuote} />
+                        </Form.Item>
+                        <Form.Item label='Observacion' labelAlign='left' span={22}>
+                            <TextArea name='observation' disabled={confirmLoading} onChange={(e) => setFormState({...formState, observation: e.target.value})} value={formState?.observation} />
+                        </Form.Item>
+                    </LayoutH>
+                </div>
+                <div span={24} style={{textAlign: 'right'}}>
+                    <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
+                    {formState.canceled && <h2 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el 02/05/2201{formState?.canceled_date} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h2>}
+                </div>
+                <div span={24} style={{textAlign: 'center'}}>
+                    <Button onClick={() => onOk()}>Generar Pago</Button>
+                </div>
+            </LayoutH>
+        </Form>
     )
 }

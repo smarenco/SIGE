@@ -14,11 +14,12 @@ import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
 import { PaymentMethodsPage } from '../../pages/administrations/PaymentMethodsPage';
-import { PaymentPage } from '../../pages/administrations/PaymentPage';
+import { ConsultPaymentPage } from '../../pages/administrations/ConsultPaymentPage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
 import { HomePage } from '../../pages/HomePage';
+import { PaymentPage } from '../../pages/administrations/PaymentPage';
 
 
 
@@ -52,7 +53,8 @@ export const appStore = createSlice({
             { key: 'paymentMethods', name: 'Metodos de pago', path: '/payment-methods/', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
             { key: 'group', name: 'Grupos', path: '/grupos/', component: GroupPage, icon: <UsergroupAddOutlined /> },
             { key: 'document', name: 'Documentos', path: '/documentos/', component: DocumentPage, icon: <IdcardOutlined /> },
-            { key: 'payment', name: 'Pago', path: '/pago/', component: PaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'consult-payment', name: 'Consulta Pagos', path: '/consulta-pago/', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'payment', name: 'Pagos', path: '/pago/', component: PaymentPage, icon: <PayCircleOutlined /> },
             { key: 'users', name: 'Usuarios', path: '/usuarios/', component: UserPage, icon: <UserOutlined /> },
             { key: 'account', name: 'Cuenta', path: '/cuenta/', component: AccountPage, icon: <SettingOutlined /> },
             // { key: 'marcas', path: '/marcas/', component: Marcas },

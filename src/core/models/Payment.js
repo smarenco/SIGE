@@ -1,4 +1,5 @@
 import moment from "moment";
+import { DDMMYYYY, DDMMYYYYHHmmss } from "../common/consts";
 
 export default class Payment {
 
@@ -81,6 +82,11 @@ export default class Payment {
      * @type {number}
      */
     value_cuote = false;
+
+    /**
+     * @type {array}
+     */
+    cuotes = [];
 
     constructor(item) {
         for (let key in item) {

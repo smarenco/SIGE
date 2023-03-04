@@ -1,20 +1,22 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Checkbox, DatePicker, Dropdown, Input, Menu, Modal } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
-import { GroupModal } from '../../modals/GroupModal';
-import Group from '../../models/Group';
+import { PaymentModal } from '../../modals/PaymentModal';
+import Payment from '../../models/Payment';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
-import { GroupTable } from '../../tables/GroupTable';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons';
+import { PaymentTable } from '../../tables/PaymentTable';
 
-import { addStudent, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate } from '../../services/GroupService';
+import { paymentCreate, paymentDelete, paymentIndex, paymentShow, paymentUpdate } from '../../services/PaymentService';
 import { useEffect } from 'react';
+import moment from 'moment';
+import { DDMMYYYY } from '../../common/consts';
 
-export const GroupPage = ({ app }) => {
+export const ConsultPaymentPage = ({ app }) => {
 
-    const [item, setItem] = useState(new Group);
-    const [filters, setFilters] = useState({});
+    const [item, setItem] = useState(new Payment);
+    const [filters, setFilters] = useState({StartDate: moment().startOf('month').format(DDMMYYYY), EndDate: moment().endOf('month').format(DDMMYYYY)});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
     const [total, setTotal] = useState(0);
@@ -33,19 +35,19 @@ export const GroupPage = ({ app }) => {
             label: 'Excel',
             key: '1',
             icon: <FileExcelOutlined />,
-            onClick: () => groupIndex(filters, 'xls')
+            onClick: () => paymentIndex(filters, 'xls')
         },
         {
             label: 'PDF',
             key: '2',
             icon: <FilePdfOutlined />,
-            onClick: () => groupIndex(filters, 'pdf')
+            onClick: () => paymentIndex(filters, 'pdf')
         },
         {
             label: 'CSV',
             key: '3',
             icon: <FileTextOutlined />,
-            onClick: () => groupIndex(filters, 'csv')
+            onClick: () => paymentIndex(filters, 'csv')
         }
     ];
 
@@ -61,10 +63,8 @@ export const GroupPage = ({ app }) => {
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Group); }} disabled={loading}>Nuevo</Button>
-                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
+                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Ver</Button>
                 </Button.Group>
-                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }
@@ -81,7 +81,7 @@ export const GroupPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                        await groupDelete(selectedRowKeys)
+                        await paymentDelete(selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
@@ -101,11 +101,11 @@ export const GroupPage = ({ app }) => {
         setLoading(true);
 
         try{
-            const { data, total } = await groupIndex({ page, pageSize, ...filters });
+            const { data, total } = await paymentIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
             setLoading(false);
-        }        
+        }
     }
 
     const loadData = () => onPageChange(1);
@@ -113,7 +113,7 @@ export const GroupPage = ({ app }) => {
     const loadItem = async(id) => {
         setLoading(true);
         try {
-            const item = await groupShow(id)
+            const item = await paymentShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
             setLoading(false);
@@ -121,13 +121,13 @@ export const GroupPage = ({ app }) => {
         }
     }
 
-    const onModalOk = async(obj) => {
+    const onCancelPayment = async(obj) => {
         setConfirmLoading(true);
         try {
             if (item.id) {
-                await groupUpdate(obj.id, obj);
+                await paymentUpdate(obj.id, obj);
             } else {
-                await groupCreate(obj);
+                await paymentCreate(obj);
             }
 
             setOpenModal(false); loadData();
@@ -138,41 +138,44 @@ export const GroupPage = ({ app }) => {
         setConfirmLoading(false)        
     }
 
-    useEffect(() => {
+    useEffect(()=>{
         loadData();
-    }, []);
+    },[]);
+
 
     return (
         <>
             <Card
-                title={(<strong>Grupos</strong>)}
+                title={(<strong>Consulta Pagos</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-                <GroupTable
+              <PaymentTable
                     data={data}
-                    onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
                     setFilters={onFilterTable}
+                    filters={filters}
+                    onReload={loadData}
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
-                    pagination={{
+                    paginationProps={{
                         pageSize: pageSize,
                         page: page,
                         total: total,
                     }}
                     onEditClick={loadItem}
-                />
+                    onCancelPayment={onCancelPayment}
+              />
             </Card>
-            <GroupModal
+            <PaymentModal
                 app={app}
+                view={true}
                 open={openModal}
                 item={item}
-                onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Group); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Payment); }}
             />
         </>
     )
