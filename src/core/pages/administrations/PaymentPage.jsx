@@ -167,8 +167,13 @@ export const PaymentPage = ({ app }) => {
         if(course_id){
             course = courses.filter(course => course.id === course_id)[0];
 
-            let fechaInicial = moment(course?.cuotes[course?.cuotes.length -1].cuote);
-            console.log('fechaInicial '+ fechaInicial)
+            let fechaInicial = undefined;
+            
+            if(course?.cuotes.length > 0){//SI YA PAGO ALGUNA CUOTA LA FECHA INICIAL SALE DE AHI, SINO LA SACO DELA FECHA DESDE DEL GRUPO
+                fechaInicial = moment(course?.cuotes[course?.cuotes.length -1].cuote);
+            }else{
+                fechaInicial = moment(course?.group.start_date);
+            }
             
             for(let i=1; i <= 6; i++){
 

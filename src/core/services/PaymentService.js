@@ -44,9 +44,6 @@ export const paymentUpdate = async (id, item) => {
     return await api.put(`${path}/${id}`, item);
 }
 
-export const paymentDelete = async (ids) => {
-    if (!Array.isArray(ids)) {
-        ids = [ids];
-    }
-    return Promise.all(ids.map(async (id) => await api.delete(`${path}/${id}`)));
+export const paymentDelete = async (id) => {
+    return await api.delete(`${path}/${id}`);
 }

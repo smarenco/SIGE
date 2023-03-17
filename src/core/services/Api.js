@@ -40,4 +40,6 @@ if (typeof access_token === 'string') {
     instance.defaults.headers.common['X-US-AUTH-TOKEN'] = access_token;
 }
 
+console.log(localStorage.getItem(ACCESS_TOKEN))
+
 export default instance;

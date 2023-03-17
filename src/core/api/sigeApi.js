@@ -16,4 +16,6 @@ sigeApi.interceptors.request.use( config => {
     return config;
 })
 
+console.log(localStorage.getItem('token'))
+
 export default sigeApi;

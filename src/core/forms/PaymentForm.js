@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch } from 'antd'
+import { Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch, Tag } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import { renderError } from '../common/functions';
@@ -121,7 +121,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     return (
         loadingStudents || loadingCourses || loadingMethodsPayment ? <Loading /> : <Form layout='vertical'>
             <LayoutH>
-                <div span={15}>
+                <div span={24}>
                     <LayoutH>
                         <Form.Item label={`${!view ? '*' : ''} Estudiante`} labelAlign='left' span={15}>
                             <Select
@@ -173,8 +173,8 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         </Form.Item>
                     </LayoutH>
                     <LayoutH>
-                        <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
-                            <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', moment(date))} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
+                        <Form.Item label='Cuotas' labelAlign='left' span={24}>
+                            {formState.cuotes.map(cuote => <Tag>{moment(cuote.cuote).format(DDMMYYYY)}</Tag>)}
                         </Form.Item>
                         <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
                             <Switch name='apply_discount' disabled={view || confirmLoading} onChange={(apply_discount) => onInputChangeByName('apply_discount', apply_discount)} checked={formState?.apply_discount} />
@@ -182,8 +182,8 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         <Form.Item label='Aplica recargo' labelAlign='left' span={8}>
                             <Switch name='apply_surcharge' disabled={view || confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => onInputChangeByName('apply_surcharge', apply_surcharge)} checked={formState?.apply_surcharge} />
                         </Form.Item>
-                        <Form.Item label='Cantidad de cuotas' labelAlign='left' span={8}>
-                            <InputNumber min={0} name='amount_coute' disabled={view || confirmLoading} onChange={(amount_coute) => onInputChangeByName('amount_coute', amount_coute)} value={formState?.amount_coute} />
+                        <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
+                            <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', moment(date))} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
                         </Form.Item>
                     </LayoutH>
                     <LayoutH>
@@ -201,37 +201,9 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                         </Form.Item>
                     </LayoutH>
                 </div>
-                <div span={9} style={{width:'80%', float:'right'}}>                            
-                    <div style={{
-                        overflowY: 'auto',
-                        maxHeight: 300,
-                        marginBottom: 10,
-                        border: '1px solid rgba(0, 0, 0, 0.1)',
-                        borderStyle: cuotes.length ? 'dashed' : 'solid',
-                        borderRadius: 2,
-                        padding: '6px 10px',
-                        background: 'rgba(0, 0, 0, 0.025)',
-                    }}> 
-                        <Form.Item label={`${!view ? '*' : ''} Cuotes`} span={20} labelAlign='left'>
-                            <Checkbox.Group
-                                disabled={view || confirmLoading}
-                                className='checkbox-options-vertical'
-                                values={formState?.Cuotes}
-                                onChange={onChangeCuotes}
-                                options={cuotes.map((cuote, index) => {
-                                    return {
-                                        label: cuote.format,
-                                        value: cuote.date,
-                                        key: index,
-                                    };
-                                })}
-                            />
-                        </Form.Item>
-                    </div>
-                </div>
                 <div span={24} style={{textAlign: 'right'}}>
                     <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
-                    {formState.canceled && <h2 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el 02/05/2201{formState?.canceled_date} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h2>}
+                    {formState.canceled && <h3 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el {moment(formState?.canceled_date).format(DDMMYYYY)} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h3>}
                 </div>
             </LayoutH>
         </Form>

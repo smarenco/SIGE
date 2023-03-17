@@ -3,6 +3,7 @@ import { EyeOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { DDMMYYYY } from '../common/consts';
 import { DEFAULT_ROWS_PER_PAGE } from '../../env';
+import { startTransition } from 'react';
 
 
 const paginationStyle = {
@@ -14,14 +15,14 @@ const paginationStyle = {
     right: 0,
 };
 
-export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, setFilters, selectedRowKeys, loading, onPageChange, paginationProps, onEditClick: onEdit, onCancelPaymentClick : onCancelPayment }) => {
+export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, setFilters, selectedRowKeys, loading, onPageChange, paginationProps, onViewClick: onView, onCancelPaymentClick : onCancelPayment }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
     }
     
-    const onEditClick = (id) => {
-        onEdit(id);
+    const onViewClick = (id) => {
+        onView(id);
     }
 
     const onCancelPaymentClick = (id) => {
@@ -33,20 +34,20 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
             {
                 title: 'Documento',
                 key: 'Documento',
-                width: 130,
+                width: 100,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
                 render: (record) => record.student.document
             }, {
                 title: 'Nombre',
                 key: 'Nombre',
-                width: 200,
+                width: 150,
                 ellipsis: true,
                 render: (record) => record.student.names
             }, {
                 title: 'Fecha pago',
                 key: 'Date',
-                width: 115,
+                width: 80,
                 ellipsis: true,
                 render: (record) => moment(record.date).format(DDMMYYYY)
             }, {
@@ -56,22 +57,22 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 ellipsis: true,
                 render: (record) => record.course.name
             }, {
-                title: 'Coutas',
-                dataIndex: 'amount_coute',
+                title: 'Coutas pagas',
                 key: 'Coutas',
-                width: 80,
+                width: 150,
                 ellipsis: true,
+                render: (record) => record.cuotes.length > 1 ? moment(record.cuotes[0].cuote).format(DDMMYYYY) + ' - ' + moment(record.cuotes[record.cuotes.length - 1].cuote).format(DDMMYYYY) : undefined
             }, {
                 title: 'Total',
                 key: 'Total',
                 dataIndex: 'total',
-                width: 80,
+                width: 60,
                 ellipsis: true,
             }, {
                 title: 'Estado',
                 key: 'canceled',
                 render: (record) => <Tag color={!record.canceled ? 'green' : 'red'}>{!record.canceled ? 'Vigente' : 'Anulado'}</Tag>,
-                width: 90,
+                width: 60,
                 ellipsis: true,
             }, {
                 title: '',
@@ -79,8 +80,8 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 width: 60,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        <EyeOutlined onClick={e => onEditClick(record.id)} />
-                        {record.Cancelable && <Button onClick={e => onCancelPaymentClick(record.id)}>Anular</Button>}
+                        <EyeOutlined onClick={e => onViewClick(record.id)} />
+                        {record.cancelable && <Button onClick={e => onCancelPaymentClick(record.id)}>Anular</Button>}
                     </div>
                 ),
             }
@@ -120,7 +121,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
             }}
             scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
             rowKey={record => record.getId()}
-            onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
+            onRow={r => ({ onDoubleClick: () => onViewClick(r.id) })}
             
         />
     )

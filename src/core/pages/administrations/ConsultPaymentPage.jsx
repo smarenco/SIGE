@@ -121,13 +121,11 @@ export const ConsultPaymentPage = ({ app }) => {
         }
     }
 
-    const onCancelPayment = async(obj) => {
+    const onCancelPayment = async(id) => {
         setConfirmLoading(true);
         try {
-            if (item.id) {
-                await paymentUpdate(obj.id, obj);
-            } else {
-                await paymentCreate(obj);
+            if (id) {
+                await paymentDelete(id);
             }
 
             setOpenModal(false); loadData();
@@ -164,8 +162,8 @@ export const ConsultPaymentPage = ({ app }) => {
                         page: page,
                         total: total,
                     }}
-                    onEditClick={loadItem}
-                    onCancelPayment={onCancelPayment}
+                    onViewClick={loadItem}
+                    onCancelPaymentClick={onCancelPayment}
               />
             </Card>
             <PaymentModal
