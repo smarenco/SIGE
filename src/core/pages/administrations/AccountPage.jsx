@@ -39,7 +39,6 @@ export const AccountPage = ({ app }) => {
     }, []);
 
     const onOk = async() => {
-        console.log(item)
         setConfirmLoading(true);
         try {
             await accountUpdate(item.id, item);

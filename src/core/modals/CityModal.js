@@ -18,7 +18,6 @@ export const CityModal = (props) => {
             renderError('Debe ingresar el nombre');
             return;
         }
-        console.log(formState)
         onOkProp(formState);
     }
 
