@@ -4,28 +4,28 @@ import { HHmm, DDMMYYYY, ACCESS_TOKEN, LOCALE } from "./consts";
 import { API_URL } from "../../env";
 
 
-export const loadTypes = async (gender) => {
+export const loadTypes = (gender) => {
     let typesUsers = [
         {id: 'administrative', name: 'Administrativo/a'},
         {id: 'teacher', name: 'Profesor/a'},
-        {id: 'DIR', name: 'Director/a'},
+        {id: 'director', name: 'Director/a'},
         {id: 'student', name: 'Estudiante'},
     ];
 
     switch (gender) {
-        case 'MASC':
+        case 'Male':
             typesUsers = [
                 {id: 'administrative', name: 'Administrativo'},
                 {id: 'teacher', name: 'Profesor'},
-                {id: 'DIR', name: 'Director'},
+                {id: 'director', name: 'Director'},
                 {id: 'student', name: 'Estudiante'},
             ];
             break;
-        case 'FEME':
+        case 'Female':
             typesUsers = [
                 {id: 'administrative', name: 'Administrativa'},
                 {id: 'teacher', name: 'Profesora'},
-                {id: 'DIR', name: 'Directora'},
+                {id: 'director', name: 'Directora'},
                 {id: 'student', name: 'Estudiante'},
             ];
             break;

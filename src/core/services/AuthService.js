@@ -31,7 +31,7 @@ export const AuthService = () => {
             .then(xhr => {
                 let { status, response } = xhr;
                 if (status === 200) {
-                    api.defaults.headers.common['X-AUTH-TOKEN'] = `${response.token}`;
+                    api.defaults.headers.common['X-US-AUTH-TOKEN'] = `${response.token}`;
                     localStorage.setItem(ACCESS_TOKEN, response.token);
                     localStorage.setItem(USER, JSON.stringify(response.usuario));
                     localStorage.setItem(PARAMS, JSON.stringify(response.parametros));
@@ -65,7 +65,7 @@ export const AuthService = () => {
             .then(xhr => {
                 let { status, response } = xhr;
                 if (status === 200) {
-                    api.defaults.headers.common['X-AUTH-TOKEN'] = `${response.token}`;
+                    api.defaults.headers.common['X-US-AUTH-TOKEN'] = `${response.token}`;
                     localStorage.setItem(ACCESS_TOKEN, response.token);
                     localStorage.setItem(USER, JSON.stringify(response.usuario));
                     localStorage.setItem(PARAMS, JSON.stringify(response.parametros));
@@ -87,7 +87,7 @@ export const AuthService = () => {
 
     const forceLogout = () => {
         // forceLogout();
-        delete api.defaults.headers.common['X-AUTH-TOKEN'];
+        delete api.defaults.headers.common['X-US-AUTH-TOKEN'];
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(USER);
         localStorage.removeItem(SESSION);

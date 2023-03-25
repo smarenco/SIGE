@@ -21,7 +21,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
 
     const [ medicalCoverages, setMedicalCoverage ] = useState([]);
     const [ countries, setCountry ] = useState([]);
-    const [ cities, setCity ] = useState([]);
+    const [ cities, setCities ] = useState([]);
     const [ typesUsers, setTypesUsers ] = useState([]);
     const [ groups, setGroups ] = useState([]);
     const [ courseSelected, setCourseSelected ] = useState(undefined);
@@ -31,57 +31,82 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const [ openModalDocument, setOpenModalDocument ] = useState(false);
     const [ documentCategory, setDocumentCategory ] = useState([]);
     const [ categorySelected, setCategorySelected ] = useState(undefined);
+    
+    const [ loadingMedicalCoverages, setLoadingMedicalCoverages ] = useState(undefined);
+    const [ loadingDocumentCategory, setLoadingDocumentCategory ] = useState(undefined);
+    const [ loadingGroups, setLoadingGroups ] = useState(undefined);
+    const [ loadingCountries, setLoadingCountries ] = useState(undefined);
+    const [ loadingCities, setLoadingCities ] = useState(undefined);
+    const [ loadingDocuments, setLoadingDocuments ] = useState(undefined);
+    const [ loadingTypes, setLoadingTypes ] = useState(undefined);
 
     const fetchMedicalCoverages = async () => {
+        setLoadingMedicalCoverages(true);
         try {
             const medicalCoverage = await medicalCoverageCombo();
             setMedicalCoverage(medicalCoverage);
-        } catch(err) { renderError(err); }
+            setLoadingMedicalCoverages(false);
+        } catch(err) { renderError(err); setLoadingMedicalCoverages(false);}
     };
 
     const fetchDocumentCategory = async () => {
+        setLoadingDocumentCategory(true);
         try {
             const documentCategory = await documentCategoryCombo();
             setDocumentCategory(documentCategory);
-        } catch(err) { renderError(err); }
+            setLoadingDocumentCategory(false);
+        } catch(err) { renderError(err); setLoadingDocumentCategory(false);}
     };
 
     const fetchGroups = async () => {
+        setLoadingGroups(true);
         try {
             if(formState.id){
                 const groups = await groupCombo({ user_type: formState.type, user_id: formState.id});
                 setGroups(groups);
+                setLoadingGroups(false);
             }
-
-        } catch(err) { renderError(err); }
+        } catch(err) { renderError(err); setLoadingGroups(false);}
     };
 
     const fetchCountries = async () => {
+        setLoadingCountries(true);
         try {
             const country = await countryCombo();
             setCountry(country);
-        } catch(err) { renderError(err); }
+            setLoadingCountries(false);
+        } catch(err) { renderError(err); setLoadingCountries(false);}
     };
 
-    const fetchCities = async () => {
-        try {
-            const city = await cityCombo();
-            setCity(city);
-        } catch(err) { renderError(err); }
+    const fetchCities = async (country_id) => {
+        if(country_id){
+            setLoadingCities(true);
+            try {
+                const cities = await cityCombo({country_id});
+                setCities(cities);
+                setLoadingCities(false);
+            } catch(err) { renderError(err); setLoadingCities(false);}
+        }else{
+            setCities([]);
+        }
     };
 
     const fetchDocuments = async (filter) => {
+        setLoadingDocuments(true);
         try {
             const documents = await documentCombo(filter);
             setDocuments(documents);
-        } catch(err) { renderError(err); }
+            setLoadingDocuments(false);
+        } catch(err) { renderError(err); setLoadingDocuments(false);}
     };
 
     const fetchTypes = async (gender) => {
+        setLoadingTypes(true);
         try {
-            const types = await loadTypes(gender);
+            const types = loadTypes(gender);
             setTypesUsers(types);
-        } catch(err) { renderError(err); }
+            setLoadingTypes(false);
+        } catch(err) { renderError(err); setLoadingTypes(false);}
     };
 
     useEffect(() => {
@@ -91,7 +116,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, []);
 
     useEffect(() => {
-        fetchCities();
+        fetchCities(formState.country_id);
     }, [formState.country_id]);
 
     useEffect(() => {
@@ -162,13 +187,13 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Input name='document' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.document} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Nombres`} labelAlign='left' span={6}>
-                        <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
+                        <Input name='names' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.names} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Apellidos`} labelAlign='left' span={6}>
-                        <Input name='last_name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.last_name} />
+                        <Input name='lastnames' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.lastnames} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Fecha nacimiento`} labelAlign='left' span={4}>
-                        <DatePicker name='birth_day' onChange={(birth_day) => onInputChangeByName('birth_day', birth_day)} format={DDMMYYYY} value={formState?.birth_day ? moment(formState?.birth_day, DDMMYYYY)  : undefined}/>
+                        <DatePicker name='birth_day' onChange={(birth_day) => onInputChangeByName('birth_day', moment(birth_day))} format={DDMMYYYY} value={formState?.birth_day ? moment(formState?.birth_day, DDMMYYYY)  : undefined}/>
                     </Form.Item>
                     <Form.Item label='Genero' labelAlign='left' span={4}>
                         <Select 
@@ -189,21 +214,22 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Input name='direction' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.direction} />
                     </Form.Item>
                     <Form.Item label='Telefono' labelAlign='left' span={5}>
-                        <Input name='phone' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.phone} />
+                        <Input name='cell_phone' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.cell_phone} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Email`} labelAlign='left' span={6}>
                         <Input type="email" name='email' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.email} />
                     </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Password`} labelAlign='left' span={4}>
-                        <Input type="password" name='password' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.password} />
+                    <Form.Item label={`${!view ? '*' : ''} Contraseña`} labelAlign='left' span={4}>
+                        <Input placeholder='Solo si desea cambiarla' type="password" name='password' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.password} />
                     </Form.Item>
                     <Form.Item label='Pais' labelAlign='left' span={5}>
                         <Select 
                             allowClear 
                             showSearch 
                             name='country_id'
+                            loading={loadingCountries}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
+                            disabled={view || confirmLoading || loadingCountries} 
                             onChange={(country_id) => onInputChangeByName('country_id', country_id)} 
                             value={formState?.country_id}
                         >
@@ -217,8 +243,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             allowClear 
                             showSearch
                             name='city_id'
+                            loading={loadingCities}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
+                            disabled={view || confirmLoading || loadingCities} 
                             onChange={(city_id) => onInputChangeByName('city_id', city_id)} 
                             value={formState?.city_id}
                         >
@@ -235,8 +262,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             allowClear 
                             showSearch 
                             name='medical_coverage_id'
+                            loading={loadingMedicalCoverages}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
+                            disabled={view || confirmLoading || loadingMedicalCoverages} 
                             onChange={(medical_coverage_id) => onInputChangeByName('medical_coverage_id', medical_coverage_id)} 
                             value={formState?.medicalCoverage_id}
                         >
@@ -250,8 +278,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             allowClear 
                             showSearch 
                             name='type'
+                            loading={loadingTypes}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
+                            disabled={view || confirmLoading || loadingTypes} 
                             onChange={(type) => onInputChangeByName('type', type)} value={formState?.type}
                         >
                             {typesUsers.map(type => 
@@ -292,7 +321,8 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view || confirmLoading}
+                            disabled={view || confirmLoading || loadingDocumentCategory}
+                            loading={loadingDocumentCategory}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={category_id => setCategorySelected(category_id)}
                         > 
@@ -304,6 +334,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                 </LayoutH>
                 <DocumentsUserTable
                     dataSource={mergeDataSchema(formState.documents, [ ...documents])}
+                    loading={loadingDocuments}
                     loadRequisitoFuncionario={loadRequisitoFuncionario}
                     documentToUser={documentToUser}
                 />
@@ -335,6 +366,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             <>
                 <GroupTable
                     data={groups}
+                    loading={loadingGroups}
                     //data={[new Group({name: 'grupo re piola', course_name: 'curso re piola', teacher_name: 'Santaigo', tourn_name: 'matutino', from_date: '20/12/2022', to_date: '22/12/2022'})]}
                     comeUserForm={true}
                 />

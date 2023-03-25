@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
-import { ACCESS_TOKEN } from "../common/consts";
+import { ACCESS_TOKEN, MENU, USER } from "../common/consts";
 import api from "../services/Api";
 
 import { clearErrorMessage, onChecking, onLogin, onLogout, onRecoveryPassword } from "../store/auth/authSlice";
@@ -18,6 +18,8 @@ export const useAuthStore = () => {
 
             localStorage.setItem(ACCESS_TOKEN, response.data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
+            localStorage.setItem(USER, JSON.stringify(response.data.user));
+            localStorage.setItem(MENU, JSON.stringify(response.data.menu));
 
             dispatch(onLogin({ name: response.data.user.names, uid: response.data.user.id }));
 
@@ -36,7 +38,7 @@ export const useAuthStore = () => {
         try {
             const { data } = await api.get('/auth/renew');
 
-            localStorage.setItem('token', data.token);
+            localStorage.setItem(ACCESS_TOKEN, data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
 
             dispatch( onLogin( { name: data.name, uid: data.uid} ) );

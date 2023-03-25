@@ -18,11 +18,14 @@ export const AccountPage = ({ app }) => {
     const { user } = AuthService();
 
     const getAccount = async () => {
+        setLoading(true);
         try {
             const account = await accountShow();
             setItem(account);
+            setLoading(false);
         } catch(err) {
             renderError(err);
+            setLoading(false);
         }
     };
 

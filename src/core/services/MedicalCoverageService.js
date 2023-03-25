@@ -1,4 +1,4 @@
-import { clearObj, open, renderError } from '../common/functions';
+import { alertError, clearObj, open, renderError } from '../common/functions';
 import MedicalCoverage from '../models/MedicalCoverage';
 import api from "./Api";
 
@@ -23,6 +23,7 @@ export const medicalCoverageIndex = async (filter, output = undefined) => {
             total: response.total,
         }
     }catch(err) {
+        alertError(err);
         renderError(err);
     }
     

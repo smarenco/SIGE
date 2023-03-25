@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Modal } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { loadTypes, renderError } from '../../common/functions';
+import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
@@ -29,7 +29,7 @@ export const UserPage = ({ app }) => {
     
     const fetchTypes = async (gender) => {
         try {
-            const types = await loadTypes(gender);
+            const types = loadTypes(gender);
             setTypesUsers(types);
         } catch(err) { renderError(err); }
     };
@@ -140,8 +140,14 @@ export const UserPage = ({ app }) => {
         setDataPage({ ...dataPage, pageSize});
         setLoading(true);
 
-        const { data, total } = await userIndex({ page, pageSize, ...filters });
-        setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        try{
+            const { data, total } = await userIndex({ page, pageSize, ...filters });
+            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
+        }catch(err){
+            alertError(err);
+            setLoading(false);
+        }
+        
     }
 
     const loadData = () => onPageChange(1);

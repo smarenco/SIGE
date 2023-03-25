@@ -1,6 +1,8 @@
+import { USER } from '../common/consts';
 import { clearObj, open } from '../common/functions';
 import Account from '../models/Account';
 import api from "./Api";
+import { AuthService } from './AuthService';
 
 const path = 'account';
 
@@ -30,9 +32,15 @@ export const accountCombo = async (filter) => {
     return response.data.map(entity => new Account(entity));
 }
 
-export const accountShow = async (id) => {
-    const { response } = await api.get(`${path}/${id}`);
-    return new Account(response);
+export const accountShow = async () => {
+    const user = JSON.parse(localStorage.getItem(USER));
+    if(user){
+        const { response } = await api.get(`${path}/${user.account_id}`);
+        return new Account(response);
+    }else{
+        AuthService().forceLogout();
+    }
+    
 }
 
 export const accountCreate = async (item) => {
