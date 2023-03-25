@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useState } from 'react';
-import { renderError } from '../../common/functions';
+import { alertError, renderError } from '../../common/functions';
 import { CityModal } from '../../modals/CityModal';
 import City from '../../models/City';
 import { AuthService } from '../../services/AuthService';
@@ -104,6 +104,7 @@ export const CityPage = ({ app }) => {
             const { data, total } = await cityIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }       
     }

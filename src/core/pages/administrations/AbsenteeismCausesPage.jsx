@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useState } from 'react';
-import { renderError } from '../../common/functions';
+import { alertError, renderError } from '../../common/functions';
 import { AbsenteeismCausesModal } from '../../modals/AbsenteeismCausesModal';
 import AbsenteeismCauses from '../../models/AbsenteeismCauses';
 import { AuthService } from '../../services/AuthService';
@@ -104,6 +104,7 @@ export const AbsenteeismCausesPage = ({ app }) => {
             const { data, total } = await absenteeismCausesIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }        
     }

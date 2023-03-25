@@ -137,6 +137,7 @@ export const CountryPage = ({ app }) => {
             const { data, total } = await countryIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }       
     }

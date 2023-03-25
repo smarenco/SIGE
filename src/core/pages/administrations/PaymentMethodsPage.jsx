@@ -103,6 +103,7 @@ export const PaymentMethodsPage = ({ app }) => {
             const { data, total } = await paymentMethodsIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }    
     }

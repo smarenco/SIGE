@@ -103,6 +103,7 @@ export const InstitutePage = ({ app }) => {
             const { data, total } = await instituteIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }
     }

@@ -104,6 +104,7 @@ export const MedicalCoveragePage = ({ app }) => {
             const { data, total } = await medicalCoverageIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }    
     }

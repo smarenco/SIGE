@@ -103,6 +103,7 @@ export const CoursePage = ({ app }) => {
             const { data, total } = await courseIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }     
     }

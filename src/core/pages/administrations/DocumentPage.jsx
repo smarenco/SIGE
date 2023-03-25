@@ -102,6 +102,7 @@ export const DocumentPage = ({ app }) => {
             const { data, total } = await documentIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         } 
     }

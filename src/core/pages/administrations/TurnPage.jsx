@@ -1,7 +1,7 @@
 import { Button, Card, Dropdown, Modal } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { renderError } from '../../common/functions';
+import { alertError, renderError } from '../../common/functions';
 import { TurnModal } from '../../modals/TurnModal';
 import Turn from '../../models/Turn';
 import { AuthService } from '../../services/AuthService';
@@ -103,6 +103,7 @@ export const TurnPage = ({ app }) => {
             const { data, total } = await turnIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }
     }

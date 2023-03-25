@@ -104,6 +104,7 @@ export const ConsultPaymentPage = ({ app }) => {
             const { data, total } = await paymentIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
+            alertError(err);
             setLoading(false);
         }
     }
