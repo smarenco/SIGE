@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider } from 'antd'
+import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider, InputNumber } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';
@@ -128,7 +128,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.gender]);
 
     useEffect(() => {
-        if(formState.type !== 'EST'){
+        if(formState.type !== 'student'){
             fetchDocumentCategory();
         }
     }, [formState.type]);
@@ -288,6 +288,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             )}
                         </Select>
                     </Form.Item>
+                    <Form.Item label='Dia tolerancia' labelAlign='left' span={5}>
+                        <InputNumber name='tolerance_day' min={1} max={31} onChange={tolerance_day => onInputChangeByName('tolerance_day', tolerance_day)} value={formState?.tolerance_day} />
+                    </Form.Item>
                     <Divider span={24}/>
                     <Form.Item label='Descripcion' labelAlign='left' span={24}>
                         <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />
@@ -299,12 +302,8 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             key: 'documents', 
             children: 
             <>
-            {/* id: 'PRI', name: 'Administrativo'},
-                    {id: 'SEC', name: 'Profesor'},
-                    {id: 'TER', name: 'Director'},
-                    {id: 'EST */}
                 <LayoutH>
-                    {formState.type === 'EST' && <Form.Item label='Cursos' labelAlign='left' span={12}>
+                    {formState.type === 'student' && <Form.Item label='Cursos' labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
@@ -317,7 +316,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             )}
                         </Select>
                     </Form.Item>}
-                    {formState.type !== 'EST' && <Form.Item label='Categoria' labelAlign='left' span={12}>
+                    {formState.type !== 'student' && <Form.Item label='Categoria' labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
@@ -361,7 +360,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         { 
             label: 'Cursos', 
             key: 'courses',
-            disabled: formState.type !== 'EST' && formState.type !== 'PRO' && formState.id,
+            disabled: formState.type !== 'student' && formState.type !== 'teacher',
             children: 
             <>
                 <GroupTable

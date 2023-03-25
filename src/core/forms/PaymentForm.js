@@ -40,7 +40,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     const fetchStudents = async () => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({ type: 'EST'});
+            const students = await userCombo({ type: 'student'});
             setStudents(students);
             setLoadingStudents(false);
         } catch(err) {

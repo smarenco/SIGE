@@ -62,7 +62,6 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 ellipsis: true,
                 render: (record) => {
                     const tipos = loadTypes(record.gender);
-                    console.log(record.gender)
                     return tipos.filter(tipo => record.type.toLowerCase() === tipo.id)[0]?.name || 'indefinido';
                 },
             }, {
