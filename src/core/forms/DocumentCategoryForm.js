@@ -110,14 +110,12 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
     ];
 
     return (
-        <Form layout='vertical'>
-            <Loading loading={loading}>
-                <Tabs
-                    style={{ marginTop: -15 }}
-                    size='small'
-                    items={items}
-                />
-            </Loading>
+        loading ? <Loading/> : <Form layout='vertical'>
+            <Tabs
+                style={{ marginTop: -15 }}
+                size='small'
+                items={items}
+            />
         </Form>
     )
 }

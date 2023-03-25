@@ -30,7 +30,7 @@ export const CityForm = ({ view, loading, confirmLoading, formState, onInputChan
 
     return (
         loading || loadingCountries ?
-            <Loading loading={loading || loadingCountries} />
+            <Loading/>
             :
             <Form layout='vertical'>
                 <LayoutH>

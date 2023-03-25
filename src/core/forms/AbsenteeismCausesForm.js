@@ -8,8 +8,7 @@ export const AbsenteeismCausesForm = ({ view, loading, confirmLoading, formState
 
     
     return (
-        <Form layout='vertical'>
-            <Loading loading={loading}>
+        loading ? <Loading/> : <Form layout='vertical'>
                 <LayoutH>
                     <Form.Item label={`${!view ? '*' : ''} Nombre`} labelAlign='left' span={16}>
                         <Input name='name' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.name} />
@@ -18,7 +17,6 @@ export const AbsenteeismCausesForm = ({ view, loading, confirmLoading, formState
                         <Checkbox name='apply_absenteeism' disabled={view || confirmLoading} onChange={e => onInputChangeByName('apply_absenteeism', e.target.checked)} checked={formState?.apply_absenteeism}>Aplica ausentismo</Checkbox>
                     </Form.Item>
                 </LayoutH>
-            </Loading>
         </Form>
     )
 }

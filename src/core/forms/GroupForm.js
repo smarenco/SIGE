@@ -315,24 +315,20 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
             label: 'Documentos', 
             key: 'info_documents', 
             children: 
-                <Loading loading={loadingDocuments}>
-                    <DocumentCategoryDocumentTable
-                        data={documents}
-                        view={true}
-                    />
-                </Loading>
+                <DocumentCategoryDocumentTable
+                    data={documents}
+                    view={true}
+                />
         }
     ];
     
     return (
-        <Form layout='vertical'>
-            {/*<Loading loading={loading || loadingTurns || loadingCourses || loadingInstitutes}>*/}
-                <Tabs
-                    style={{ marginTop: -15 }}
-                    size='small'
-                    items={items}
-                />
-            {/*</Loading>*/}
+        loading || loadingTurns || loadingCourses || loadingInstitutes || loadingDocuments ? <Loading/> : <Form layout='vertical'>
+            <Tabs
+                style={{ marginTop: -15 }}
+                size='small'
+                items={items}
+            />
         </Form>
     )
 }

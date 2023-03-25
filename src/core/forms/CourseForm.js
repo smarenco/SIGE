@@ -120,25 +120,23 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
                                     )}
                             </Select>
                     </Form.Item>
-                    <Loading loading={loadingDocuments} span={24}>
+                    {/* <Loading loading={loadingDocuments} span={24}> */}
                         <DocumentCategoryDocumentTable
                             data={documents}
                             view={true}
                         />
-                    </Loading>
+                    {/* </Loading> */}
                 </LayoutH>
         }
     ];
     
     return (
-        <Form layout='vertical'>
-            <Loading loading={loading || loadingDocumentCategories}>
-                <Tabs
-                    style={{ marginTop: -15 }}
-                    size='small'
-                    items={items}
-                />
-            </Loading>
+        loading || loadingDocumentCategories || loadingDocuments ? <Loading /> : <Form layout='vertical'>
+            <Tabs
+                style={{ marginTop: -15 }}
+                size='small'
+                items={items}
+            />
         </Form>
     )
 }
