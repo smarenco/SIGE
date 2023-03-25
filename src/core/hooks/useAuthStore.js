@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
-import sigeApi from "../api/sigeApi";
+import { ACCESS_TOKEN } from "../common/consts";
+import api from "../services/Api";
+
 import { clearErrorMessage, onChecking, onLogin, onLogout, onRecoveryPassword } from "../store/auth/authSlice";
 
 export const useAuthStore = () => {
@@ -12,13 +14,12 @@ export const useAuthStore = () => {
         dispatch(onChecking());
 
         try {
-            const { data } = await sigeApi.post('/auth/login', { username, password })
+            const { response } = await api.post('/auth/login', { username, password })
 
-            localStorage.setItem('token', data.data.token);
+            localStorage.setItem(ACCESS_TOKEN, response.data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
 
-            //resolver porque la desestructuración de la response en data, no se queda con data y hay que hacer data.data
-            dispatch(onLogin({ name: data.data.user.names, uid: data.data.user.id }));
+            dispatch(onLogin({ name: response.data.user.names, uid: response.data.user.id }));
 
         } catch (err) {
             console.log(err)
@@ -28,12 +29,12 @@ export const useAuthStore = () => {
     }
 
     const checkAuthToken = async () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem(ACCESS_TOKEN);
 
         if (!token) return dispatch(onLogout());
 
         try {
-            const { data } = await sigeApi.get('/auth/renew');
+            const { data } = await api.get('/auth/renew');
 
             localStorage.setItem('token', data.token);
             localStorage.setItem('token-init-date', new Date().getTime());
@@ -52,7 +53,7 @@ export const useAuthStore = () => {
     }
 
     const startRecoveryPassword = async ({ username }) => {
-        const { data } = await sigeApi.post('/auth/recovery-password', { username })
+        const { data } = await api.post('/auth/recovery-password', { username })
         dispatch(onRecoveryPassword());
     }
 
