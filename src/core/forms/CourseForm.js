@@ -21,7 +21,7 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
     const fetchDocumental_categories = async () => {
         setLoadingDocumentCategories(true);
         try {
-            const documental_categories = await documentCategoryCombo();
+            const documental_categories = await documentCategoryCombo({Type: 'CUR'});
             setDocumental_categories(documental_categories);
             setLoadingDocumentCategories(false);
         } catch(err) {
@@ -35,7 +35,7 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
         try {
             if(Documental_category_id){
                 const documentCategory = await documentCategoryShow(Documental_category_id);
-                setDocuments(documentCategory.document_category_document);
+                setDocuments(documentCategory.documental_category_document);
             }else{
                 setDocuments([]);
             }

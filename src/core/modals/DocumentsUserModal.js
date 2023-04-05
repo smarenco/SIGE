@@ -34,7 +34,7 @@ export const DocumentsUserModal = (props) => {
         <Modal
             bodyStyle={{ paddingTop: 10}}
             title={`Documento: ${formState.name}`}
-            visible={visible}
+            open={visible}
             width={600}
             destroyOnClose={true}
             okText='Guardar'

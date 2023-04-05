@@ -49,13 +49,17 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         } catch(err) { renderError(err); setLoadingMedicalCoverages(false);}
     };
 
-    const fetchDocumentCategory = async () => {
-        setLoadingDocumentCategory(true);
-        try {
-            const documentCategory = await documentCategoryCombo();
-            setDocumentCategory(documentCategory);
-            setLoadingDocumentCategory(false);
-        } catch(err) { renderError(err); setLoadingDocumentCategory(false);}
+    const fetchDocumentCategory = async (Type) => {
+        if(Type){
+            setLoadingDocumentCategory(true);
+            try {
+                const documentCategory = await documentCategoryCombo({Type});
+                setDocumentCategory(documentCategory);
+                setLoadingDocumentCategory(false);
+            } catch(err) { renderError(err); setLoadingDocumentCategory(false);}
+        }else{
+            setDocumentCategory([]);
+        }
     };
 
     const fetchGroups = async () => {
@@ -94,6 +98,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const fetchDocuments = async (filter) => {
         setLoadingDocuments(true);
         try {
+            if(formState.id){
+                filter.user_id = formState.id;
+            }
             const documents = await documentCombo(filter);
             setDocuments(documents);
             setLoadingDocuments(false);
@@ -120,7 +127,11 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.country_id]);
 
     useEffect(() => {
-        fetchDocuments({ course_id: courseSelected });
+        if(courseSelected){
+            fetchDocuments({ course_id: courseSelected });
+        }else{
+            setDocuments([]);
+        }
     }, [courseSelected]);
 
     useEffect(() => {
@@ -128,13 +139,16 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.gender]);
 
     useEffect(() => {
-        if(formState.type !== 'student'){
-            fetchDocumentCategory();
-        }
+        fetchDocumentCategory(formState.type);
     }, [formState.type]);
 
     useEffect(() => {
-        fetchDocuments({ category_id: categorySelected });
+        console.log(categorySelected)
+        if(categorySelected){
+            fetchDocuments({ category_id: categorySelected });
+        }else{
+            setDocuments([]);
+        }
     }, [categorySelected]);
 
     const mergeDataSchema = (data, schema) => {
@@ -219,7 +233,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <Form.Item label={`${!view ? '*' : ''} Email`} labelAlign='left' span={6}>
                         <Input type="email" name='email' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.email} />
                     </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Contraseña`} labelAlign='left' span={4}>
+                    <Form.Item label='Contraseña' labelAlign='left' span={4}>
                         <Input placeholder='Solo si desea cambiarla' type="password" name='password' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.password} />
                     </Form.Item>
                     <Form.Item label='Pais' labelAlign='left' span={5}>
@@ -273,7 +287,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             )}
                         </Select>
                     </Form.Item>
-                    <Form.Item label='Tipo usuario' labelAlign='left' span={5}>
+                    <Form.Item label={`${!view ? '*' : ''} Tipo usuario`} labelAlign='left' span={5}>
                         <Select 
                             allowClear 
                             showSearch 
@@ -311,8 +325,8 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={course_id => setCourseSelected(course_id)}
                         > 
-                            {groups.map(grupo => 
-                                <Select.Option value={grupo.course.id} key={grupo.course.id}>{grupo.course.name} ({grupo.name})</Select.Option>
+                            {groups.map(group => 
+                                <Select.Option value={group.course_id} key={group.course_id}>{group.course_name} ({group.name})</Select.Option>
                             )}
                         </Select>
                     </Form.Item>}
@@ -326,7 +340,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             onChange={category_id => setCategorySelected(category_id)}
                         > 
                             {documentCategory.map(category => 
-                                <Select.Option value={category.category_id} key={category.category_id}>{category.name}</Select.Option>
+                                <Select.Option value={category.id} key={category.id}>{category.name}</Select.Option>
                             )}
                         </Select>
                     </Form.Item>}
