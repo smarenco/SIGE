@@ -5,7 +5,7 @@ import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import { loadTypes, renderError } from '../common/functions';
+import { alertError, loadTypes, renderError } from '../common/functions';
 import { medicalCoverageCombo } from '../services/MedicalCoverageService';
 import { cityCombo } from '../services/CityService';
 import { countryCombo } from '../services/CountryService';
@@ -143,7 +143,6 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.type]);
 
     useEffect(() => {
-        console.log(categorySelected)
         if(categorySelected){
             fetchDocuments({ category_id: categorySelected });
         }else{
@@ -152,23 +151,26 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [categorySelected]);
 
     const mergeDataSchema = (data, schema) => {
-        return schema.map(item => {
+        //console.log('schema',schema)
+        //console.log('data',data)
+        let schema2 = [ ...schema];
+        return schema2.map(item => {
             item.loaded = false;
             item.observation = '';
-            item.id = null;
             item.expiration = null;
             item.file_name = null;
+            item.document_id = item.id;
             item.file = null;
-            item.name_desc = item.Nombre + (item.required ? ' (*)' : '');
+            item.name_desc = item.name + (item.required ? ' (*)' : '');
 
             for (let i in data) {
-                if (data[i].document_id === item.document_id) {
+                if (data[i]?.document_id === item.document_id) {
+                    let doc = data[i];
                     item.loaded = true;
-                    item.expiration = data[i].expiration;
-                    item.file = data[i].file;
-                    item.file_name = data[i].file_name;
-                    item.id = data[i].id;
-                    item.observation = data[i].observation;
+                    item.expiration = doc.expiration;
+                    item.file = doc.file;
+                    item.file_name = doc.file_name;
+                    item.observation = doc.observation;
                 }
             }
             return item;
@@ -176,16 +178,20 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }
 
     const loadRequisitoFuncionario = (id) => {
-        const documentToSee = formState.documents.filter((document) => document.id === id)[0];
+        const schema = documents.filter((document) => document.id === id);
+        const documentToSee = formState.documents.filter((document) => document.id === id);
+
         setOpenModalDocument(true);
-        setDocumentToSee(documentToSee);
+        setDocumentToSee(mergeDataSchema(documentToSee || [], schema)[0]);
     }
 
     const documentToUser = (documentSee, remove = false) => {
-        const documents = formState.documents.filter((document) => document.id !== documentSee.id);
-        if (documentSee.id && !remove) {
+        console.log('documentSee',documentSee);
+        console.log('formState.documents', formState.documents);
+        const documents = formState.documents.filter((document) => document.document_id !== documentSee.document_id);
+        if (documentSee.document_id && !remove) {
             onInputChangeByName('documents', [ ...documents, { ...document }]);
-        }else if(documentSee.id && remove){
+        }else if(documentSee.document_id && remove){
             onInputChangeByName('documents', documents);
         }
         
@@ -352,15 +358,19 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     documentToUser={documentToUser}
                 />
                 <DocumentsUserModal
-                    open={openModalDocument}
+                    visible={openModalDocument}
                     loading={loadingDocument}
                     item={documentToSee}
                     onOkProp={document => {
 
-                        setLoadingDocument(true);
-                        formState.documents.filter(FSdocument => FSdocument.id !== document.id);
-                        const docs = [...formState.documents, document];
+                        ////console.log('document', document)
+                        //console.log('formState',formState.documents)
 
+                        setLoadingDocument(true);
+                        const documents = formState.documents.filter(FSdocument => FSdocument.document_id !== document.document_id);
+                        //console.log('documents',documents)
+                        const docs = [...documents, document];
+                        //console.log('docs',docs)
                         onInputChangeByName('documents', docs);
                         setLoadingDocument(false);
                         setOpenModalDocument(false);

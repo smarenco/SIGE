@@ -17,6 +17,7 @@ export const useAuthStore = () => {
             const { response } = await api.post('/auth/login', { username, password })
 
             localStorage.setItem(ACCESS_TOKEN, response.data.token);
+            api.defaults.headers.common['X-US-AUTH-TOKEN'] = response.data.token;
             localStorage.setItem('token-init-date', new Date().getTime());
             localStorage.setItem(USER, JSON.stringify(response.data.user));
             localStorage.setItem(MENU, JSON.stringify(response.data.menu));

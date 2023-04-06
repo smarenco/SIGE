@@ -78,7 +78,7 @@ export default class User {
     /**
      * @type {array}
      */
-    documents = undefined;
+    documents = [];
 
     /**
      * @type {string}
