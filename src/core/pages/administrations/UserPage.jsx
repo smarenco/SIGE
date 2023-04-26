@@ -5,7 +5,7 @@ import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
-import { importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
+import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
 import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { ImportUsersModal } from '../../modals/ImportUsersModal';
@@ -169,11 +169,27 @@ export const UserPage = ({ app }) => {
     const onModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
-            if (item.id) {
+            let documents = [];
+            let i = 0;
+            
+            obj.documents.forEach(document => {
+                if(document['file']){
+                    const arr_name = document['file'].name.split('.');
+                    const ext = arr_name[arr_name.length - 1];
+                    let file_name = 'documento-' + document['document_id'] + '-usuario-' + obj.id + '-' + obj.document + '.' + ext;
+                    documents.push({...document, file_name});
+                    obj.documents[i].file_name = file_name;
+                }
+                i++;
+            });
+
+            if (obj.id) {
                 await userUpdate(obj.id, obj);
             } else {
                 await userCreate(obj);
             }
+
+            documents.forEach(document => uploadDocument(document.file, document.file_name));
 
             setOpenModal(false); loadData();
         } catch (err) {

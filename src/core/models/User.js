@@ -78,12 +78,12 @@ export default class User {
     /**
      * @type {array}
      */
-    documents = undefined;
+    documents = [];
 
     /**
      * @type {string}
      */
-    category_id = undefined;
+    document_category_id = undefined;
 
     /**
      * @type {boolean}

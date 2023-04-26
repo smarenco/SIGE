@@ -162,12 +162,12 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
         
     }
 
-    const fetchDocumentsCategoryDocuments = async (Documental_category_id) => {
+    const fetchDocumentsCategoryDocuments = async (documental_category_id) => {
         setLoadingDocuments(true);
         try {
-            if(Documental_category_id){
-                const documentCategory = await documentCategoryShow(Documental_category_id);
-                setDocuments(documentCategory.document_category_document);
+            if(documental_category_id){
+                const documentCategory = await documentCategoryShow(documental_category_id);
+                setDocuments(documentCategory.documental_category_document);
             }else{
                 setDocuments([]);
             }

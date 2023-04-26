@@ -5,7 +5,7 @@ import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import { loadTypes, renderError } from '../common/functions';
+import { alertError, loadTypes, renderError } from '../common/functions';
 import { medicalCoverageCombo } from '../services/MedicalCoverageService';
 import { cityCombo } from '../services/CityService';
 import { countryCombo } from '../services/CountryService';
@@ -30,7 +30,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const [ loadingDocument, setLoadingDocument ] = useState(false);
     const [ openModalDocument, setOpenModalDocument ] = useState(false);
     const [ documentCategory, setDocumentCategory ] = useState([]);
-    const [ categorySelected, setCategorySelected ] = useState(undefined);
+    const [ documentCategorySelected, setDocumentCategorySelected ] = useState(undefined);
     
     const [ loadingMedicalCoverages, setLoadingMedicalCoverages ] = useState(undefined);
     const [ loadingDocumentCategory, setLoadingDocumentCategory ] = useState(undefined);
@@ -49,13 +49,17 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         } catch(err) { renderError(err); setLoadingMedicalCoverages(false);}
     };
 
-    const fetchDocumentCategory = async () => {
-        setLoadingDocumentCategory(true);
-        try {
-            const documentCategory = await documentCategoryCombo();
-            setDocumentCategory(documentCategory);
-            setLoadingDocumentCategory(false);
-        } catch(err) { renderError(err); setLoadingDocumentCategory(false);}
+    const fetchDocumentCategory = async (Type) => {
+        if(Type){
+            setLoadingDocumentCategory(true);
+            try {
+                const documentCategory = await documentCategoryCombo({Type});
+                setDocumentCategory(documentCategory);
+                setLoadingDocumentCategory(false);
+            } catch(err) { renderError(err); setLoadingDocumentCategory(false);}
+        }else{
+            setDocumentCategory([]);
+        }
     };
 
     const fetchGroups = async () => {
@@ -94,6 +98,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const fetchDocuments = async (filter) => {
         setLoadingDocuments(true);
         try {
+            if(formState.id){
+                filter.user_id = formState.id;
+            }
             const documents = await documentCombo(filter);
             setDocuments(documents);
             setLoadingDocuments(false);
@@ -120,7 +127,11 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.country_id]);
 
     useEffect(() => {
-        fetchDocuments({ course_id: courseSelected });
+        if(courseSelected){
+            fetchDocuments({ course_id: courseSelected });
+        }else{
+            setDocuments([]);
+        }
     }, [courseSelected]);
 
     useEffect(() => {
@@ -128,33 +139,40 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.gender]);
 
     useEffect(() => {
-        if(formState.type !== 'student'){
-            fetchDocumentCategory();
+        if(formState.type && formState.type !== 'student'){
+            fetchDocumentCategory(formState.type);
         }
     }, [formState.type]);
 
     useEffect(() => {
-        fetchDocuments({ category_id: categorySelected });
-    }, [categorySelected]);
+        if(documentCategorySelected){
+            fetchDocuments({ document_category_id: documentCategorySelected });
+        }else{
+            setDocuments([]);
+        }
+    }, [documentCategorySelected]);
 
     const mergeDataSchema = (data, schema) => {
-        return schema.map(item => {
+        //console.log('schema',schema)
+        //console.log('data',data)
+        let schema2 = [ ...schema];
+        return schema2.map(item => {
             item.loaded = false;
             item.observation = '';
-            item.id = null;
             item.expiration = null;
             item.file_name = null;
+            item.document_id = item.id;
             item.file = null;
-            item.name_desc = item.Nombre + (item.required ? ' (*)' : '');
+            item.name_desc = item.name + (item.required ? ' (*)' : '');
 
             for (let i in data) {
-                if (data[i].document_id === item.document_id) {
+                if (data[i]?.document_id === item.document_id) {
+                    let doc = data[i];
                     item.loaded = true;
-                    item.expiration = data[i].expiration;
-                    item.file = data[i].file;
-                    item.file_name = data[i].file_name;
-                    item.id = data[i].id;
-                    item.observation = data[i].observation;
+                    item.expiration = doc.expiration;
+                    item.file = doc.file;
+                    item.file_name = doc.file_name;
+                    item.observation = doc.observation;
                 }
             }
             return item;
@@ -162,16 +180,20 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }
 
     const loadRequisitoFuncionario = (id) => {
-        const documentToSee = formState.documents.filter((document) => document.id === id)[0];
+        const schema = documents.filter((document) => document.id === id);
+        const documentToSee = formState.documents.filter((document) => document.id === id);
+
         setOpenModalDocument(true);
-        setDocumentToSee(documentToSee);
+        setDocumentToSee(mergeDataSchema(documentToSee || [], schema)[0]);
     }
 
     const documentToUser = (documentSee, remove = false) => {
-        const documents = formState.documents.filter((document) => document.id !== documentSee.id);
-        if (documentSee.id && !remove) {
+        console.log('documentSee',documentSee);
+        console.log('formState.documents', formState.documents);
+        const documents = formState.documents.filter((document) => document.document_id !== documentSee.document_id);
+        if (documentSee.document_id && !remove) {
             onInputChangeByName('documents', [ ...documents, { ...document }]);
-        }else if(documentSee.id && remove){
+        }else if(documentSee.document_id && remove){
             onInputChangeByName('documents', documents);
         }
         
@@ -219,7 +241,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <Form.Item label={`${!view ? '*' : ''} Email`} labelAlign='left' span={6}>
                         <Input type="email" name='email' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.email} />
                     </Form.Item>
-                    <Form.Item label={`${!view ? '*' : ''} Contraseña`} labelAlign='left' span={4}>
+                    <Form.Item label='Contraseña' labelAlign='left' span={4}>
                         <Input placeholder='Solo si desea cambiarla' type="password" name='password' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.password} />
                     </Form.Item>
                     <Form.Item label='Pais' labelAlign='left' span={5}>
@@ -266,14 +288,14 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             disabled={view || confirmLoading || loadingMedicalCoverages} 
                             onChange={(medical_coverage_id) => onInputChangeByName('medical_coverage_id', medical_coverage_id)} 
-                            value={formState?.medicalCoverage_id}
+                            value={formState?.medical_coverage_id}
                         >
                             {medicalCoverages.map(medicalCoverage => 
                                 <Select.Option value={medicalCoverage.id} key={medicalCoverage.id}>{medicalCoverage.name}</Select.Option>
                             )}
                         </Select>
                     </Form.Item>
-                    <Form.Item label='Tipo usuario' labelAlign='left' span={5}>
+                    <Form.Item label={`${!view ? '*' : ''} Tipo usuario`} labelAlign='left' span={5}>
                         <Select 
                             allowClear 
                             showSearch 
@@ -291,10 +313,6 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <Form.Item label='Dia tolerancia' labelAlign='left' span={5}>
                         <InputNumber name='tolerance_day' min={1} max={31} onChange={tolerance_day => onInputChangeByName('tolerance_day', tolerance_day)} value={formState?.tolerance_day} />
                     </Form.Item>
-                    <Divider span={24}/>
-                    <Form.Item label='Descripcion' labelAlign='left' span={24}>
-                        <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />
-                    </Form.Item>
                 </LayoutH> 
         },
         { 
@@ -311,8 +329,8 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={course_id => setCourseSelected(course_id)}
                         > 
-                            {groups.map(grupo => 
-                                <Select.Option value={grupo.course.id} key={grupo.course.id}>{grupo.course.name} ({grupo.name})</Select.Option>
+                            {groups.map(group => 
+                                <Select.Option value={group.course_id} key={group.course_id}>{group.course_name} ({group.name})</Select.Option>
                             )}
                         </Select>
                     </Form.Item>}
@@ -322,11 +340,12 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             showSearch
                             disabled={view || confirmLoading || loadingDocumentCategory}
                             loading={loadingDocumentCategory}
+                            value={formState?.document_category_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={category_id => setCategorySelected(category_id)}
+                            onChange={document_category_id => {onInputChangeByName('document_category_id', document_category_id); setDocumentCategorySelected(document_category_id);}}
                         > 
                             {documentCategory.map(category => 
-                                <Select.Option value={category.category_id} key={category.category_id}>{category.name}</Select.Option>
+                                <Select.Option value={category.id} key={category.id}>{category.name}</Select.Option>
                             )}
                         </Select>
                     </Form.Item>}
@@ -338,15 +357,19 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     documentToUser={documentToUser}
                 />
                 <DocumentsUserModal
-                    open={openModalDocument}
+                    visible={openModalDocument}
                     loading={loadingDocument}
                     item={documentToSee}
                     onOkProp={document => {
 
-                        setLoadingDocument(true);
-                        formState.documents.filter(FSdocument => FSdocument.id !== document.id);
-                        const docs = [...formState.documents, document];
+                        ////console.log('document', document)
+                        //console.log('formState',formState.documents)
 
+                        setLoadingDocument(true);
+                        const documents = formState.documents.filter(FSdocument => FSdocument.document_id !== document.document_id);
+                        //console.log('documents',documents)
+                        const docs = [...documents, document];
+                        //console.log('docs',docs)
                         onInputChangeByName('documents', docs);
                         setLoadingDocument(false);
                         setOpenModalDocument(false);
@@ -377,35 +400,31 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             children: 
                 <LayoutH>
                     <Form.Item labelAlign='left' span={6}>
-                        <Checkbox name='work_in_Area_similar' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.work_in_Area_similar}>Trabaja en area similar</Checkbox>
+                        <Checkbox name='work_in_Area_similar' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('work_in_Area_similar', e.target.checked)} checked={formState?.work_in_Area_similar}>Trabaja en area similar</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={8}>
-                        <Checkbox name='has_knowledge_in_area' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.has_knowledge_in_area}>Tiene conocimiento en el area</Checkbox>
+                        <Checkbox name='has_knowledge_in_area' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('has_knowledge_in_area', e.target.checked)} checked={formState?.has_knowledge_in_area}>Tiene conocimiento en el area</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={4}>
-                        <Checkbox name='trained' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.trained}>Entrenado</Checkbox>
+                        <Checkbox name='trained' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('trained', e.target.checked)} checked={formState?.trained}>Entrenado</Checkbox>
                     </Form.Item>
                     <Form.Item label='Expectativas' labelAlign='left' span={18}>
-                        <TextArea name='expectation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectation} />
+                        <TextArea name='expectations' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectations} />
                     </Form.Item>
                     <Form.Item label='Nivel Educacion' labelAlign='left' span={6}>
                         <Select 
                             allowClear 
                             showSearch 
-                            name='level_education'
+                            name='education_level'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
-                            onChange={(level_education) => onInputChangeByName('level_education', level_education)}
-                            value={formState?.level_education}
+                            disabled={view || confirmLoading}
+                            onChange={(education_level) => onInputChangeByName('education_level', education_level)}
+                            value={formState?.education_level}
                         >
                             {levels_educations.map(level => 
                                 <Select.Option value={level.id} key={level.id}>{level.name}</Select.Option>
                             )}
                         </Select>
-                    </Form.Item>
-                    <Divider span={24}/>
-                    <Form.Item label='Observaciones' labelAlign='left' span={24}>
-                        <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
                     </Form.Item>
                 </LayoutH> 
         },
@@ -418,6 +437,10 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                 size='small'
                 items={items} 
             />
+            <Divider span={24}/>
+            <Form.Item label='Observaciones' labelAlign='left' span={24}>
+                <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
+            </Form.Item>
         </Form>
     )
 }

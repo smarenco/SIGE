@@ -44,8 +44,8 @@ export const levels_educations = [
 ];
 
 export const genders = [
-    {id: 'FEME', name: 'Femenino'},
-    {id: 'MASC', name: 'Masculino'},
+    {id: 'FEMALE', name: 'Femenino'},
+    {id: 'MALE', name: 'Masculino'},
     {id: 'NOBIN', name: 'No Binario'},
     {id: 'PRND', name: 'Prefiero no decirlo'},
 ];

@@ -14,11 +14,11 @@ export const DocumentsUserModal = (props) => {
 
     const { visible, item, onOkProp, loading, onCancel: onCancelProp } = props;
 
-    const { formState, onInputChange, onInputChangeByName } = useForm(item);    
+    const { formState, onInputChange, onInputChangeByName } = useForm(item ? item : {});    
 
     const onOk = () => {
 
-        if(formState.required && (formState.expiration === null || formState.expiration === undefined)){
+        if(formState.expiration_control && (formState.expiration === null || formState.expiration === undefined)){
             renderError('Debe agregar una fecha de vencimiento');
             return;
         }
@@ -34,7 +34,7 @@ export const DocumentsUserModal = (props) => {
         <Modal
             bodyStyle={{ paddingTop: 10}}
             title={`Documento: ${formState.name}`}
-            visible={visible}
+            open={visible}
             width={600}
             destroyOnClose={true}
             okText='Guardar'
@@ -58,7 +58,7 @@ export const DocumentsUserModal = (props) => {
                         format={DDMMYYYY}
                         style={{ width: '100%', display: 'block' }}
                         value={formState.expiration ? moment(formState.expiration) : undefined}
-                        onChange={date => onInputChangeByName('expiration', date )} />
+                        onChange={date => onInputChangeByName('expiration', date)} />
                 </div>
                 <div style={{ marginTop: 10 }}>
                     <label>Observaciones</label>
