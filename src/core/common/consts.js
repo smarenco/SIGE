@@ -20,6 +20,8 @@ export const MENU = "menu";
 export const CONFIG = "config";
 
 export const colors = {
+    urusigeSkyblue: '#2995d3',
+    urusigeGreen: '#95c56e',
     magenta: '#eb2f96',
     red: '#f5222d',
     volcano: '#fa541c',

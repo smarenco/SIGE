@@ -10,10 +10,7 @@ export const UserModal = (props) => {
     const { formState, onInputChange, onInputChangeByName } = useForm(item); 
 
     const onOk = () => {
-        
-        //const documents = refForm.current.getDocuments();
-
-        if(!formState.Nombre || formState.Nombre.trim().length === 0){
+        if(!formState.names || formState.names.trim().length === 0){
             return;
         }
 
@@ -26,7 +23,6 @@ export const UserModal = (props) => {
                 return false;
             }
         });*/
-
         
         if(!error){ onOkProp(formState); }
     }
