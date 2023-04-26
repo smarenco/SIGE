@@ -30,7 +30,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const [ loadingDocument, setLoadingDocument ] = useState(false);
     const [ openModalDocument, setOpenModalDocument ] = useState(false);
     const [ documentCategory, setDocumentCategory ] = useState([]);
-    const [ categorySelected, setCategorySelected ] = useState(undefined);
+    const [ documentCategorySelected, setDocumentCategorySelected ] = useState(undefined);
     
     const [ loadingMedicalCoverages, setLoadingMedicalCoverages ] = useState(undefined);
     const [ loadingDocumentCategory, setLoadingDocumentCategory ] = useState(undefined);
@@ -139,16 +139,18 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     }, [formState.gender]);
 
     useEffect(() => {
-        fetchDocumentCategory(formState.type);
+        if(formState.type && formState.type !== 'student'){
+            fetchDocumentCategory(formState.type);
+        }
     }, [formState.type]);
 
     useEffect(() => {
-        if(categorySelected){
-            fetchDocuments({ category_id: categorySelected });
+        if(documentCategorySelected){
+            fetchDocuments({ document_category_id: documentCategorySelected });
         }else{
             setDocuments([]);
         }
-    }, [categorySelected]);
+    }, [documentCategorySelected]);
 
     const mergeDataSchema = (data, schema) => {
         //console.log('schema',schema)
@@ -286,7 +288,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             disabled={view || confirmLoading || loadingMedicalCoverages} 
                             onChange={(medical_coverage_id) => onInputChangeByName('medical_coverage_id', medical_coverage_id)} 
-                            value={formState?.medicalCoverage_id}
+                            value={formState?.medical_coverage_id}
                         >
                             {medicalCoverages.map(medicalCoverage => 
                                 <Select.Option value={medicalCoverage.id} key={medicalCoverage.id}>{medicalCoverage.name}</Select.Option>
@@ -310,10 +312,6 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     </Form.Item>
                     <Form.Item label='Dia tolerancia' labelAlign='left' span={5}>
                         <InputNumber name='tolerance_day' min={1} max={31} onChange={tolerance_day => onInputChangeByName('tolerance_day', tolerance_day)} value={formState?.tolerance_day} />
-                    </Form.Item>
-                    <Divider span={24}/>
-                    <Form.Item label='Descripcion' labelAlign='left' span={24}>
-                        <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />
                     </Form.Item>
                 </LayoutH> 
         },
@@ -342,8 +340,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             showSearch
                             disabled={view || confirmLoading || loadingDocumentCategory}
                             loading={loadingDocumentCategory}
+                            value={formState?.document_category_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={category_id => setCategorySelected(category_id)}
+                            onChange={document_category_id => {onInputChangeByName('document_category_id', document_category_id); setDocumentCategorySelected(document_category_id);}}
                         > 
                             {documentCategory.map(category => 
                                 <Select.Option value={category.id} key={category.id}>{category.name}</Select.Option>
@@ -401,35 +400,31 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             children: 
                 <LayoutH>
                     <Form.Item labelAlign='left' span={6}>
-                        <Checkbox name='work_in_Area_similar' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.work_in_Area_similar}>Trabaja en area similar</Checkbox>
+                        <Checkbox name='work_in_Area_similar' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('work_in_Area_similar', e.target.checked)} checked={formState?.work_in_Area_similar}>Trabaja en area similar</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={8}>
-                        <Checkbox name='has_knowledge_in_area' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.has_knowledge_in_area}>Tiene conocimiento en el area</Checkbox>
+                        <Checkbox name='has_knowledge_in_area' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('has_knowledge_in_area', e.target.checked)} checked={formState?.has_knowledge_in_area}>Tiene conocimiento en el area</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={4}>
-                        <Checkbox name='trained' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.trained}>Entrenado</Checkbox>
+                        <Checkbox name='trained' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('trained', e.target.checked)} checked={formState?.trained}>Entrenado</Checkbox>
                     </Form.Item>
                     <Form.Item label='Expectativas' labelAlign='left' span={18}>
-                        <TextArea name='expectation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectation} />
+                        <TextArea name='expectations' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.expectations} />
                     </Form.Item>
                     <Form.Item label='Nivel Educacion' labelAlign='left' span={6}>
                         <Select 
                             allowClear 
                             showSearch 
-                            name='level_education'
+                            name='education_level'
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            disabled={view || confirmLoading} 
-                            onChange={(level_education) => onInputChangeByName('level_education', level_education)}
-                            value={formState?.level_education}
+                            disabled={view || confirmLoading}
+                            onChange={(education_level) => onInputChangeByName('education_level', education_level)}
+                            value={formState?.education_level}
                         >
                             {levels_educations.map(level => 
                                 <Select.Option value={level.id} key={level.id}>{level.name}</Select.Option>
                             )}
                         </Select>
-                    </Form.Item>
-                    <Divider span={24}/>
-                    <Form.Item label='Observaciones' labelAlign='left' span={24}>
-                        <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
                     </Form.Item>
                 </LayoutH> 
         },
@@ -442,6 +437,10 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                 size='small'
                 items={items} 
             />
+            <Divider span={24}/>
+            <Form.Item label='Observaciones' labelAlign='left' span={24}>
+                <TextArea name='observation' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.observation} />
+            </Form.Item>
         </Form>
     )
 }

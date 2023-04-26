@@ -37,12 +37,13 @@ export const useAuthStore = () => {
         if (!token) return dispatch(onLogout());
 
         try {
-            const { data } = await api.get('/auth/renew');
+            //const { data } = await api.get('/auth/renew');
 
-            localStorage.setItem(ACCESS_TOKEN, data.token);
-            localStorage.setItem('token-init-date', new Date().getTime());
+            //localStorage.setItem(ACCESS_TOKEN, token);
+            //localStorage.setItem('token-init-date', new Date().getTime());
+            const user = localStorage.getItem(USER);
 
-            dispatch( onLogin( { name: data.name, uid: data.uid} ) );
+            dispatch( onLogin( { name: user.names, uid: user.id} ) );
 
         } catch (err) {
             localStorage.clear();

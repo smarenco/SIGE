@@ -5,8 +5,8 @@ export const APP_PATH = '';
 //export const API_URL_BASE = 'https://ddns.fusionar.com.uy:6588';
 
 //DESA
-export const API_URL = 'http://backend.sige.edu.uy/';
-export const API_URL_BASE = 'http://backend.sige.edu.uy/';
+export const API_URL = 'http://backend.sige.edu.uy';
+export const API_URL_BASE = 'http://backend.sige.edu.uy';
 
 export const APP_NAME = 'Sige Web'
 

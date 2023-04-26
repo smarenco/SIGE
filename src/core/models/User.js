@@ -83,7 +83,7 @@ export default class User {
     /**
      * @type {string}
      */
-    category_id = undefined;
+    document_category_id = undefined;
 
     /**
      * @type {boolean}

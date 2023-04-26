@@ -63,3 +63,18 @@ export const userDelete = async (ids) => {
     }
     return Promise.all(ids.map(async (id) => await api.delete(`${path}/${id}`)));
 }
+
+export const downloadDocument = (filename) =>{
+    open(`${path}/download-document/${filename}`);
+}
+
+export const uploadDocument = (file, filename) => {
+    console.log(file, filename);
+    let formData = new FormData();
+    formData.append('Archivo-file', file);
+    formData.append('filename', filename);
+
+    return api.post(`${path}/subir-docs`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' } 
+    });
+}

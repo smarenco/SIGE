@@ -2,13 +2,14 @@ import moment from "moment";
 import { Button, Modal, Table } from 'antd';
 import {
     DeleteTwoTone,
+    DownloadOutlined,
     EditTwoTone,
     ExclamationCircleTwoTone,
     PlusCircleTwoTone,
   } from '@ant-design/icons';
 
 import { DDMMYYYY } from "../common/consts";
-import { downloadDocument } from "../services/DocumentService";
+import { downloadDocument } from "../services/UserService";
 
 export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionario, documentToUser }) => {
     
@@ -46,7 +47,7 @@ export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionar
             }, {
                 title: '',
                 key: 'Actions',
-                width: 50,
+                width: 90,
                 render: (_, record, i) => {
                     let alerts = [];
                     if (record.required && !record.expiration && !record.loaded) {
@@ -55,22 +56,21 @@ export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionar
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="red" style={{marginRight: 10}} title="Este documento exige vencimiento y no está cargado" />);
                     } else if (!record.required && !record.expiration && !record.loaded) {
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="red" style={{marginRight: 10}} title="Este documento es requerido, exige vencimiento y no está cargado" />);
-                    } else if (record.loaded && moment(record.expiration, DDMMYYYY).isValid() && moment(record.expiration, DDMMYYYY).diff(new Date) < 0) {
+                    } else if (record.loaded && moment(record.expiration).isValid() && moment(record.expiration).diff(new Date) < 0) {
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="orange" style={{marginRight: 10}} title="Este documento ha vencido" />);
                     }
                     return (
                         <div style={{ width: '100%', textAlign: 'right' }}>
                             {alerts.length > 0 && alerts[0]}
-                            {record.file_name && <Button key='download' onClick={e => downloadDocument(record.file_name)} style={{ marginRight: 10 }} title='Descargar documento' ></Button>}
-                            {record.loaded ? <EditTwoTone twoToneColor="green" onClick={e => loadRequisitoFuncionario(record.id)} title='Editar documento' /> : <PlusCircleTwoTone twoToneColor="green" onClick={e => loadRequisitoFuncionario(record.id)} title='Agregar documento' />}
-                            {record.loaded && <DeleteTwoTone twoToneColor="red" disabled={!record.loaded} onClick={e => onDeleteDocument(record)} title='Eliminar documento'/>}
+                            {record.file_name && <DownloadOutlined onClick={e => downloadDocument(record.file_name)} style={{ fontSize:18, marginRight: 10 }} title='Descargar documento' />}
+                            {record.loaded ? <EditTwoTone twoToneColor="green" onClick={e => loadRequisitoFuncionario(record.id)} style={{ fontSize:18, marginRight: 10 }} title='Editar documento' /> : <PlusCircleTwoTone twoToneColor="green" onClick={e => loadRequisitoFuncionario(record.id)} title='Agregar documento' style={{ fontSize:18, marginRight: 10 }}/>}
+                            {record.loaded && <DeleteTwoTone twoToneColor="red" disabled={!record.loaded} style={{ fontSize:18 }} onClick={e => onDeleteDocument(record)} title='Eliminar documento'/>}
                         </div>
                 )}
             }
         ];
     }
 
-    console.log(dataSource);
     return (
         <Table
             loading={loading}

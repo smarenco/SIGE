@@ -5,7 +5,7 @@ import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
-import { userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
+import { uploadDocument, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 
@@ -173,24 +173,20 @@ export const UserPage = ({ app }) => {
                 if(document['file']){
                     const arr_name = document['file'].name.split('.');
                     const ext = arr_name[arr_name.length - 1];
-                    console.log(ext)
-                    let file_name = 'documento-' + document['document_id'] + '-usuario-' + obj.document + '.' + ext;
+                    let file_name = 'documento-' + document['document_id'] + '-usuario-' + obj.id + '-' + obj.document + '.' + ext;
                     documents.push({...document, file_name});
                     obj.documents[i].file_name = file_name;
                 }
                 i++;
             });
+
             if (obj.id) {
                 await userUpdate(obj.id, obj);
             } else {
                 await userCreate(obj);
             }
 
-            //CARGAR FISICAMENTE LOS ARCHIVOS/
-            //CARGAR FISICAMENTE LOS ARCHIVOS/
-            //CARGAR FISICAMENTE LOS ARCHIVOS/
-            //CARGAR FISICAMENTE LOS ARCHIVOS/
-            //documents.forEach(document => uploadDocument(document, document.file_name));
+            documents.forEach(document => uploadDocument(document.file, document.file_name));
 
             setOpenModal(false); loadData();
         } catch(err) {
