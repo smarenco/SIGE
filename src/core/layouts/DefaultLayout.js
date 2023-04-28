@@ -16,6 +16,7 @@ import {
 } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { useAuthStore } from '../hooks/useAuthStore';
+import { MENU } from '../common/consts';
 const { Header, Sider, Content } = Layout;
 
 
@@ -32,24 +33,11 @@ const DefaultLayout = ({ component, app }) => {
         console.log(e);
     }
 
-    const items = [
-        {
-            label: 'Mi Perfil',
-            key: '1',
-            icon: <UserOutlined />,
-            onClick: handleMyProfile
-        },
-        {
-            label: 'Cerrar Sesión',
-            key: '2',
-            icon: <LogoutOutlined />,
-            onClick: handleLogout
-        }
-    ];
+    let menuProps = JSON.parse(localStorage.getItem(MENU));
 
-    const menuProps = {
-        items
-    };
+    if(!menuProps){
+        menuProps = [];
+    }
 
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -83,8 +71,10 @@ const DefaultLayout = ({ component, app }) => {
                     <Menu
                         theme="dark"
                         mode="inline"
-                        defaultSelectedKeys={['1']}
-                        items={app?.routes.map((route, i) => {
+                        defaultSelectedKeys={['0']}
+                        items={menuProps.map((r, i) => {
+                            const route = app.routes.filter(route => route.key === r.key)[0];
+                            console.log(route);
                             if (!route.isPublic) {
                                 return {
                                     key: i,

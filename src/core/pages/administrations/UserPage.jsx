@@ -204,7 +204,7 @@ export const UserPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Funcionarios</strong>)}
+                title={(<strong>Usuarios</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
