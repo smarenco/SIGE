@@ -26,7 +26,7 @@ export const userIndex = async (filter, output = undefined) => {
 export const userCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
-    
+
     return response.data.map(entity => new User(entity));
 }
 
@@ -36,11 +36,11 @@ export const userCombo = async (filter) => {
      * @param {array} records Registros a modificar su estado
      * @returns {Promise}
      */
-export const userToggle = async(active, records) => {
+export const userToggle = async (active, records) => {
     if (!Array.isArray(records)) {
         records = [records];
     }
-    return Promise.all(records.map(async (id) => await api.post(`${this.path}/${id}/${active ? 'activate' : 'desactivate'}`) ));
+    return Promise.all(records.map(async (id) => await api.post(`${this.path}/${id}/${active ? 'activate' : 'desactivate'}`)));
 }
 
 export const userShow = async (id) => {
@@ -55,6 +55,16 @@ export const userCreate = async (item) => {
 
 export const userUpdate = async (id, item) => {
     return await api.put(`${path}/${id}`, item);
+}
+
+export const importUsers = async (file, type) => {
+    let formData = new FormData();
+    formData.append("file", file);
+    return await api.post(`${path}/import/${type}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    });
 }
 
 export const userDelete = async (ids) => {

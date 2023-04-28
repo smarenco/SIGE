@@ -5,19 +5,21 @@ import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
-import { uploadDocument, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
+import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
+import { ImportUsersModal } from '../../modals/ImportUsersModal';
 
 export const UserPage = ({ app }) => {
 
     const [item, setItem] = useState(new User);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
-    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
+    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50 });
     const [total, setTotal] = useState(0);
-    const [rowSelected, setRowSelected] = useState({selectedRowKeys: [], selectedRows: []});
+    const [rowSelected, setRowSelected] = useState({ selectedRowKeys: [], selectedRows: [] });
     const [openModal, setOpenModal] = useState(false);
+    const [openImportModal, setOpenImportModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [typesUsers, setTypesUsers] = useState([]);
@@ -26,12 +28,12 @@ export const UserPage = ({ app }) => {
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
-    
+
     const fetchTypes = async (gender) => {
         try {
             const types = loadTypes(gender);
             setTypesUsers(types);
-        } catch(err) { renderError(err); }
+        } catch (err) { renderError(err); }
     };
 
     const items = [
@@ -63,11 +65,12 @@ export const UserPage = ({ app }) => {
 
         return (
             <>
+                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={e => setOpenImportModal(true)}>Importar</Button>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <Button icon={<ExportOutlined />} style={{ marginRight: 15 }} type="text" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
+                    <Button key="new" onClick={e => { setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
                 <Button.Group style={{ marginLeft: 15 }}>
@@ -88,28 +91,28 @@ export const UserPage = ({ app }) => {
                 okText: 'Eliminar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea eliminar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
+                onOk: async () => {
                     setLoading(true);
                     try {
                         await userDelete(selectedRowKeys)
-                    } catch(err) {
+                    } catch (err) {
                         renderError(err);
-                    }                        
+                    }
                     loadData();
-                    },
+                },
             }); break;
             case 'activate': Modal.confirm({
                 title: 'Activar registro',
                 okText: 'Activar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea activar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
+                onOk: async () => {
                     setLoading(true);
                     try {
                         await userToggle(true, selectedRowKeys)
-                    } catch(err) {
+                    } catch (err) {
                         renderError(err);
-                    }                        
+                    }
                     loadData();
                 },
             }); break;
@@ -118,13 +121,13 @@ export const UserPage = ({ app }) => {
                 okText: 'Desactivar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea desactivar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
+                onOk: async () => {
                     setLoading(true);
                     try {
-                       await userToggle(false, selectedRowKeys)
-                    } catch(err) {
+                        await userToggle(false, selectedRowKeys)
+                    } catch (err) {
                         renderError(err);
-                    }                        
+                    }
                     loadData();
                 },
             }); break;
@@ -137,33 +140,33 @@ export const UserPage = ({ app }) => {
 
     const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
+        setDataPage({ ...dataPage, pageSize });
         setLoading(true);
 
-        try{
+        try {
             const { data, total } = await userIndex({ page, pageSize, ...filters });
-            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
-        }catch(err){
+            setData(data); setTotal(total); setLoading(false); setRowSelected({ selectedRowKeys: [], selectedRows: [] });
+        } catch (err) {
             alertError(err);
             setLoading(false);
         }
-        
+
     }
 
     const loadData = () => onPageChange(1);
 
-    const loadItem = async(id) => {
+    const loadItem = async (id) => {
         setLoading(true);
         try {
             const item = await userShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
-        } catch(err) {
+        } catch (err) {
             setLoading(false);
             renderError(err);
         }
     }
 
-    const onModalOk = async(obj) => {
+    const onModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
             let documents = [];
@@ -189,11 +192,23 @@ export const UserPage = ({ app }) => {
             documents.forEach(document => uploadDocument(document.file, document.file_name));
 
             setOpenModal(false); loadData();
-        } catch(err) {
+        } catch (err) {
             renderError(err);
         }
 
-        setConfirmLoading(false)        
+        setConfirmLoading(false)
+    }
+
+    const onImportModalOk = async (obj) => {
+        setConfirmLoading(true);
+        try {
+            await importUsers(obj, 'personal');
+            setOpenImportModal(false); loadData();
+        } catch (err) {
+            renderError(err);
+        }
+
+        setConfirmLoading(false)
     }
 
     useEffect(() => {
@@ -208,7 +223,7 @@ export const UserPage = ({ app }) => {
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-              <UserTable
+                <UserTable
                     data={data}
                     onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
@@ -223,7 +238,7 @@ export const UserPage = ({ app }) => {
                         total: total,
                     }}
                     onEditClick={loadItem}
-              />
+                />
             </Card>
             <UserModal
                 app={app}
@@ -233,6 +248,16 @@ export const UserPage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onCancel={() => { setLoading(false); setOpenModal(false); setItem(new User); }}
+            />
+            <ImportUsersModal
+                app={app}
+                open={openImportModal}
+                file={undefined}
+                onOk={onImportModalOk}
+                confirmLoading={confirmLoading}
+                loading={loading}
+                onCancel={() => { setLoading(false); setOpenImportModal(false); setItem(new User); }}
+
             />
         </>
     )

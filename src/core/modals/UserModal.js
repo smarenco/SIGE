@@ -46,7 +46,6 @@ export const UserModal = (props) => {
                 return false;
             }
         });*/
-
         
         if(!error){ onOkProp(formState); }
     }
