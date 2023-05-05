@@ -1,24 +1,27 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CourseModal } from '../../modals/CourseModal';
 import Course from '../../models/Course';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { CourseTable } from '../../tables/CourseTable';
 
-import { courseCreate, courseDelete, courseIndex, courseShow, courseUpdate } from '../../services/CourseService';
+import { courseCreate, courseDelete, courseIndex, courseShow, courseUpdate, importCourses } from '../../services/CourseService';
+import { ImportCoursesModal } from '../../modals/ImportCoursesModal';
 
 export const CoursePage = ({ app }) => {
 
     const [item, setItem] = useState(new Course);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
-    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
+    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50 });
     const [total, setTotal] = useState(0);
-    const [rowSelected, setRowSelected] = useState({selectedRowKeys: [], selectedRows: []});
+    const [rowSelected, setRowSelected] = useState({ selectedRowKeys: [], selectedRows: [] });
     const [openModal, setOpenModal] = useState(false);
+    const [openImportModal, setOpenImportModal] = useState(false);
+    const [importState, setImportState] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -26,7 +29,7 @@ export const CoursePage = ({ app }) => {
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
-    
+
     const items = [
         {
             label: 'Excel',
@@ -56,11 +59,12 @@ export const CoursePage = ({ app }) => {
 
         return (
             <>
+                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Course); }} disabled={loading}>Nuevo</Button>
+                    <Button key="new" onClick={e => { setOpenModal(true); setItem(new Course); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
@@ -77,15 +81,15 @@ export const CoursePage = ({ app }) => {
                 okText: 'Eliminar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea eliminar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
+                onOk: async () => {
                     setLoading(true);
                     try {
                         await courseDelete(selectedRowKeys)
-                    } catch(err) {
+                    } catch (err) {
                         renderError(err);
-                    }                        
+                    }
                     loadData();
-                    },
+                },
             }); break;
         }
     }
@@ -96,32 +100,32 @@ export const CoursePage = ({ app }) => {
 
     const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
+        setDataPage({ ...dataPage, pageSize });
         setLoading(true);
 
-        try{
+        try {
             const { data, total } = await courseIndex({ page, pageSize, ...filters });
-            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
-        }catch(err){
+            setData(data); setTotal(total); setLoading(false); setRowSelected({ selectedRowKeys: [], selectedRows: [] });
+        } catch (err) {
             alertError(err);
             setLoading(false);
-        }     
+        }
     }
 
     const loadData = () => onPageChange(1);
 
-    const loadItem = async(id) => {
+    const loadItem = async (id) => {
         setLoading(true);
         try {
             const item = await courseShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
-        } catch(err) {
+        } catch (err) {
             setLoading(false);
             renderError(err);
         }
     }
 
-    const onModalOk = async(obj) => {
+    const onModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -131,13 +135,32 @@ export const CoursePage = ({ app }) => {
             }
 
             setOpenModal(false); loadData();
-        } catch(err) {
+        } catch (err) {
             renderError(err);
         }
 
-        setConfirmLoading(false)        
+        setConfirmLoading(false)
     }
-    
+
+    const onImportModalOk = async (obj) => {
+        setConfirmLoading(true);
+        try {
+            const { response } = await importCourses(obj);
+
+            if (response?.data?.error?.length > 0) {
+                setImportState(response?.data)
+            } else {
+                setOpenImportModal(false);
+                message.success('Cursos importados correctamente');
+                loadData();
+            }
+        } catch (err) {
+            renderError(err);
+        }
+
+        setConfirmLoading(false)
+    }
+
     useEffect(() => {
         loadData();
     }, []);
@@ -149,7 +172,7 @@ export const CoursePage = ({ app }) => {
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-              <CourseTable
+                <CourseTable
                     data={data}
                     onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
@@ -163,7 +186,7 @@ export const CoursePage = ({ app }) => {
                         total: total,
                     }}
                     onEditClick={loadItem}
-              />
+                />
             </Card>
             <CourseModal
                 app={app}
@@ -173,6 +196,16 @@ export const CoursePage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Course); }}
+            />
+            <ImportCoursesModal
+                app={app}
+                importState={importState}
+                open={openImportModal}
+                file={undefined}
+                onOk={onImportModalOk}
+                confirmLoading={confirmLoading}
+                loading={loading}
+                onCancel={() => { setLoading(false); setOpenImportModal(false); setItem(new Course); }}
             />
         </>
     )

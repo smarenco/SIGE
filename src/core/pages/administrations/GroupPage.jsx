@@ -1,25 +1,28 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, message } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { GroupModal } from '../../modals/GroupModal';
 import Group from '../../models/Group';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { GroupTable } from '../../tables/GroupTable';
 
-import { addStudent, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate } from '../../services/GroupService';
+import { addStudent, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate, importGroups } from '../../services/GroupService';
 import { useEffect } from 'react';
+import { ImportGroupsModal } from '../../modals/ImportGroupsModal';
 
 export const GroupPage = ({ app }) => {
 
     const [item, setItem] = useState(new Group);
     const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
-    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
+    const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50 });
     const [total, setTotal] = useState(0);
-    const [rowSelected, setRowSelected] = useState({selectedRowKeys: [], selectedRows: []});
+    const [rowSelected, setRowSelected] = useState({ selectedRowKeys: [], selectedRows: [] });
     const [openModal, setOpenModal] = useState(false);
+    const [openImportModal, setOpenImportModal] = useState(false);
+    const [importState, setImportState] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -27,7 +30,7 @@ export const GroupPage = ({ app }) => {
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
-    
+
     const items = [
         {
             label: 'Excel',
@@ -57,11 +60,12 @@ export const GroupPage = ({ app }) => {
 
         return (
             <>
+                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new Group); }} disabled={loading}>Nuevo</Button>
+                    <Button key="new" onClick={e => { setOpenModal(true); setItem(new Group); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
                 <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
@@ -78,15 +82,15 @@ export const GroupPage = ({ app }) => {
                 okText: 'Eliminar',
                 cancelText: 'Cancelar',
                 content: `¿Seguro que desea eliminar ${selectedRowKeys.length} ${selectedRowKeys.length !== 1 ? 'registros' : 'registro'}?`,
-                onOk: async() => {
+                onOk: async () => {
                     setLoading(true);
                     try {
                         await groupDelete(selectedRowKeys)
-                    } catch(err) {
+                    } catch (err) {
                         renderError(err);
-                    }                        
+                    }
                     loadData();
-                    },
+                },
             }); break;
         }
     }
@@ -97,32 +101,32 @@ export const GroupPage = ({ app }) => {
 
     const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
+        setDataPage({ ...dataPage, pageSize });
         setLoading(true);
 
-        try{
+        try {
             const { data, total } = await groupIndex({ page, pageSize, ...filters });
-            setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
-        }catch(err){
+            setData(data); setTotal(total); setLoading(false); setRowSelected({ selectedRowKeys: [], selectedRows: [] });
+        } catch (err) {
             alertError(err);
             setLoading(false);
-        }        
+        }
     }
 
     const loadData = () => onPageChange(1);
 
-    const loadItem = async(id) => {
+    const loadItem = async (id) => {
         setLoading(true);
         try {
             const item = await groupShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
-        } catch(err) {
+        } catch (err) {
             setLoading(false);
             renderError(err);
         }
     }
 
-    const onModalOk = async(obj) => {
+    const onModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
             if (item.id) {
@@ -132,11 +136,30 @@ export const GroupPage = ({ app }) => {
             }
 
             setOpenModal(false); loadData();
-        } catch(err) {
+        } catch (err) {
             renderError(err);
         }
 
-        setConfirmLoading(false)        
+        setConfirmLoading(false)
+    }
+
+    const onImportModalOk = async (obj) => {
+        setConfirmLoading(true);
+        try {
+            const { response } = await importGroups(obj);
+
+            if (response?.data?.error?.length > 0) {
+                setImportState(response?.data)
+            } else {
+                setOpenImportModal(false);
+                message.success('Grupos importados correctamente');
+                loadData();
+            }
+        } catch (err) {
+            renderError(err);
+        }
+
+        setConfirmLoading(false)
     }
 
     useEffect(() => {
@@ -174,6 +197,16 @@ export const GroupPage = ({ app }) => {
                 confirmLoading={confirmLoading}
                 loading={loading}
                 onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Group); }}
+            />
+            <ImportGroupsModal
+                app={app}
+                importState={importState}
+                open={openImportModal}
+                file={undefined}
+                onOk={onImportModalOk}
+                confirmLoading={confirmLoading}
+                loading={loading}
+                onCancel={() => { setLoading(false); setOpenImportModal(false); setItem(new Group); }}
             />
         </>
     )
