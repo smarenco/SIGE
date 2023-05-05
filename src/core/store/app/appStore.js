@@ -33,16 +33,9 @@ export const appStore = createSlice({
 
         },
         routes: [
-            { key: 'chkHome', name:'Home' ,path: '/', component: HomePage, icon: <HomeOutlined /> },
+            { key: 'home', name:'Home' ,path: '/', component: HomePage, icon: <HomeOutlined /> },
             // Sesión
             { key: 'chkLogin', path: '/auth', component: LoginPage, isPublic: true, clean: true },
-            // { key: 'chkLoginByToken', path: '/auth/login-by-token', component: AuthLoginByToken, isPublic: true, clean: true },
-            // { key: 'chkLogout', path: '/auth/logout', component: AuthLogout, isPublic: true, clean: true },
-            // { key: 'chkAdmContraseña', path: '/account/password', component: undefined },
-            // { key: 'chkVisitanteQR', path: '/auth/visitantes-qr', component: VisitantesQr, isPublic: true, clean: true },
-            // Administraciones
-            //{ key: 'actividades', name:'Actividades', path: '/actividades', component: ActividadesPage },
-            //{ key: 'countries', name:'Paises', path: '/paises', component: CountryPage },
             { key: 'cities', name: 'Ciudades', path: '/ciudades', component: CityPage, icon: <AimOutlined /> },
             { key: 'medicalCoverage', name: 'Coberturas Medicas', path: '/coberturas-medicas', component: MedicalCoveragePage, icon: <HeartOutlined /> },
             { key: 'courses', name: 'Cursos', path: '/cursos', component: CoursePage, icon: <ApartmentOutlined /> },

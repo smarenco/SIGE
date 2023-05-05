@@ -7,6 +7,7 @@ import {
   Route,
 } from "react-router-dom";
 import { APP_PATH } from '../../env';
+import { MENU } from '../common/consts';
 import Loading from '../components/common/Loading';
 import { useAuthStore } from '../hooks/useAuthStore';
 import DefaultLayout from '../layouts/DefaultLayout';
@@ -31,13 +32,13 @@ export const AppRouter = () => {
       )
     }
 
-    const renderPrivateRoutes = (routes, j) => {
-        let r = routes.map((route, i) => {
-            if (route.isPublic !== true) {
+    const renderPrivateRoutes = (j) => {
+        const routes = JSON.parse(localStorage.getItem(MENU));
+        let r = routes.map((r, i) => {
+            const route = app.routes.filter(route => route.key === r.key)[0];
+            if (route && route.isPublic !== true) {
                 return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout component={<route.component />} app={app} /> } />;
-                //return <DefaultLayout key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact component={route.component} app={this.props.app} />;
             }
-            //return <PublicLayout key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact component={route.component} app={this.props.app} />;
         });
         return r;
     }
@@ -57,7 +58,8 @@ export const AppRouter = () => {
                 <div className="app">
                     
                     <Routes>
-                        {renderPrivateRoutes(app.routes, 1)}
+                        {/*renderPrivateRoutes(app.routes, 1)*/}
+                        {renderPrivateRoutes(1)}
                         <Route path='/*' element={ <Navigate to="/" /> } />
                     </Routes>
                 </div>   
