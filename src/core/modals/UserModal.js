@@ -38,14 +38,6 @@ export const UserModal = (props) => {
         }
 
         let error = false;
-        /*documents.forEach(document => {
-            const documentSelected = formState.document.find((req) => req.id === document.id);
-            if(!documentSelected && document.required){
-                message.error('Hay documentos obligatorios que no se cargaron');
-                error = true;
-                return false;
-            }
-        });*/
         
         if(!error){ onOkProp(formState); }
     }

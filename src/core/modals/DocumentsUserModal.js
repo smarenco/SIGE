@@ -22,12 +22,13 @@ export const DocumentsUserModal = (props) => {
             renderError('Debe agregar una fecha de vencimiento');
             return;
         }
-        if((formState.file === null || formState.file === undefined) && (formState.file_name === null || formState.file_name === undefined)){
+        if((formState.file === null || formState.file === undefined)){
             renderError('Debe adjuntar un documento');
             return;
         }
+        console.log(formState)
 
-        onOkProp(formState);
+        //onOkProp(formState);
     }
 
     return (
@@ -52,7 +53,7 @@ export const DocumentsUserModal = (props) => {
                     <Input disabled value={formState.name} />
                 </div>
                 <div style={{ marginTop: 10 }}>
-                    <label>Fecha de vencimento {formState.required && '*'}</label>
+                    <label>Fecha de vencimento {formState.expiration_control && '*'}</label>
                     <DatePicker
                         placeholder='Seleccionar fecha'
                         format={DDMMYYYY}
@@ -71,7 +72,7 @@ export const DocumentsUserModal = (props) => {
                     <label>Documento</label>
                     <Dragger
                         multiple={false}
-                        fileList={formState.file ? [formState.file] : formState.file_name ? [{ uid: -1, name: formState.file_name, fileName: formState.file_name, status: 'done' }] : undefined}
+                        //fileList={formState.file ? [formState.file] : formState.file_name ? [{ uid: -1, name: formState.file_name, fileName: formState.file_name, status: 'done' }] : undefined}
                         beforeUpload={ReadyToUpload => {
                             onInputChangeByName('file', ReadyToUpload );
                             return false;

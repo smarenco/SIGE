@@ -1,6 +1,7 @@
 import api from "./Api";
 import { useSelector } from "react-redux"
 import { ACCESS_TOKEN, CONFIG, MENU, PARAMS, SESSION, USER } from "../common/consts";
+import User from "../models/User";
 // import User from "../models/User";
 
 export const AuthService = () => {

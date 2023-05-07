@@ -74,7 +74,6 @@ const DefaultLayout = ({ component, app }) => {
                         defaultSelectedKeys={['0']}
                         items={menuProps.map((r, i) => {
                             const route = app.routes.filter(route => route.key === r.key)[0];
-                            console.log(route);
                             if (!route.isPublic) {
                                 return {
                                     key: i,
