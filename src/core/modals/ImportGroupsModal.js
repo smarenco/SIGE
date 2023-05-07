@@ -6,8 +6,8 @@ import { colors } from '../common/consts';
 const { Panel } = Collapse;
 // import { useForm } from '../hooks/useForm';
 
-export const ImportUsersModal = (props) => {
-    const { importState: propImportState, view, type, open, file: fileProp, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
+export const ImportGroupsModal = (props) => {
+    const { importState: propImportState, view, open, file: fileProp, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
     // const { formState, onInputChange, onInputChangeByName } = useForm(item);
     const [file, setFile] = useState(fileProp);
     const [importState, setImportState] = useState(propImportState);
@@ -42,7 +42,7 @@ export const ImportUsersModal = (props) => {
     return (
         <Modal
             bodyStyle={importState !== undefined ? { height: 300, overflow: 'auto' } : { height: 300, overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
-            title={'Importar ' + (type === 'student' ? 'Estudiantes' : (type === 'teacher' ? 'Profesores' : 'Funcionarios'))}
+            title={'Importar Cursos'}
             open={open}
             width={700}
             destroyOnClose={true}

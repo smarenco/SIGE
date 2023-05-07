@@ -56,3 +56,13 @@ export const groupDelete = async (ids) => {
     }
     return Promise.all(ids.map(async (id) => await api.delete(`${path}/${id}`)));
 }
+
+export const importGroups = async (file, type) => {
+    let formData = new FormData();
+    formData.append("file", file);
+    return await api.post(`${path}/import`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        }
+    });
+}

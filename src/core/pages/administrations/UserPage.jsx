@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, loadTypes, renderError } from '../../common/functions';
@@ -7,7 +7,7 @@ import User from '../../models/User';
 import { AuthService } from '../../services/AuthService';
 import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
-import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
+import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
 import { ImportUsersModal } from '../../modals/ImportUsersModal';
 
 export const UserPage = ({ app }) => {
@@ -20,6 +20,8 @@ export const UserPage = ({ app }) => {
     const [rowSelected, setRowSelected] = useState({ selectedRowKeys: [], selectedRows: [] });
     const [openModal, setOpenModal] = useState(false);
     const [openImportModal, setOpenImportModal] = useState(false);
+    const [importState, setImportState] = useState(undefined);
+    const [importType, setImportType] = useState('student');
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [typesUsers, setTypesUsers] = useState([]);
@@ -61,11 +63,46 @@ export const UserPage = ({ app }) => {
         items
     };
 
-    const renderExtraTable = () => {
+    const importItems = [
+        {
+            label: 'Estudiantes',
+            key: '1',
+            icon: <UserAddOutlined />,
+            onClick: () => {
+                setOpenImportModal(true);
+                setImportType('student')
+            }
+        },
+        {
+            label: 'Docentes',
+            key: '2',
+            icon: <TeamOutlined />,
+            onClick: () => {
+                setOpenImportModal(true);
+                setImportType('teacher')
+            }
+        },
+        {
+            label: 'Funcionarios',
+            key: '3',
+            icon: <IdcardOutlined />,
+            onClick: () => {
+                setOpenImportModal(true);
+                setImportType('employee')
+            }
+        }
+    ];
 
+    const menuImportProps = {
+        items: importItems
+    };
+
+    const renderExtraTable = () => {
         return (
             <>
-                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={e => setOpenImportModal(true)}>Importar</Button>
+                <Dropdown menu={menuImportProps} placement="bottomLeft" disabled={loading}>
+                    <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
+                </Dropdown>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button icon={<ExportOutlined />} style={{ marginRight: 15 }} type="text" disabled={loading}>Exportar</Button>
                 </Dropdown>
@@ -131,6 +168,8 @@ export const UserPage = ({ app }) => {
                     loadData();
                 },
             }); break;
+            default:
+                break;
         }
     }
 
@@ -171,13 +210,13 @@ export const UserPage = ({ app }) => {
         try {
             let documents = [];
             let i = 0;
-            
+
             obj.documents.forEach(document => {
-                if(document['file']){
+                if (document['file']) {
                     const arr_name = document['file'].name.split('.');
                     const ext = arr_name[arr_name.length - 1];
                     let file_name = 'documento-' + document['document_id'] + '-usuario-' + obj.id + '-' + obj.document + '.' + ext;
-                    documents.push({...document, file_name});
+                    documents.push({ ...document, file_name });
                     obj.documents[i].file_name = file_name;
                 }
                 i++;
@@ -202,8 +241,15 @@ export const UserPage = ({ app }) => {
     const onImportModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
-            await importUsers(obj, 'personal');
-            setOpenImportModal(false); loadData();
+            const { response } = await importUsers(obj, importType);
+
+            if (response?.data?.error?.length > 0) {
+                setImportState(response?.data)
+            } else {
+                setOpenImportModal(false);
+                message.success('Usuarios importados correctamente');
+                loadData();
+            }
         } catch (err) {
             renderError(err);
         }
@@ -251,6 +297,8 @@ export const UserPage = ({ app }) => {
             />
             <ImportUsersModal
                 app={app}
+                importState={importState}
+                type={importType}
                 open={openImportModal}
                 file={undefined}
                 onOk={onImportModalOk}
