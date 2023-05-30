@@ -1,6 +1,5 @@
 import { Modal } from 'antd'
 import React from 'react'
-import { renderError } from '../common/functions';
 import { PaymentForm } from '../forms/PaymentForm';
 import { useForm } from '../hooks/useForm';
 
