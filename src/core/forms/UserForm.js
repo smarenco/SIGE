@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider, InputNumber } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
-import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
-import { alertError, loadTypes, renderError } from '../common/functions';
+import { loadTypes, renderError } from '../common/functions';
 import { medicalCoverageCombo } from '../services/MedicalCoverageService';
 import { cityCombo } from '../services/CityService';
 import { countryCombo } from '../services/CountryService';
@@ -16,6 +15,7 @@ import { DocumentsUserTable } from '../tables/DocumentsUserTable';
 import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 import { GroupTable } from '../tables/GroupTable';
 import { DDMMYYYY, genders, levels_educations } from '../common/consts';
+import dayjs from 'dayjs';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
 
@@ -215,7 +215,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                         <Input name='lastnames' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.lastnames} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Fecha nacimiento`} labelAlign='left' span={4}>
-                        <DatePicker name='birth_day' onChange={(birth_day, er) => onInputChangeByName('birth_day', birth_day)} format={DDMMYYYY} value={formState?.birth_day ? moment(formState?.birth_day)  : undefined}/>
+                        <DatePicker name='birth_day' onChange={(birth_day) => onInputChangeByName('birth_day', birth_day)} format={DDMMYYYY} value={formState?.birth_day ? dayjs(formState?.birth_day, DDMMYYYY)  : undefined}/>
                     </Form.Item>
                     <Form.Item label='Genero' labelAlign='left' span={4}>
                         <Select 

@@ -2,6 +2,7 @@ import { Button, Checkbox, Input, Table } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { DDMMYYYY } from '../common/consts';
+import dayjs from 'dayjs';
 
 
 const paginationStyle = {
@@ -54,13 +55,13 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
                 title: 'Desde',
                 key: 'Desde',
                 width: 110,
-                render: (r) => moment(r.start_date).format(DDMMYYYY),
+                render: (r) => dayjs(r.start_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: 'Hasta',
                 key: 'Hasta',
                 width: 110,
-                render: (r) => moment(r.finish_date).format(DDMMYYYY),
+                render: (r) => dayjs(r.finish_date).format(DDMMYYYY),
                 ellipsis: true,
             }, {
                 title: '',

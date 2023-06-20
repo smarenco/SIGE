@@ -1,6 +1,5 @@
-import moment from "moment";
 import { Form, message, Modal } from "antd";
-import { HHmm, DDMMYYYY, ACCESS_TOKEN, LOCALE } from "./consts";
+import { ACCESS_TOKEN, LOCALE } from "./consts";
 import { API_URL } from "../../env";
 
 
@@ -167,61 +166,6 @@ export const formatDate = (date, showTime, shortDate) => {
     }
     return formated.join(' ')
 }
-
-/**
- * Converte a formato humano (DD/MM/YYYY) una fecha de tipo `moment`.
- * 
- * @param {moment.Moment} date
- * 
- * @return {string}
- */
-export const momentFormat = date => {
-    if (!moment.isMoment(date)) {
-        date = moment(date);
-    }
-    return date.format(DDMMYYYY);
-}
-
-export const isWeekendDay = date => {
-    if (!moment.isMoment(date)) {
-        date = moment(date);
-    }
-    const day = date.day();
-    return day === 0 || day === 6;
-}
-
-/**
- * Convierte a formato humano (HH24:MM) una fecha (hora) de tipo `moment`.
- * 
- * @param {moment.Moment} date 
- * 
- * @return {string}
- */
-export const momentFormatTime = date => {
-    if (!moment.isMoment(date)) {
-        date = moment(date);
-    }
-    return date.format(HHmm);
-}
-
-/**
- * Restablece la hora de una fecha a las 00:00:00.
- * 
- * @param {moment.Moment} date 
- * 
- * @return {moment.Moment}
- */
-export const momentStartDay = date => date.hour(0).minute(0).second(0).millisecond(0);
-
-/**
- * Restablece la hora de una fecha a las 23:59:59.
- * 
- * @param {moment.Moment} date 
- * 
- * @return {moment.Moment}
- */
-export const momentEndDay = date => date.hour(23).minute(59).second(59).millisecond(999);
-
 /**
  * Obtener contenido del archivo como `base64`.
  * 

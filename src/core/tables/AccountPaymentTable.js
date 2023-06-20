@@ -1,8 +1,8 @@
-import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { Button, Checkbox, DatePicker, Input, Table, Tag } from 'antd';
 import { DownloadOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { DDMMYYYY, methods_payments, MMYYYY } from '../common/consts';
-import moment from 'moment';
 import { downloadDocument } from '../services/AccountPaymentService';
+import dayjs from 'dayjs';
 
 
 const paginationStyle = {
@@ -14,7 +14,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const AccountPaymentTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChange, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -28,16 +28,16 @@ export const AccountPaymentTable = ({ data, onReload, onRowSelectedChange, setFi
         return [
             {
                 title: 'Pago',
-                dataIndex: 'payment_day',
-                render:(r,i) => i ? moment(i).format(DDMMYYYY) : undefined,
+                dataIndex: 'created_at',
+                render:(i) => i ? dayjs(i).format(DDMMYYYY) : undefined,
                 key: 'Pago',
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             },{
                 title: 'Pago corresponde a',
-                dataIndex: 'date_pay',
-                render:(r,i) => i ? moment(i).format(MMYYYY) : undefined,
+                dataIndex: 'payment_day',
+                render:(i) => i ? dayjs(i).format(DDMMYYYY) : undefined,
                 key: 'Pagoday',
                 width: 150,
                 ellipsis: true,
@@ -81,12 +81,17 @@ export const AccountPaymentTable = ({ data, onReload, onRowSelectedChange, setFi
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
+                        {viewAll && <Button onClick={e => changeState(record.id, record.state)} style={{ fontSize:18, marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
                         {record.document_name && <DownloadOutlined onClick={e => downloadDocument(record.document_name)} style={{ fontSize:18, marginRight: 10 }} title='Descargar documento' />}&nbsp;<EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
             }
         ];
     }
+
+    const changeState = (id, state) => {
+        console.log(id, state);
+    };
 
     return (
         <Table

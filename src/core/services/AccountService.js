@@ -28,7 +28,7 @@ export const accountIndex = async (filter, output = undefined) => {
 export const accountCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
-    
+
     return response.data.map(entity => new Account(entity));
 }
 

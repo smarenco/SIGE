@@ -131,7 +131,7 @@ export const AccountPaymentPage = ({ app }) => {
             if (obj.id) {
                 await accountPaymentUpdate(obj.id, obj);
             } else {
-                let document = {};
+                let document = null;
                 console.log(obj)
                 if(obj.file){
                     const arr_name = obj.file.name.split('.');
@@ -177,6 +177,7 @@ export const AccountPaymentPage = ({ app }) => {
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
+                    viewAll={true}//{user().view_all}
                     pagination={{
                         pageSize: pageSize,
                         page: page,

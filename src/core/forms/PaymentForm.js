@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch, Tag } from 'antd'
+import { DatePicker, Form, Input, InputNumber, Select, Switch, Tag } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import { renderError } from '../common/functions';
@@ -8,8 +8,8 @@ import { userCombo } from '../services/UserService';
 import { courseCombo } from '../services/CourseService';
 import TextArea from 'antd/lib/input/TextArea';
 import { paymentMethodsCombo } from '../services/PaymentMethodsService';
-import { DDMMYYYY, DDMMYYYYHHmm, MMYYYY } from '../common/consts';
-import moment from 'moment';
+import { DDMMYYYY } from '../common/consts';
+import dayjs from 'dayjs';
 
 export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName, onInputChangeByObject }) => {    
 
@@ -101,14 +101,14 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
     const onChangeCourse = (course_id) => {
         let course = courses.filter(course => course.id === course_id)[0];
 
-        let fechaInicial = moment(formState.UltimaCuota);
+        let fechaInicial = dayjs(formState.UltimaCuota);
         //console.log('fechaInicial '+ fechaInicial)
         let cuotes = []; 
         for(let i=1; i <= 6; i++){
 
             fechaInicial.add(1, 'M');
-            let format = moment(fechaInicial).format(DDMMYYYY);
-            cuotes.push({'format': format, 'date': moment(fechaInicial)});
+            let format = dayjs(fechaInicial).format(DDMMYYYY);
+            cuotes.push({'format': format, 'date': dayjs(fechaInicial)});
         }
 
         onInputChangeByObject({course_id, value_cuote: course.quota_value, cuotes, amount_coute: 0});
@@ -174,7 +174,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                     </LayoutH>
                     <LayoutH>
                         <Form.Item label='Cuotas' labelAlign='left' span={24}>
-                            {formState.cuotes.map(cuote => <Tag>{moment(cuote.cuote).format(DDMMYYYY)}</Tag>)}
+                            {formState.cuotes.map(cuote => <Tag>{dayjs(cuote.cuote).format(DDMMYYYY)}</Tag>)}
                         </Form.Item>
                         <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
                             <Switch name='apply_discount' disabled={view || confirmLoading} onChange={(apply_discount) => onInputChangeByName('apply_discount', apply_discount)} checked={formState?.apply_discount} />
@@ -183,7 +183,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                             <Switch name='apply_surcharge' disabled={view || confirmLoading || formState?.apply_discount} onChange={(apply_surcharge) => onInputChangeByName('apply_surcharge', apply_surcharge)} checked={formState?.apply_surcharge} />
                         </Form.Item>
                         <Form.Item label={`${!view ? '*' : ''} Fecha de pago`} labelAlign='left' span={22}>
-                            <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', moment(date))} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
+                            <DatePicker disabled={view} name='date' onChange={(date) => onInputChangeByName('date', dayjs(date))} format={DDMMYYYY} value={formState?.date ? dayjs(formState?.date)  : undefined}/>
                         </Form.Item>
                     </LayoutH>
                     <LayoutH>
@@ -203,7 +203,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                 </div>
                 <div span={24} style={{textAlign: 'right'}}>
                     <h2 style={{marginRight: 40}}>Total  ${formState.total}</h2>
-                    {formState.canceled && <h3 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el {moment(formState?.canceled_date).format(DDMMYYYY)} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h3>}
+                    {formState.canceled && <h3 style={{padding: 10, textAlign: 'center', backgroundColor: !formState.canceled && '#ffc7c7'}}>Cancelado el {dayjs(formState?.canceled_date).format(DDMMYYYY)} por {formState?.user_canceled?.names +' '+ formState?.user_canceled?.lastnames}</h3>}
                 </div>
             </LayoutH>
         </Form>
