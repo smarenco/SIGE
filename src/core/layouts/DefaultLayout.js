@@ -111,7 +111,7 @@ const DefaultLayout = ({ component, app }) => {
                         style={{
                             margin: '24px 16px',
                             padding: 24,
-                            minHeight: window.innerHeight - 112,
+                            minHeight: window.innerHeight - 100,
                         }}
                     >
                         {component}

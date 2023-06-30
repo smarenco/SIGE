@@ -76,7 +76,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} elementos`,
                 ...pagination,
             }}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
             rowKey={record => record.getId()}
             onRow={r => ({ onDoubleClick: () => onEditClick(r.getId()) })}
             

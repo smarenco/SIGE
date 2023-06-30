@@ -1,22 +1,22 @@
-import { Button, Card, Checkbox, DatePicker, Dropdown, Input, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentModal } from '../../modals/PaymentModal';
 import Payment from '../../models/Payment';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ReloadOutlined } from '@ant-design/icons';
+import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { PaymentTable } from '../../tables/PaymentTable';
 
-import { paymentCreate, paymentDelete, paymentIndex, paymentShow, paymentUpdate } from '../../services/PaymentService';
+import { paymentDelete, paymentIndex, paymentShow } from '../../services/PaymentService';
 import { useEffect } from 'react';
-import moment from 'moment';
 import { DDMMYYYY } from '../../common/consts';
+import dayjs from 'dayjs';
 
 export const ConsultPaymentPage = ({ app }) => {
 
     const [item, setItem] = useState(new Payment);
-    const [filters, setFilters] = useState({StartDate: moment().startOf('month').format(DDMMYYYY), EndDate: moment().endOf('month').format(DDMMYYYY)});
+    const [filters, setFilters] = useState({StartDate: dayjs().startOf('month').format(DDMMYYYY), EndDate: dayjs().endOf('month').format(DDMMYYYY)});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
     const [total, setTotal] = useState(0);

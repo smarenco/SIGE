@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { HHmm } from '../common/consts';
 import { clearObj, open } from '../common/functions';
 import Turn from '../models/Turn';
@@ -40,15 +40,15 @@ export const turnShow = async (id) => {
 
 export const turnCreate = async (item) => {
     let params = { ...item };
-    params.start_time = moment(params.start_time).format(HHmm);
-    params.finish_time = moment(params.finish_time).format(HHmm);
+    params.start_time = dayjs(params.start_time).format(HHmm);
+    params.finish_time = dayjs(params.finish_time).format(HHmm);
     return await api.post(path, params);
 }
 
 export const turnUpdate = async (id, item) => {
     let params = { ...item };
-    params.start_time = moment(params.start_time).format(HHmm);
-    params.finish_time = moment(params.finish_time).format(HHmm);
+    params.start_time = dayjs.isDayjs(params.start_time) ? dayjs(params.start_time).format(HHmm) : params.start_time;
+    params.finish_time = dayjs.isDayjs(params.finish_time) ? dayjs(params.finish_time).format(HHmm) : params.finish_time;
     return await api.put(`${path}/${id}`, params);
 }
 
