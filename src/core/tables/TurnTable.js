@@ -1,6 +1,6 @@
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { HHmm } from '../common/consts';
 
 
@@ -37,15 +37,15 @@ export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 key: 'Desde',
                 width: 250,
                 ellipsis: true,
-                render: (r) => moment(r.start_time, HHmm).format(HHmm)
+                render: (r) => dayjs(r.start_time, HHmm).format(HHmm)
             }, {
                 title: 'Hasta',
                 key: 'Hasta',
                 width: 200,
                 ellipsis: true,
-                render: (r) => moment(r.finish_time, HHmm).format(HHmm)
+                render: (r) => dayjs(r.finish_time, HHmm).format(HHmm)
             }, {
-                title: 'Baja',
+                title: 'Estado',
                 key: 'Baja',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,
@@ -89,7 +89,7 @@ export const TurnTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} elementos`,
                 ...pagination,
             }}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
             rowKey={record => record.getId()}
             onRow={r => ({ onDoubleClick: () => onEditClick(r.id) })}
             

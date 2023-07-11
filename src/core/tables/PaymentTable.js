@@ -1,6 +1,6 @@
 import { Button, Checkbox, DatePicker, Input, Table, Tag } from 'antd';
 import { EyeOutlined, ReloadOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { DDMMYYYY } from '../common/consts';
 import { DEFAULT_ROWS_PER_PAGE } from '../../env';
 import { startTransition } from 'react';
@@ -49,7 +49,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 key: 'Date',
                 width: 80,
                 ellipsis: true,
-                render: (record) => moment(record.date).format(DDMMYYYY)
+                render: (record) => dayjs(record.date).format(DDMMYYYY)
             }, {
                 title: 'Curso',
                 key: 'Curso',
@@ -61,7 +61,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 key: 'Coutas',
                 width: 150,
                 ellipsis: true,
-                render: (record) => record.cuotes.length > 1 ? moment(record.cuotes[0].cuote).format(DDMMYYYY) + ' - ' + moment(record.cuotes[record.cuotes.length - 1].cuote).format(DDMMYYYY) : undefined
+                render: (record) => record.cuotes.length > 1 ? dayjs(record.cuotes[0].cuote).format(DDMMYYYY) + ' - ' + dayjs(record.cuotes[record.cuotes.length - 1].cuote).format(DDMMYYYY) : undefined
             }, {
                 title: 'Total',
                 key: 'Total',
@@ -100,9 +100,9 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                     &nbsp;
                     <Input style={{width: '20%'}} value={filters?.Search} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
-                    <DatePicker placeholder='Desde' format={DDMMYYYY} value={filters?.StartDate ? moment(filters.StartDate, DDMMYYYY) : undefined} onChange={StartDate => setFilters({ StartDate })} />
+                    <DatePicker placeholder='Desde' format={DDMMYYYY} value={filters?.StartDate ? dayjs(filters.StartDate, DDMMYYYY) : undefined} onChange={StartDate => setFilters({ StartDate: dayjs(StartDate).format(DDMMYYYY) })} />
                     &nbsp;
-                    <DatePicker placeholder='Hasta' format={DDMMYYYY} value={filters?.EndDate ? moment(filters.EndDate, DDMMYYYY) : undefined} onChange={EndDate => setFilters({ EndDate })} />
+                    <DatePicker placeholder='Hasta' format={DDMMYYYY} value={filters?.EndDate ? dayjs(filters.EndDate, DDMMYYYY) : undefined} onChange={EndDate => setFilters({ EndDate: dayjs(EndDate).format(DDMMYYYY)})} />
                     &nbsp;
                     <Checkbox checked={filters?.ShowDeleted} onChange={e => setFilters({ ShowDeleted: e.target.checked })}>Ver solo cancelados</Checkbox>
                 </div>}
@@ -119,7 +119,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 showTotal: (total, range) => `${range[0]}-${range[1]} de ${total} elementos`,
                 ...paginationProps,
             }}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
             rowKey={record => record.getId()}
             onRow={r => ({ onDoubleClick: () => onViewClick(r.id) })}
             

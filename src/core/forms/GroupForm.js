@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { Form, Input, Select, DatePicker, Tabs, Button, InputNumber } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
-import moment from 'moment';
 import TextArea from 'antd/lib/input/TextArea';
 import { userCombo } from '../services/UserService';
 import { alertError, renderError } from '../common/functions';
@@ -15,6 +14,7 @@ import { DDMMYYYY } from '../common/consts';
 import { instituteCombo } from '../services/InstituteService';
 import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumentTable';
 import { documentCategoryShow } from '../services/DocumentCategoryService';
+import dayjs from 'dayjs';
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -245,13 +245,13 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                         </Select>
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Cupos`} labelAlign='left' span={5}>
-                        <InputNumber name='number_students' min={formState.students.length} onChange={(number_students) => onInputChangeByName('number_students', number_students)} value={formState?.number_students}/>
+                        <InputNumber name='number_students' min={formState.students.length} disabled={view || confirmLoading} onChange={(number_students) => onInputChangeByName('number_students', number_students)} value={formState?.number_students}/>
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Desde`} labelAlign='left' span={5}>
-                        <DatePicker name='start_date' onChange={(start_date) => onInputChangeByName('start_date', start_date)} format={DDMMYYYY} value={formState?.start_date ? moment(formState?.start_date)  : undefined}/>
+                        <DatePicker name='start_date' disabled={view || confirmLoading} onChange={(start_date) => onInputChangeByName('start_date', start_date)} format={DDMMYYYY} value={formState?.start_date ? dayjs(formState?.start_date)  : undefined}/>
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Hasta`} labelAlign='left' span={5}>
-                        <DatePicker name='finish_date' onChange={(finish_date) => onInputChangeByName('finish_date', finish_date)} format={DDMMYYYY} value={formState?.finish_date ? moment(formState?.finish_date)  : undefined}/>
+                        <DatePicker name='finish_date' disabled={view || confirmLoading} onChange={(finish_date) => onInputChangeByName('finish_date', finish_date)} format={DDMMYYYY} value={formState?.finish_date ? dayjs(formState?.finish_date)  : undefined}/>
                     </Form.Item>
                     <Form.Item label={`Descripcion`} labelAlign='left' span={24}>
                         <TextArea name='description' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.description} />

@@ -36,6 +36,12 @@ export const colors = {
     grey: '#616161',
 };
 
+export const methods_payments = [
+    {id: 'MercadoPago', name: 'Mercado Pago'},
+    {id: 'Efectivo', name: 'Efectivo'},
+    {id: 'Transferencia', name: 'Transferencia'},
+];
+
 export const levels_educations = [
     {id: 'PRI', name: 'Primaria'},
     {id: 'SEC', name: 'Secundaria'},

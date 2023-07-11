@@ -1,7 +1,7 @@
 import { Button, Card, Form, Input, InputNumber } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { renderError } from '../../common/functions';
+import { alertError, renderError } from '../../common/functions';
 import Account from '../../models/Account';
 import { AuthService } from '../../services/AuthService';
 
@@ -24,7 +24,7 @@ export const AccountPage = ({ app }) => {
             setItem(account);
             setLoading(false);
         } catch(err) {
-            renderError(err);
+            alertError(err);
             setLoading(false);
         }
     };

@@ -2,8 +2,8 @@ import { Button, Checkbox, DatePicker, Form, Input, InputNumber, Select, Switch 
 import { useState, useEffect } from 'react';
 import Payment from '../../models/Payment';
 
-import { paymentCreate, paymentUpdate } from '../../services/PaymentService';
-import moment from 'moment';
+import { paymentCreate } from '../../services/PaymentService';
+import dayjs from 'dayjs';
 import { DDMMYYYY, DDMMYYYYHHmm } from '../../common/consts';
 import { courseCombo } from '../../services/CourseService';
 import { userCombo } from '../../services/UserService';
@@ -48,7 +48,7 @@ export const PaymentPage = ({ app }) => {
         }
 
         let error = false;
-        let fechaInicial = moment(formState.cuotes[0]);
+        let fechaInicial = dayjs(formState.cuotes[0]);
         let cuotes = [];
         let formStateCuotes = [ ...formState.cuotes];
         let fechaComparacion = '';
@@ -64,20 +64,22 @@ export const PaymentPage = ({ app }) => {
                 }
             }else{
                 fechaComparacion = fechaInicial.add(1, 'M');
-                //console.log(moment(fechaComparacion).format(DDMMYYYY)+ ' !== ' +moment(formStateCuotes[i]).format(DDMMYYYY))
-                if(moment(fechaComparacion).format(DDMMYYYY) !== moment(formStateCuotes[i]).format(DDMMYYYY)){
+                //console.log(dayjs(fechaComparacion).format(DDMMYYYY)+ ' !== ' +dayjs(formStateCuotes[i]).format(DDMMYYYY))
+                if(dayjs(fechaComparacion).format(DDMMYYYY) !== dayjs(formStateCuotes[i]).format(DDMMYYYY)){
                     error = true;
                     renderError('Las coutas deben ser consecutivas');
                     break;
                 }
             }
-            cuotes.push(moment(formStateCuotes[i]));
+            cuotes.push(dayjs(formStateCuotes[i]));
         }
 
         if(!error){
             setConfirmLoading(true);
             try {
                 await paymentCreate(formState);
+                setFormState(new Payment);
+                setCuotes([])
             } catch(err) {
                 renderError(err);
             }
@@ -170,18 +172,21 @@ export const PaymentPage = ({ app }) => {
             let fechaInicial = undefined;
             
             if(course?.cuotes.length > 0){//SI YA PAGO ALGUNA CUOTA LA FECHA INICIAL SALE DE AHI, SINO LA SACO DELA FECHA DESDE DEL GRUPO
-                fechaInicial = moment(course?.cuotes[course?.cuotes.length -1].cuote);
+                fechaInicial = dayjs(course?.cuotes[course?.cuotes.length -1].cuote);
             }else{
-                fechaInicial = moment(course?.group.start_date);
+                fechaInicial = dayjs(course?.group.start_date);
+                fechaInicial = fechaInicial.add(-1, 'M');
             }
-            
+            console.log('fechaInicial',fechaInicial);
             for(let i=1; i <= 6; i++){
 
-                fechaInicial.add(1, 'M');
-                let format = moment(fechaInicial).format(DDMMYYYY);
-                cuotes.push({'format': format, 'date': moment(fechaInicial)});
+                fechaInicial = fechaInicial.add(1, 'M');
+                let format = dayjs(fechaInicial).format(DDMMYYYY);
+                cuotes.push({'format': format, 'date': dayjs(fechaInicial)});
             }
         }
+
+        console.log('cuotes',cuotes)
 
         setFormState({...formState, course_id, value_cuote: course?.quota_value, cuotes: [], amount_coute: 0});
         setCuotes(cuotes);
@@ -273,7 +278,7 @@ export const PaymentPage = ({ app }) => {
                     </LayoutH>
                     <LayoutH>
                         <Form.Item label={`Fecha de pago *`} labelAlign='left' span={22}>
-                            <DatePicker name='date' onChange={(date) => setFormState({...formState, date: moment(date)})} format={DDMMYYYYHHmm} value={formState?.date ? moment(formState?.date)  : undefined}/>
+                            <DatePicker name='date' onChange={(date) => setFormState({...formState, date: dayjs(date)})} format={DDMMYYYY} value={formState?.date ? dayjs(formState?.date)  : undefined}/>
                         </Form.Item>
                         <Form.Item label='Aplica descuento' labelAlign='left' span={8}>
                             <Switch name='apply_discount' disabled={confirmLoading} onChange={(apply_discount) => setFormState({...formState, apply_discount})} checked={formState?.apply_discount} />

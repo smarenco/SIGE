@@ -76,7 +76,7 @@ export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionar
             loading={loading}
             columns={columns()}
             dataSource={[ ...dataSource]}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
             rowKey={record => record.getId()}            
         />
     )

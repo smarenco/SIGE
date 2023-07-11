@@ -1,5 +1,4 @@
-import moment from "moment";
-import { DDMMYYYY, DDMMYYYYHHmmss } from "../common/consts";
+import dayjs from "dayjs";
 
 export default class Payment {
 
@@ -31,7 +30,7 @@ export default class Payment {
     /**
      * @type {date}
      */
-    date = moment();
+    date = dayjs();
 
     /**
      * @type {boolean}

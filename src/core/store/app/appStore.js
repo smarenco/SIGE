@@ -20,6 +20,8 @@ import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
 import { HomePage } from '../../pages/HomePage';
 import { PaymentPage } from '../../pages/administrations/PaymentPage';
+import { UserProfilePage } from '../../pages/administrations/UserProfilePage';
+import { AccountPaymentPage } from '../../pages/administrations/AccountPaymentPage';
 
 
 
@@ -50,6 +52,8 @@ export const appStore = createSlice({
             { key: 'payment', name: 'Pagos', path: '/pago/', component: PaymentPage, icon: <PayCircleOutlined /> },
             { key: 'users', name: 'Usuarios', path: '/usuarios/', component: UserPage, icon: <UserOutlined /> },
             { key: 'account', name: 'Cuenta', path: '/cuenta/', component: AccountPage, icon: <SettingOutlined /> },
+            { key: 'profile', name: 'Perfil', path: '/perfil/', component: UserProfilePage, icon: <UserOutlined /> },
+            { key: 'accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta/', component: AccountPaymentPage, icon: <UserOutlined /> },
             // { key: 'marcas', path: '/marcas/', component: Marcas },
             //{ key: 'asistencia', name:'Asistencia', path: '/asistencia/', component: AsistenciaPage },
             // /// Configuración

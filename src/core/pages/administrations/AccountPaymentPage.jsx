@@ -2,21 +2,21 @@ import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
-import { PaymentModal } from '../../modals/PaymentModal';
-import Payment from '../../models/Payment';
+import { AccountPaymentModal } from '../../modals/AccountPaymentModal';
+import AccountPayment from '../../models/AccountPayment';
 import { AuthService } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
-import { PaymentTable } from '../../tables/PaymentTable';
+import { AccountPaymentTable } from '../../tables/AccountPaymentTable';
 
-import { paymentDelete, paymentIndex, paymentShow } from '../../services/PaymentService';
+import { accountPaymentCreate, accountPaymentDelete, accountPaymentIndex, accountPaymentShow, accountPaymentUpdate, uploadDocument } from '../../services/AccountPaymentService';
 import { useEffect } from 'react';
 import { DDMMYYYY } from '../../common/consts';
-import dayjs from 'dayjs';
+import moment from 'moment';
 
-export const ConsultPaymentPage = ({ app }) => {
+export const AccountPaymentPage = ({ app }) => {
 
-    const [item, setItem] = useState(new Payment);
-    const [filters, setFilters] = useState({StartDate: dayjs().startOf('month').format(DDMMYYYY), EndDate: dayjs().endOf('month').format(DDMMYYYY)});
+    const [item, setItem] = useState(new AccountPayment);
+    const [filters, setFilters] = useState({});
     const [data, setData] = useState([]);
     const [dataPage, setDataPage] = useState({ page: 1, pageSize: 50});
     const [total, setTotal] = useState(0);
@@ -35,19 +35,19 @@ export const ConsultPaymentPage = ({ app }) => {
             label: 'Excel',
             key: '1',
             icon: <FileExcelOutlined />,
-            onClick: () => paymentIndex(filters, 'xls')
+            onClick: () => accountPaymentIndex(filters, 'xls')
         },
         {
             label: 'PDF',
             key: '2',
             icon: <FilePdfOutlined />,
-            onClick: () => paymentIndex(filters, 'pdf')
+            onClick: () => accountPaymentIndex(filters, 'pdf')
         },
         {
             label: 'CSV',
             key: '3',
             icon: <FileTextOutlined />,
-            onClick: () => paymentIndex(filters, 'csv')
+            onClick: () => accountPaymentIndex(filters, 'csv')
         }
     ];
 
@@ -63,8 +63,10 @@ export const ConsultPaymentPage = ({ app }) => {
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
-                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Ver</Button>
+                    <Button key="new" onClick={e => {setOpenModal(true); setItem(new AccountPayment); }} disabled={loading}>Nuevo</Button>
+                    <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
                 </Button.Group>
+                <Button style={{ marginLeft: 15 }} key="delete" onClick={() => onExtraTableClick('delete')} disabled={loading || selectedRowKeys.length === 0} danger ghost>Eliminar</Button>
             </>
         );
     }
@@ -81,7 +83,7 @@ export const ConsultPaymentPage = ({ app }) => {
                 onOk: async() => {
                     setLoading(true);
                     try {
-                        await paymentDelete(selectedRowKeys)
+                        await accountPaymentDelete(selectedRowKeys)
                     } catch(err) {
                         renderError(err);
                     }                        
@@ -101,12 +103,12 @@ export const ConsultPaymentPage = ({ app }) => {
         setLoading(true);
 
         try{
-            const { data, total } = await paymentIndex({ page, pageSize, ...filters });
+            const { data, total } = await accountPaymentIndex({ page, pageSize, ...filters });
             setData(data); setTotal(total); setLoading(false); setRowSelected({selectedRowKeys: [], selectedRows: []});
         }catch(err){
             alertError(err);
             setLoading(false);
-        }
+        }       
     }
 
     const loadData = () => onPageChange(1);
@@ -114,7 +116,7 @@ export const ConsultPaymentPage = ({ app }) => {
     const loadItem = async(id) => {
         setLoading(true);
         try {
-            const item = await paymentShow(id)
+            const item = await accountPaymentShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
         } catch(err) {
             setLoading(false);
@@ -122,19 +124,37 @@ export const ConsultPaymentPage = ({ app }) => {
         }
     }
 
-    const onCancelPayment = async(id) => {
+    const onModalOk = async(obj) => {
         setConfirmLoading(true);
         try {
-            if (id) {
-                await paymentDelete(id);
+            
+            if (obj.id) {
+                await accountPaymentUpdate(obj.id, obj);
+            } else {
+                let document = null;
+                console.log(obj)
+                if(obj.file){
+                    const arr_name = obj.file.name.split('.');
+                    const ext = arr_name[arr_name.length - 1];
+                    const date = new Date;
+                    let document_name = 'pago-cuenta-' + user().account_id + '-' + date.getTime() + '.' + ext;
+                    document = { file: obj.file, document_name };
+                    obj.document_name = document_name;
+                }
+
+                await accountPaymentCreate(obj);
+
+                if(document){
+                    await uploadDocument(document.file, document.document_name);
+                }
             }
 
             setOpenModal(false); loadData();
+            setConfirmLoading(false)
         } catch(err) {
+            setConfirmLoading(false)
             renderError(err);
         }
-
-        setConfirmLoading(false)        
     }
 
     useEffect(()=>{
@@ -145,36 +165,36 @@ export const ConsultPaymentPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Consulta Pagos</strong>)}
+                title={(<strong>Pagos de la cuenta</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
-              <PaymentTable
+              <AccountPaymentTable
                     data={data}
+                    onReload={loadData}
                     onRowSelectedChange={(selectedRowKeys, selectedRows) => setRowSelected({ selectedRowKeys, selectedRows })}
                     setFilters={onFilterTable}
-                    filters={filters}
-                    onReload={loadData}
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
-                    paginationProps={{
+                    viewAll={true}//{user().view_all}
+                    pagination={{
                         pageSize: pageSize,
                         page: page,
                         total: total,
                     }}
-                    onViewClick={loadItem}
-                    onCancelPaymentClick={onCancelPayment}
+                    onEditClick={loadItem}
               />
             </Card>
-            <PaymentModal
+            <AccountPaymentModal
+                view={item.id}
                 app={app}
-                view={true}
                 open={openModal}
                 item={item}
+                onOk={onModalOk}
                 confirmLoading={confirmLoading}
                 loading={loading}
-                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new Payment); }}
+                onCancel={() => { setLoading(false); setOpenModal(false); setItem(new AccountPayment); }}
             />
         </>
     )

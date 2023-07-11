@@ -1,12 +1,15 @@
 import api from "./Api";
 import { useSelector } from "react-redux"
 import { ACCESS_TOKEN, CONFIG, MENU, PARAMS, SESSION, USER } from "../common/consts";
+import User from "../models/User";
+import { useAuthStore } from "../hooks/useAuthStore";
 // import User from "../models/User";
 
 export const AuthService = () => {
 
     const app = useSelector( state => state.app );
-    
+    const { startLogout } = useAuthStore();
+
      const resetPassword = (Token, New_contrasenna, Repeat_contrasenna) => {
         return api
             .post('auth/reset-password', {
@@ -86,7 +89,7 @@ export const AuthService = () => {
     const logout = () => this.checkSession().finally(forceLogout);
 
     const forceLogout = () => {
-        // forceLogout();
+        console.log('forcelogout')
         delete api.defaults.headers.common['X-US-AUTH-TOKEN'];
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(USER);

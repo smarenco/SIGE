@@ -3,8 +3,8 @@
 import { Form, Input, Select, TimePicker } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
-import moment from 'moment';
-import { HHmm } from '../common/consts';
+import dayjs from 'dayjs';
+import { HHmm, HHmmss } from '../common/consts';
 
 export const TurnForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
     
@@ -18,7 +18,7 @@ export const TurnForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <TimePicker name='start_time' 
                         onSelect={(start_time) => onInputChangeByName('start_time', start_time)} 
                         format={HHmm} 
-                        value={formState?.start_time ? moment(formState?.start_time) : undefined}
+                        value={formState?.start_time ? dayjs(formState?.start_time, HHmmss) : undefined}
                         allowClear={false}
                     />
                 </Form.Item>
@@ -26,7 +26,7 @@ export const TurnForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <TimePicker name='finish_time'
                         onSelect={(finish_time) => onInputChangeByName('finish_time', finish_time)}
                         format={HHmm} 
-                        value={formState?.finish_time ? moment(formState?.finish_time) : undefined}
+                        value={formState?.finish_time ? dayjs(formState?.finish_time, HHmmss) : undefined}
                         allowClear={false}
                     />
                 </Form.Item>

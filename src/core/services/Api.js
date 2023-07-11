@@ -1,9 +1,7 @@
 import axios from "axios";
 import { API_URL } from "../../env";
-import { ACCESS_TOKEN } from "../common/consts";
+import { ACCESS_TOKEN, CONFIG, PARAMS, SESSION, USER } from "../common/consts";
 import { AuthService } from "./AuthService";
-
-//const { forceLogout } = AuthService();
 
 const instance = axios.create({
     baseURL: API_URL,
@@ -19,7 +17,15 @@ const handleSuccess = response => {
 
 const handleError = error => {
     if (error && error.response && error.response.status === 401) {
-        AuthService().forceLogout();
+        //AuthService.forceLogout();
+        console.log(123)
+        localStorage.removeItem(ACCESS_TOKEN);
+        localStorage.removeItem(USER);
+        localStorage.removeItem(SESSION);
+        localStorage.removeItem(PARAMS);
+        localStorage.removeItem(CONFIG);
+        console.log(23)
+
     }
     if (error.message === 'Network Error') {
         return Promise.reject({ message: 'Se ha perdido la conexión con el servidor. Por favor, vuelva a intentarlo' });

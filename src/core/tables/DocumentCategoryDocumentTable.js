@@ -43,7 +43,7 @@ export const DocumentCategoryDocumentTable = ({ data, onDeleteDocument, view }) 
         <Table
             columns={columns()}
             dataSource={[ ...data ]}
-            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 260px)' }}
+            scroll={{ x: columns().map(a => a.width).reduce((b, c) => b + c), y: 'calc(100vh - 280px)' }}
             rowKey={record => record.id}
             pagination={false}
         />
