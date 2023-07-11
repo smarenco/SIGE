@@ -7,7 +7,7 @@ const { Panel } = Collapse;
 // import { useForm } from '../hooks/useForm';
 
 export const ImportGroupsModal = (props) => {
-    const { importState: propImportState, view, open, file: fileProp, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
+    const { importState: propImportState, view, open, type, file: fileProp, onOk: onOkProp, loading, confirmLoading, onCancel: onCancelProp } = props;
     // const { formState, onInputChange, onInputChangeByName } = useForm(item);
     const [file, setFile] = useState(fileProp);
     const [importState, setImportState] = useState(propImportState);
@@ -42,7 +42,7 @@ export const ImportGroupsModal = (props) => {
     return (
         <Modal
             bodyStyle={importState !== undefined ? { height: 300, overflow: 'auto' } : { height: 300, overflow: 'auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
-            title={'Importar Cursos'}
+            title={type ? 'Importar Grupos' : 'Asociar estudiantes'}
             open={open}
             width={700}
             destroyOnClose={true}

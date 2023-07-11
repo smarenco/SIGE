@@ -93,14 +93,14 @@ export const UserPage = ({ app }) => {
         }
     ];
 
-    const menuImportProps = {
+    const dropdownImportProps = {
         items: importItems
     };
 
     const renderExtraTable = () => {
         return (
             <>
-                <Dropdown menu={menuImportProps} placement="bottomLeft" disabled={loading}>
+                <Dropdown menu={dropdownImportProps} placement="bottomLeft" disabled={loading}>
                     <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
                 </Dropdown>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>

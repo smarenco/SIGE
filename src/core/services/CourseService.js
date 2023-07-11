@@ -51,7 +51,7 @@ export const courseDelete = async (ids) => {
     return Promise.all(ids.map(async (id) => await api.delete(`${path}/${id}`)));
 }
 
-export const importCourses = async (file, type) => {
+export const importCourses = async (file) => {
     let formData = new FormData();
     formData.append("file", file);
     return await api.post(`${path}/import`, formData, {
