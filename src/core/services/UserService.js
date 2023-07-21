@@ -79,7 +79,6 @@ export const downloadDocument = (filename) =>{
 }
 
 export const uploadDocument = (file, filename) => {
-    console.log(file, filename);
     let formData = new FormData();
     formData.append('Archivo-file', file);
     formData.append('filename', filename);

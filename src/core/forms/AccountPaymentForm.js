@@ -5,7 +5,6 @@ import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import { DDMMYYYY, methods_payments } from '../common/consts';
 import TextArea from 'antd/es/input/TextArea';
-import moment from 'moment';
 import Dragger from 'antd/es/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';

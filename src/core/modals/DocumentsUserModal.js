@@ -2,8 +2,7 @@ import { DatePicker, Input, Modal, Upload } from 'antd'
 import {
     InboxOutlined,
 } from '@ant-design/icons';
-import moment from 'moment';
-
+import dayjs from 'dayjs';
 import { DDMMYYYY } from '../common/consts';
 import { renderError } from '../common/functions';
 import { useForm } from '../hooks/useForm';
@@ -58,7 +57,7 @@ export const DocumentsUserModal = (props) => {
                         placeholder='Seleccionar fecha'
                         format={DDMMYYYY}
                         style={{ width: '100%', display: 'block' }}
-                        value={formState.expiration ? moment(formState.expiration) : undefined}
+                        value={formState.expiration ? dayjs(formState.expiration) : undefined}
                         onChange={date => onInputChangeByName('expiration', date)} />
                 </div>
                 <div style={{ marginTop: 10 }}>

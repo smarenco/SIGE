@@ -95,7 +95,7 @@ export const DocumentPage = ({ app }) => {
 
     const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
+        setDataPage({ ...dataPage, pageSize, page});
         setLoading(true);
 
         try{
@@ -107,7 +107,7 @@ export const DocumentPage = ({ app }) => {
         } 
     }
 
-    const loadData = () => onPageChange(1);
+    const loadData = () => onPageChange(page);
 
     const loadItem = async(id) => {
         setLoading(true);

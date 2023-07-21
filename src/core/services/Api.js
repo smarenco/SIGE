@@ -1,7 +1,6 @@
 import axios from "axios";
 import { API_URL } from "../../env";
 import { ACCESS_TOKEN, CONFIG, PARAMS, SESSION, USER } from "../common/consts";
-import { AuthService } from "./AuthService";
 
 const instance = axios.create({
     baseURL: API_URL,
@@ -17,14 +16,12 @@ const handleSuccess = response => {
 
 const handleError = error => {
     if (error && error.response && error.response.status === 401) {
-        //AuthService.forceLogout();
-        console.log(123)
         localStorage.removeItem(ACCESS_TOKEN);
         localStorage.removeItem(USER);
         localStorage.removeItem(SESSION);
         localStorage.removeItem(PARAMS);
         localStorage.removeItem(CONFIG);
-        console.log(23)
+        delete instance.defaults.headers.common['X-US-AUTH-TOKEN'];
 
     }
     if (error.message === 'Network Error') {
@@ -44,7 +41,5 @@ instance.interceptors.response.use(handleSuccess, handleError);
 const access_token = localStorage.getItem(ACCESS_TOKEN);
 instance.defaults.headers.common['X-US-AUTH-TOKEN'] = access_token;
 
-
-console.log(localStorage.getItem(ACCESS_TOKEN))
 
 export default instance;

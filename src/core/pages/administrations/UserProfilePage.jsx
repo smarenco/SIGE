@@ -4,8 +4,7 @@ import { AuthService } from '../../services/AuthService';
 import { uploadDocument, userShow, userUpdate } from '../../services/UserService';
 import { Form, Input, Select, DatePicker, Tabs, Divider, InputNumber, Button } from 'antd'
 import LayoutH from '../../components/layout/LayoutH';
-import moment from 'moment';
-import TextArea from 'antd/lib/input/TextArea';
+import dayjs from 'dayjs';
 import { alertError, loadTypes, renderError } from '../../common/functions';
 import { medicalCoverageCombo } from '../../services/MedicalCoverageService';
 import { cityCombo } from '../../services/CityService';
@@ -273,8 +272,6 @@ export const UserProfilePage = () => {
     }
 
     const documentToUser = (documentSee, remove = false) => {
-        console.log('documentSee',documentSee);
-        console.log('formState.documents', formState.documents);
         const documents = formState.documents.filter((document) => document.document_id !== documentSee.document_id);
         if (documentSee.document_id && !remove) {
             setFormState({ ...formState , documents: [ ...documents, { ...document }]});
@@ -300,7 +297,7 @@ export const UserProfilePage = () => {
                         <Input name='lastnames' disabled={view || confirmLoading} onChange={e => setFormState({ ...formState, lastnames: e.target.value})} value={formState?.lastnames} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Fecha nacimiento`} labelAlign='left' span={4}>
-                        <DatePicker name='birth_day' onChange={(birth_day) => setFormState({ ...formState, birth_day})} format={DDMMYYYY} value={formState?.birth_day ? moment(formState?.birth_day)  : undefined}/>
+                        <DatePicker name='birth_day' onChange={(birth_day) => setFormState({ ...formState, birth_day})} format={DDMMYYYY} value={formState?.birth_day ? dayjs(formState?.birth_day)  : undefined}/>
                     </Form.Item>
                     <Form.Item label='Genero' labelAlign='left' span={4}>
                         <Select 
@@ -445,7 +442,7 @@ export const UserProfilePage = () => {
                     item={documentToSee}
                     onOkProp={document => {
 
-                        console.log('document', document)
+                        //console.log('document', document)
                         //console.log('formState',formState.documents)
 
                         setLoadingDocument(true);

@@ -1,8 +1,9 @@
-import { Button, Checkbox, DatePicker, Input, Table, Tag } from 'antd';
+import { Button, Checkbox, DatePicker, Input, Modal, Table, Tag } from 'antd';
 import { DownloadOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { DDMMYYYY, methods_payments, MMYYYY } from '../common/consts';
 import { downloadDocument } from '../services/AccountPaymentService';
 import dayjs from 'dayjs';
+import { modalGlobalConfig } from 'antd/es/modal/confirm';
 
 
 const paginationStyle = {
@@ -14,7 +15,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChange, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const AccountPaymentTable = ({ viewAll, data, onChangeState, onReload, onRowSelectedChange, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -35,7 +36,7 @@ export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChan
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             },{
-                title: 'Pago corresponde a',
+                title: 'Pago correspondiente a',
                 dataIndex: 'payment_day',
                 render:(i) => i ? dayjs(i).format(DDMMYYYY) : undefined,
                 key: 'Pagoday',
@@ -66,7 +67,7 @@ export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChan
             }, {
                 title: 'Estado',
                 key: 'Estado',
-                render: (record) => <Tag color={record.state === 'P' ? 'grey' : record.state === 'C' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'C' ? 'Confirmado' : 'Rechazado'}</Tag>,
+                render: (record) => <Tag color={record.state === 'P' ? 'grey' : record.state === 'A' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'A' ? 'Aprobado' : 'Rechazado'}</Tag>,
                 width: 150,
                 ellipsis: true,
             }, {
@@ -81,7 +82,7 @@ export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChan
                 width: 100,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        {viewAll && <Button onClick={e => changeState(record.id, record.state)} style={{ fontSize:18, marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
+                        {viewAll && <Button size='small' onClick={e => onModalChangeState(record)} style={{ marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
                         {record.document_name && <DownloadOutlined onClick={e => downloadDocument(record.document_name)} style={{ fontSize:18, marginRight: 10 }} title='Descargar documento' />}&nbsp;<EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
@@ -89,8 +90,22 @@ export const AccountPaymentTable = ({ viewAll, data, onReload, onRowSelectedChan
         ];
     }
 
-    const changeState = (id, state) => {
-        console.log(id, state);
+    const onModalChangeState = (record) => {
+        Modal.info({
+            width:450,
+            title: 'Aprobar/Rechazar',
+            okText: 'Cancelar',
+            okType: 'default',
+            content: (
+                <>
+                    <div style={{textAlign:'center', marginTop:10}}>Pago correspondiente a <Tag>{dayjs(record.payment_day).format(DDMMYYYY)}</Tag> Estado <Tag color={record.state === 'P' ? 'grey' : record.state === 'A' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'A' ? 'Aprobado' : 'Rechazado'}</Tag></div>
+                    <div style={{textAlign:'center', marginTop:20, marginBottom:20}}>
+                        <Button type="primary" onClick={e => onChangeState(record.id, 'A')} style={{marginRight: 10 }}>Aprobar</Button> 
+                        <Button type="primary" danger onClick={e => onChangeState(record.id, 'R')} style={{ marginRight: 20 }}>Rechazar</Button>
+                    </div>
+                </>
+            ),
+        });
     };
 
     return (

@@ -1,4 +1,4 @@
-import moment from "moment";
+import dayjs from "dayjs";
 import { Button, Modal, Table } from 'antd';
 import {
     DeleteTwoTone,
@@ -35,7 +35,7 @@ export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionar
             }, {
                 title: 'Vencimiento',
                 key: 'expiration',
-                render: r => r.expiration ? moment(r.expiration).format(DDMMYYYY) : undefined,
+                render: r => r.expiration ? dayjs(r.expiration).format(DDMMYYYY) : undefined,
                 width: 100,
                 ellipsis: true,
             }, {
@@ -56,7 +56,7 @@ export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionar
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="red" style={{marginRight: 10}} title="Este documento exige vencimiento y no está cargado" />);
                     } else if (!record.required && !record.expiration && !record.loaded) {
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="red" style={{marginRight: 10}} title="Este documento es requerido, exige vencimiento y no está cargado" />);
-                    } else if (record.loaded && moment(record.expiration).isValid() && moment(record.expiration).diff(new Date) < 0) {
+                    } else if (record.loaded && dayjs(record.expiration).isValid() && dayjs(record.expiration).diff(new Date) < 0) {
                         alerts.push(<ExclamationCircleTwoTone twoToneColor="orange" style={{marginRight: 10}} title="Este documento ha vencido" />);
                     }
                     return (

@@ -8,10 +8,8 @@ import { AuthService } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { AccountPaymentTable } from '../../tables/AccountPaymentTable';
 
-import { accountPaymentCreate, accountPaymentDelete, accountPaymentIndex, accountPaymentShow, accountPaymentUpdate, uploadDocument } from '../../services/AccountPaymentService';
+import { accountPaymentChangeState, accountPaymentCreate, accountPaymentDelete, accountPaymentIndex, accountPaymentShow, accountPaymentUpdate, uploadDocument } from '../../services/AccountPaymentService';
 import { useEffect } from 'react';
-import { DDMMYYYY } from '../../common/consts';
-import moment from 'moment';
 
 export const AccountPaymentPage = ({ app }) => {
 
@@ -99,7 +97,7 @@ export const AccountPaymentPage = ({ app }) => {
 
     const onPageChange = async (page, pageSize) => {
         pageSize = pageSize === undefined ? pageSize : pageSize;
-        setDataPage({ ...dataPage, pageSize});
+        setDataPage({ ...dataPage, pageSize, page});
         setLoading(true);
 
         try{
@@ -111,13 +109,24 @@ export const AccountPaymentPage = ({ app }) => {
         }       
     }
 
-    const loadData = () => onPageChange(1);
+    const loadData = () => onPageChange(page);
 
     const loadItem = async(id) => {
         setLoading(true);
         try {
             const item = await accountPaymentShow(id)
             setItem(item); setOpenModal(true); setLoading(false);
+        } catch(err) {
+            setLoading(false);
+            renderError(err);
+        }
+    }
+
+    const onChangeState = async(id, state) => {
+        setLoading(true);
+        try {
+            const item = await accountPaymentChangeState(id, state)
+            Modal.destroyAll(); setLoading(false); loadData();
         } catch(err) {
             setLoading(false);
             renderError(err);
@@ -177,7 +186,8 @@ export const AccountPaymentPage = ({ app }) => {
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
-                    viewAll={true}//{user().view_all}
+                    onChangeState={onChangeState}
+                    viewAll={true}//{user().view_all}//view_all es para el usuario de caiqui o mio
                     pagination={{
                         pageSize: pageSize,
                         page: page,

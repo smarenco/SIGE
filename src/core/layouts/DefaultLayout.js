@@ -11,9 +11,6 @@ import {
 } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
-import {
-    LogoutOutlined
-} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { useAuthStore } from '../hooks/useAuthStore';
 import { MENU } from '../common/consts';
@@ -59,7 +56,7 @@ const DefaultLayout = ({ component, app }) => {
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
             {contextHolder}
             <Layout>
-                <Sider trigger={null} collapsible collapsed={collapsed}>
+                <Sider style={{overflow:'auto'}} trigger={null} collapsible collapsed={collapsed}>
                     <div className='logo-container'>
                         {
                             collapsed ?

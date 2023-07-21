@@ -1,6 +1,5 @@
 import { Button, Checkbox, Input, Table } from 'antd';
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
-import moment from 'moment';
 import { DDMMYYYY } from '../common/consts';
 import dayjs from 'dayjs';
 

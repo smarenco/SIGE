@@ -1,5 +1,3 @@
-import moment from 'moment';
-import { DDMMYYYY, DDMMYYYYHHmm } from '../common/consts';
 import { clearObj, open } from '../common/functions';
 import AccountPayment from '../models/AccountPayment';
 import api from "./Api";
@@ -49,11 +47,14 @@ export const uploadDocument = (file, filename) => {
 export const accountPaymentShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
     return new AccountPayment(response);
-
 }
 
 export const accountPaymentCreate = async (item) => {
     return await api.post(path, item);
+}
+
+export const accountPaymentChangeState = async (id, state) => {
+    return await api.put(`${path}/${id}/change-state`, {state});
 }
 
 export const accountPaymentUpdate = async (id, item) => {
