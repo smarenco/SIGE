@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import './DefaultLayouts.css';
 import {
     DownOutlined,
+    LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     // UploadOutlined,
