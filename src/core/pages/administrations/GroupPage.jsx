@@ -5,10 +5,10 @@ import { alertError, renderError } from '../../common/functions';
 import { GroupModal } from '../../modals/GroupModal';
 import Group from '../../models/Group';
 import { AuthService } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, BranchesOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { GroupTable } from '../../tables/GroupTable';
 
-import { addStudent, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate, importGroups } from '../../services/GroupService';
+import { addStudent, asociateStudents, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate, importGroups } from '../../services/GroupService';
 import { useEffect } from 'react';
 import { ImportGroupsModal } from '../../modals/ImportGroupsModal';
 
@@ -23,6 +23,7 @@ export const GroupPage = ({ app }) => {
     const [openModal, setOpenModal] = useState(false);
     const [openImportModal, setOpenImportModal] = useState(false);
     const [importState, setImportState] = useState(undefined);
+    const [importGroup, setImportGroup] = useState(true);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
@@ -56,11 +57,38 @@ export const GroupPage = ({ app }) => {
         items
     };
 
+    const importItems = [
+        {
+            label: 'Grupos',
+            key: '2',
+            icon: <AppstoreAddOutlined />,
+            onClick: () => {
+                setOpenImportModal(true);
+                setImportGroup(true)
+            }
+        },
+        {
+            label: 'Asociar estudiantes',
+            key: '3',
+            icon: <BranchesOutlined />,
+            onClick: () => {
+                setOpenImportModal(true);
+                setImportGroup(false)
+            }
+        }
+    ];
+
+    const dropdownImportProps = {
+        items: importItems
+    };
+
     const renderExtraTable = () => {
 
         return (
             <>
-                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
+                <Dropdown menu={dropdownImportProps} placement="bottomLeft" disabled={loading}>
+                    <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
+                </Dropdown>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
                 </Dropdown>
@@ -92,6 +120,8 @@ export const GroupPage = ({ app }) => {
                     loadData();
                 },
             }); break;
+            default:
+                break;
         }
     }
 
@@ -146,7 +176,7 @@ export const GroupPage = ({ app }) => {
     const onImportModalOk = async (obj) => {
         setConfirmLoading(true);
         try {
-            const { response } = await importGroups(obj);
+            const { response } = await importGroups(obj, importGroup);
 
             if (response?.data?.error?.length > 0) {
                 setImportState(response?.data)
@@ -202,6 +232,7 @@ export const GroupPage = ({ app }) => {
                 app={app}
                 importState={importState}
                 open={openImportModal}
+                type={importGroup}
                 file={undefined}
                 onOk={onImportModalOk}
                 confirmLoading={confirmLoading}

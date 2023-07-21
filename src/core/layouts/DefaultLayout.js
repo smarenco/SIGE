@@ -36,6 +36,25 @@ const DefaultLayout = ({ component, app }) => {
         menuProps = [];
     }
 
+    const itemsDropdown = [
+        {
+            label: 'Mi Perfil',
+            key: '1',
+            icon: <UserOutlined />,
+            onClick: handleMyProfile
+        },
+        {
+            label: 'Cerrar Sesión',
+            key: '2',
+            icon: <LogoutOutlined />,
+            onClick: handleLogout
+        }
+    ];
+
+    const dropdownProps = {
+        items: itemsDropdown
+    };
+
     const [messageApi, contextHolder] = message.useMessage();
 
     // const info = (message) => {
@@ -95,7 +114,7 @@ const DefaultLayout = ({ component, app }) => {
                             onClick: () => setCollapsed(!collapsed),
                         })}
                         <Space wrap style={{ float: 'right', top: 10, marginRight: 20 }}>
-                            <Dropdown menu={menuProps} >
+                            <Dropdown menu={dropdownProps} >
                                 <Button type='text' >
                                     <Avatar size='small' style={{ transform: 'translateY(-2px)' }} src={require('../../assets/logo1.png')} icon={<UserOutlined />} />
                                     <DownOutlined />
