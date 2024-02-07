@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentModal } from '../../modals/DocumentModal';
 import Document from '../../models/Document';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { documentCreate, documentDelete, documentIndex, documentShow, documentToggle, documentUpdate } from '../../services/DocumentService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { DocumentTable } from '../../tables/DocumentTable';

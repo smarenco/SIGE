@@ -3,8 +3,6 @@ import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import Account from '../../models/Account';
-import { AuthService } from '../../services/AuthService';
-
 import { accountUpdate, accountShow } from '../../services/AccountService';
 import LayoutH from '../../components/layout/LayoutH';
 import Loading from '../../components/common/Loading';
@@ -14,8 +12,6 @@ export const AccountPage = ({ app }) => {
     const [ item, setItem ] = useState(new Account); 
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    const { user } = AuthService();
 
     const getAccount = async () => {
         setLoading(true);

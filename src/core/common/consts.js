@@ -61,5 +61,5 @@ export const typesCategories = [
     {id: 'PRO', name: 'Profesor/a'},
     {id: 'DIR', name: 'Director/a'},
     {id: 'EST', name: 'Estudiante'},
-    {id: 'CUR', name: 'Curso'},
+    //{id: 'CUR', name: 'Curso'},
 ]; 

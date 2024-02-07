@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
 import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
@@ -26,7 +26,7 @@ export const UserPage = ({ app }) => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [typesUsers, setTypesUsers] = useState([]);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

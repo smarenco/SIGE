@@ -12,19 +12,16 @@ import {
 } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
-import { useDispatch } from 'react-redux';
-import { useAuthStore } from '../hooks/useAuthStore';
 import { MENU } from '../common/consts';
+import { forceLogout } from '../services/AuthService';
 const { Header, Sider, Content } = Layout;
 
-
 const DefaultLayout = ({ component, app }) => {
-    const dispatch = useDispatch();
     const [collapsed, setCollapsed] = useState(false);
-    const { startLogout } = useAuthStore();
 
-    const handleLogout = () => {
-        dispatch(startLogout());
+    const handleLogout = async () => {
+        console.log('handleLogout');
+        forceLogout();
     }
 
     const handleMyProfile = (e) => {

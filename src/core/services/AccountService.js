@@ -2,7 +2,7 @@ import { USER } from '../common/consts';
 import { clearObj, open } from '../common/functions';
 import Account from '../models/Account';
 import api from "./Api";
-import { AuthService } from './AuthService';
+import { forceLogout } from './AuthService';
 
 const path = 'account';
 
@@ -38,7 +38,7 @@ export const accountShow = async () => {
         const { response } = await api.get(`${path}/${user.account_id}`);
         return new Account(response);
     }else{
-        AuthService().forceLogout();
+        forceLogout();
     }
     
 }

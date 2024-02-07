@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { AbsenteeismCausesModal } from '../../modals/AbsenteeismCausesModal';
 import AbsenteeismCauses from '../../models/AbsenteeismCauses';
-import { AuthService } from '../../services/AuthService';
 import { AbsenteeismCausesTable } from '../../tables/AbsenteeismCausesTable';
 
 import { absenteeismCausesCreate, absenteeismCausesDelete, absenteeismCausesIndex, absenteeismCausesShow, absenteeismCausesUpdate } from '../../services/AbsenteeismCausesService';
@@ -22,8 +21,6 @@ export const AbsenteeismCausesPage = ({ app }) => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

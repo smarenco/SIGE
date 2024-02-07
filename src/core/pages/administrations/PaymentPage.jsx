@@ -4,7 +4,7 @@ import Payment from '../../models/Payment';
 
 import { paymentCreate } from '../../services/PaymentService';
 import dayjs from 'dayjs';
-import { DDMMYYYY, DDMMYYYYHHmm } from '../../common/consts';
+import { DDMMYYYY } from '../../common/consts';
 import { courseCombo } from '../../services/CourseService';
 import { userCombo } from '../../services/UserService';
 import { paymentMethodsCombo } from '../../services/PaymentMethodsService';

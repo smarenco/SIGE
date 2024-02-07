@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { TurnModal } from '../../modals/TurnModal';
 import Turn from '../../models/Turn';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { TurnTable } from '../../tables/TurnTable';
 
@@ -22,7 +22,7 @@ export const TurnPage = ({ app }) => {
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

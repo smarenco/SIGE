@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CountryModal } from '../../modals/CountryModal';
 import Country from '../../models/Country';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { CountryTable } from '../../tables/CountryTable';
 
@@ -22,7 +22,7 @@ export const CountryPage = ({ app }) => {
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

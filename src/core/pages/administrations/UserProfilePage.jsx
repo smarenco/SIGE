@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { uploadDocument, userShow, userUpdate } from '../../services/UserService';
 import { Form, Input, Select, DatePicker, Tabs, Divider, InputNumber, Button } from 'antd'
 import LayoutH from '../../components/layout/LayoutH';
@@ -48,7 +48,7 @@ export const UserProfilePage = () => {
         const [loading, setLoading] = useState(false);
         const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     useEffect(() => {
         if(formState.type && formState.type?.toLowerCase() !== 'student'){

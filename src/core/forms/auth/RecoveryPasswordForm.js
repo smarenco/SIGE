@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useForm } from '../../hooks/useForm';
-import { useAuthStore } from '../../hooks/useAuthStore';
+import { recoveryPassword } from '../../services/AuthService';
 
 const loginFormFields = {
   recoveryEmail: ''
@@ -10,17 +10,14 @@ const loginFormFields = {
 
 const RecoveryPasswordForm = ({ handleError }) => {
   const { recoveryEmail, onInputChange: onLoginInputChange } = useForm(loginFormFields);
-  const { startRecoveryPassword, errorMessage } = useAuthStore();
 
-    useEffect(() => {
-        if (errorMessage !== undefined) {
-          handleError('Error en la autenticacion', errorMessage);
-        }
-
-    }, [errorMessage, handleError])
-
-  const handleOnSubmit = (event) => {
-    startRecoveryPassword({ username: recoveryEmail });
+  const handleOnSubmit = async () => {
+    try {
+      const { response } = await recoveryPassword(recoveryEmail);
+      message.success(response.message);
+    }catch(err){
+      handleError('Error en la autenticacion');
+    }
   }
 
   return (

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentCategoryModal } from '../../modals/DocumentCategoryModal';
 import DocumentCategory from '../../models/DocumentCategory';
-import { AuthService } from '../../services/AuthService';
 import { documentCategoryCreate, documentCategoryDelete, documentCategoryIndex, documentCategoryShow, documentCategoryToggle, documentCategoryUpdate } from '../../services/DocumentCategoryService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { DocumentCategoryTable } from '../../tables/DocumentCategoryTable';
@@ -20,8 +19,6 @@ export const DocumentCategoryPage = ({ app }) => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    const { documentCategory } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

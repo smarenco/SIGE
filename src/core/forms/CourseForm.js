@@ -9,53 +9,88 @@ import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumen
 
 export const CourseForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName, onInputChangeByObject }) => {    
     
-    let [documental_categories, setDocumental_categories ] = useState([]);
-    let [loadingDocumentCategories, setLoadingDocumentCategories ] = useState(false);
+    let [student_documental_categories, setStudent_Documental_categories ] = useState([]);
+    let [teacher_documental_categories, setTeacher_Documental_categories ] = useState([]);
+    let [loadingStudentDocumentCategories, setLoadingStudentDocumentCategories ] = useState(false);
+    let [loadingTeacherDocumentCategories, setLoadingTeacherDocumentCategories ] = useState(false);
 
-    let [documents, setDocuments ] = useState([]);
-    let [loadingDocuments, setLoadingDocuments ] = useState(false);
+    let [studentDocuments, setStudentDocuments ] = useState([]);
+    let [loadingStudentDocuments, setLoadingStudentDocuments ] = useState(false);
+    let [teacherDocuments, setTeacherDocuments ] = useState([]);
+    let [loadingTeacherDocuments, setLoadingTeacherDocuments ] = useState(false);
 
     let [disabledTuition_value, setDisabledTuition_value ] = useState(true);
 
-
-    const fetchDocumental_categories = async () => {
-        setLoadingDocumentCategories(true);
+    const fetchStudent_documental_categories = async () => {
+        setLoadingStudentDocumentCategories(true);
         try {
-            const documental_categories = await documentCategoryCombo({Type: 'CUR'});
-            setDocumental_categories(documental_categories);
-            setLoadingDocumentCategories(false);
+            const documental_categories = await documentCategoryCombo({Type: 'EST'});
+            setStudent_Documental_categories(documental_categories);
+            setLoadingStudentDocumentCategories(false);
         } catch(err) {
-            setLoadingDocumentCategories(false);
+            setLoadingStudentDocumentCategories(false);
             renderError(err);
         }
     };
 
-    const fetchDocumentsCategoryDocuments = async (Documental_category_id) => {
-        setLoadingDocuments(true);
+    const fetchTeacher_documental_categories = async () => {
+        setLoadingTeacherDocumentCategories(true);
+        try {
+            const documental_categories = await documentCategoryCombo({Type: 'PRO'});
+            setTeacher_Documental_categories(documental_categories);
+            setLoadingTeacherDocumentCategories(false);
+        } catch(err) {
+            setLoadingTeacherDocumentCategories(false);
+            renderError(err);
+        }
+    };
+
+    const fetchTeacherDocumentsCategoryDocuments = async (Documental_category_id) => {
+        setLoadingTeacherDocuments(true);
         try {
             if(Documental_category_id){
                 const documentCategory = await documentCategoryShow(Documental_category_id);
-                setDocuments(documentCategory.documental_category_document);
+                setTeacherDocuments(documentCategory.documental_category_document);
             }else{
-                setDocuments([]);
+                setTeacherDocuments([]);
             }
-            
-            setLoadingDocuments(false);
+            setLoadingTeacherDocuments(false);
         } catch(err) {
-            setLoadingDocuments(false);
+            setLoadingTeacherDocuments(false);
+            renderError(err);
+        }
+    };
+
+    const fetchStudentDocumentsCategoryDocuments = async (Documental_category_id) => {
+        setLoadingStudentDocuments(true);
+        try {
+            if(Documental_category_id){
+                const documentCategory = await documentCategoryShow(Documental_category_id);
+                setStudentDocuments(documentCategory.documental_category_document);
+            }else{
+                setStudentDocuments([]);
+            }
+            setLoadingStudentDocuments(false);
+        } catch(err) {
+            setLoadingStudentDocuments(false);
             renderError(err);
         }
     };
 
     useEffect(() => {
-        fetchDocumental_categories();
+        fetchStudent_documental_categories();
+        fetchTeacher_documental_categories();
 
         if(formState?.tuition){
             setDisabledTuition_value(false);
         }
 
-        if(formState?.documental_category_id){
-            fetchDocumentsCategoryDocuments(formState?.documental_category_id);
+        if(formState?.student_documental_category_id){
+            fetchStudentDocumentsCategoryDocuments(formState?.documental_category_id);
+        }
+
+        if(formState?.teacher_documental_category_id){
+            fetchTeacherDocumentsCategoryDocuments(formState?.documental_category_id);
         }
 
       }, []);
@@ -63,11 +98,6 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
     const onChangeTuition = (tuition) => {
         setDisabledTuition_value(!tuition)
         onInputChangeByObject({ tuition, tuition_value: undefined });
-    };
-
-    const onChangeDocumentalCategoryId = (documental_category_id) => {
-        onInputChangeByObject({ documental_category_id });
-        fetchDocumentsCategoryDocuments(documental_category_id)
     };
 
     const items = [
@@ -101,37 +131,60 @@ export const CourseForm = ({ view, loading, confirmLoading, formState, onInputCh
                     </LayoutH>
                 </>,
         }, {
-            label: 'Documentos', 
-            key: 'info_documents', 
+            label: 'Documentos Estudiantes', 
+            key: 'info_documents_stu', 
             children:
                 <LayoutH>
-                    <Form.Item label={`Categoria documentos`} labelAlign='left' span={12}>
+                    <Form.Item label={`Categoria documentos estudiantes`} labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view || confirmLoading || loadingDocumentCategories}
-                            loading={loadingDocumentCategories}
-                            value={formState?.documental_category_id}
+                            disabled={view || confirmLoading || loadingStudentDocumentCategories}
+                            loading={loadingStudentDocumentCategories}
+                            value={formState?.student_documental_category_id}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-                            onChange={onChangeDocumentalCategoryId}
-                            > 
-                                {documental_categories.map(documental_category => 
-                                    <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
-                                    )}
-                            </Select>
+                            onChange={(student_documental_category_id) => {
+                                onInputChangeByName('student_documental_category_id', student_documental_category_id);
+                                fetchStudentDocumentsCategoryDocuments(student_documental_category_id);
+                            }}
+                        > 
+                            {student_documental_categories.map(documental_category => 
+                                <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
+                                )}
+                        </Select>
                     </Form.Item>
-                    {/* <Loading loading={loadingDocuments} span={24}> */}
-                        <DocumentCategoryDocumentTable
-                            data={documents}
-                            view={true}
-                        />
-                    {/* </Loading> */}
+                    {loadingStudentDocuments ? <Loading /> : <DocumentCategoryDocumentTable data={studentDocuments} view={true} />}
+                </LayoutH>
+        }, {
+            label: 'Documentos Profesores', 
+            key: 'info_documents', 
+            children:
+                <LayoutH>
+                    <Form.Item label={`Categoria documentos profesores`} labelAlign='left' span={12}>
+                        <Select 
+                            allowClear
+                            showSearch
+                            disabled={view || confirmLoading || loadingTeacherDocumentCategories}
+                            loading={loadingTeacherDocumentCategories}
+                            value={formState?.teacher_documental_category_id}
+                            filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+                            onChange={(teacher_documental_category_id) => {
+                                onInputChangeByName('teacher_documental_category_id', teacher_documental_category_id);
+                                fetchTeacherDocumentsCategoryDocuments(teacher_documental_category_id);
+                            }}
+                        > 
+                            {teacher_documental_categories.map(documental_category => 
+                                <Select.Option value={documental_category.id} key={documental_category.id}>{documental_category.name}</Select.Option>
+                                )}
+                        </Select>
+                    </Form.Item>
+                    {loadingTeacherDocuments ? <Loading /> : <DocumentCategoryDocumentTable data={teacherDocuments} view={true} />}
                 </LayoutH>
         }
     ];
     
     return (
-        loading || loadingDocumentCategories || loadingDocuments ? <Loading /> : <Form layout='vertical'>
+        loading ? <Loading /> : <Form layout='vertical'>
             <Tabs
                 style={{ marginTop: -15 }}
                 size='small'

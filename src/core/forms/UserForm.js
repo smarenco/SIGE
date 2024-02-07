@@ -39,7 +39,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
     const [ loadingCities, setLoadingCities ] = useState(undefined);
     const [ loadingDocuments, setLoadingDocuments ] = useState(undefined);
     const [ loadingTypes, setLoadingTypes ] = useState(undefined);
-
+    
     const fetchMedicalCoverages = async () => {
         setLoadingMedicalCoverages(true);
         try {
@@ -66,7 +66,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         setLoadingGroups(true);
         try {
             if(formState.id){
-                const groups = await groupCombo({ user_type: formState.type, user_id: formState.id});
+                const groups = await groupCombo({ user_type: formState?.type?.toLowerCase(), user_id: formState?.id});
                 setGroups(groups);
                 setLoadingGroups(false);
             }
@@ -100,6 +100,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         try {
             if(formState.id){
                 filter.user_id = formState.id;
+                filter.user_type = formState.type;
             }
             const documents = await documentCombo(filter);
             setDocuments(documents);
@@ -187,16 +188,11 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         setDocumentToSee(mergeDataSchema(documentToSee || [], schema)[0]);
     }
 
-    const documentToUser = (documentSee, remove = false) => {
-        console.log('documentSee',documentSee);
-        console.log('formState.documents', formState.documents);
+    const removeDocument = (documentSee) => {
+        //console.log('documentSee',documentSee);
+        //console.log('formState.documents', formState.documents);
         const documents = formState.documents.filter((document) => document.document_id !== documentSee.document_id);
-        if (documentSee.document_id && !remove) {
-            onInputChangeByName('documents', [ ...documents, { ...document }]);
-        }else if(documentSee.document_id && remove){
-            onInputChangeByName('documents', documents);
-        }
-        
+        onInputChangeByName('documents', documents);
     }
 
     const items = [
@@ -235,7 +231,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <Form.Item label='Direccion' labelAlign='left' span={9}>
                         <Input name='direction' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.direction} />
                     </Form.Item>
-                    <Form.Item label='Telefono' labelAlign='left' span={5}>
+                    <Form.Item label={`${!view ? '*' : ''} Telefono`} labelAlign='left' span={5}>
                         <Input name='cell_phone' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.cell_phone} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Email`} labelAlign='left' span={6}>
@@ -322,11 +318,12 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             children: 
             <>
                 <LayoutH>
-                    {formState.type === 'student' && <Form.Item label='Cursos' labelAlign='left' span={12}>
+                    {(formState?.type?.toLowerCase() === 'student' || formState?.type?.toLowerCase() === 'teacher') && <Form.Item label='Cursos' labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
-                            disabled={view || confirmLoading}
+                            disabled={loadingGroups}
+                            loading={loadingGroups}
                             filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                             onChange={course_id => setCourseSelected(course_id)}
                         > 
@@ -335,7 +332,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             )}
                         </Select>
                     </Form.Item>}
-                    {formState.type !== 'student' && <Form.Item label='Categoria' labelAlign='left' span={12}>
+                    {formState?.type?.toLowerCase() !== 'student' && formState?.type?.toLowerCase() !== 'teacher' && <Form.Item label='Categoria' labelAlign='left' span={12}>
                         <Select 
                             allowClear
                             showSearch
@@ -355,7 +352,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     dataSource={mergeDataSchema(formState.documents, [ ...documents])}
                     loading={loadingDocuments}
                     loadRequisitoFuncionario={loadRequisitoFuncionario}
-                    documentToUser={documentToUser}
+                    removeDocument={removeDocument}
                 />
                 <DocumentsUserModal
                     visible={openModalDocument}
@@ -384,13 +381,12 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         { 
             label: 'Cursos', 
             key: 'courses',
-            disabled: formState.type !== 'student' && formState.type !== 'teacher',
+            disabled: formState?.type?.toLowerCase() !== 'student' && formState?.type?.toLowerCase() !== 'teacher',
             children: 
             <>
                 <GroupTable
                     data={groups}
                     loading={loadingGroups}
-                    //data={[new Group({name: 'grupo re piola', course_name: 'curso re piola', teacher_name: 'Santaigo', tourn_name: 'matutino', from_date: '20/12/2022', to_date: '22/12/2022'})]}
                     comeUserForm={true}
                 />
             </>

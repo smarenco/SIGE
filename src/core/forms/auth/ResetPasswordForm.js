@@ -1,26 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useForm } from '../../hooks/useForm';
-import { useAuthStore } from '../../hooks/useAuthStore';
+import { resetPassword } from '../../services/AuthService';
+import { getQueryString } from '../../common/functions';
 
 const loginFormFields = {
   resetEmail: ''
 }
 
 const ResetPasswordForm = ({ handleError }) => {
-  const { resetEmail, onInputChange: onLoginInputChange } = useForm(loginFormFields);
-  const { startResetPassword, errorMessage } = useAuthStore();
+  const { new_password, repeat_password, onInputChange: onLoginInputChange } = useForm(loginFormFields);
 
-    useEffect(() => {
-        if (errorMessage !== undefined) {
-          handleError('Error en la autenticacion', errorMessage);
-        }
-
-    }, [errorMessage, handleError])
-
-  const handleOnSubmit = (event) => {
-    startResetPassword({ username: resetEmail });
+  const handleOnSubmit = async () => {
+    try {
+      const token = getQueryString('token');
+      const { response } = await resetPassword(token, new_password, repeat_password);
+      message.success(response.message);
+    }catch(err){
+      handleError('Error en la autenticacion');
+    }
   }
 
   return (
@@ -43,15 +42,22 @@ const ResetPasswordForm = ({ handleError }) => {
         ]}
         >
         <Input
-          name="resetEmail"
+          style={{marginBottom: 5}}
+          name="new_password"
           onChange={onLoginInputChange}
           prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Correo Electrónico"
+          placeholder="Nueva contraseña"
+        />
+        <Input
+          name="repeat_password"
+          onChange={onLoginInputChange}
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Repita la contraseña"
         />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
-          Recuperar Contraseña
+          Resetear Contraseña
         </Button>
       </Form.Item>
     </Form>
