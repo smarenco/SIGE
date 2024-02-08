@@ -37,29 +37,35 @@ export const colors = {
 };
 
 export const methods_payments = [
-    {id: 'MercadoPago', name: 'Mercado Pago'},
-    {id: 'Efectivo', name: 'Efectivo'},
-    {id: 'Transferencia', name: 'Transferencia'},
+    {id: 'mercado-pago', name: 'Mercado Pago'},
+    {id: 'efectivo', name: 'Efectivo'},
+    {id: 'transferencia', name: 'Transferencia'},
 ];
 
-export const levels_educations = [
-    {id: 'PRI', name: 'Primaria'},
-    {id: 'SEC', name: 'Secundaria'},
-    {id: 'TER', name: 'Terciaria'},
-    {id: 'POS', name: 'Posgrado'},
+export const education_level = [
+    {id: 'primaria-incompleta', name: 'Primaria Incompleta'},
+    {id: 'primaria-completa', name: 'Primaria Completa'},
+    {id: 'ciclo-basico-inompleto', name: 'Ciclo Básico Inompleto'},
+    {id: 'ciclo-basico-completo', name: 'Ciclo Básico Completo'},
+    {id: 'bachillerato-inompleto', name: 'Bachillerato Inompleto'},
+    {id: 'bachillerato-completo', name: 'Bachillerato Completo'},
+    {id: 'educacion-terciaria-universitaria-inompleta', name: 'Educacion Terciaria Universitaria Inompleta'},
+    {id: 'educacion-terciaria-universitaria-completa', name: 'Educacion Terciaria Universitaria Completa'},
+    {id: 'educacion-terciaria-no-universitaria-inompleta', name: 'Educacion Terciaria No Universitaria Inompleta'},
+    {id: 'educacion-terciaria-no-universitaria-completa', name: 'Educacion Terciaria No Universitaria Completa'},
 ];
 
 export const genders = [
-    {id: 'FEMALE', name: 'Femenino'},
-    {id: 'MALE', name: 'Masculino'},
-    {id: 'NOBIN', name: 'No Binario'},
-    {id: 'PRND', name: 'Prefiero no decirlo'},
+    {id: 'female', name: 'Femenino'},
+    {id: 'male', name: 'Masculino'},
+    {id: 'nobin', name: 'No Binario'},
+    {id: 'prnd', name: 'Prefiero no decirlo'},
 ];
 
-export const typesCategories = [
-    {id: 'ADM', name: 'Administrativo/a'},
-    {id: 'PRO', name: 'Profesor/a'},
-    {id: 'DIR', name: 'Director/a'},
-    {id: 'EST', name: 'Estudiante'},
-    //{id: 'CUR', name: 'Curso'},
+export const types_categories = [
+    {id: 'administrative', name: 'Administrativo/a'},
+    {id: 'teacher', name: 'Profesor/a'},
+    {id: 'director', name: 'Director/a'},
+    {id: 'student', name: 'Estudiante'},
+    //{id: 'course', name: 'Curso'},
 ]; 

@@ -14,7 +14,7 @@ import { documentCombo } from '../services/DocumentService';
 import { DocumentsUserTable } from '../tables/DocumentsUserTable';
 import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 import { GroupTable } from '../tables/GroupTable';
-import { DDMMYYYY, genders, levels_educations } from '../common/consts';
+import { DDMMYYYY, genders, education_level } from '../common/consts';
 import dayjs from 'dayjs';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
@@ -418,7 +418,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             onChange={(education_level) => onInputChangeByName('education_level', education_level)}
                             value={formState?.education_level}
                         >
-                            {levels_educations.map(level => 
+                            {education_level.map(level => 
                                 <Select.Option value={level.id} key={level.id}>{level.name}</Select.Option>
                             )}
                         </Select>

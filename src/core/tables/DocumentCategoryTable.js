@@ -1,6 +1,6 @@
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
-import { typesCategories } from '../common/consts';
+import { types_categories } from '../common/consts';
 
 
 const paginationStyle = {
@@ -36,7 +36,7 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 dataIndex: 'type',
                 key: 'Tipo',
                 render: t => {
-                    const type = typesCategories.filter(i => i.id === t);
+                    const type = types_categories.filter(i => i.id === t);
                     if(type.length > 0){
                         return type[0].name;
                     }

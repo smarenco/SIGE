@@ -79,7 +79,7 @@ export const isLogged = () => {
 }
 
 export const checkSession = async () => {
-    try {
+    /*try {
         const res = await api.get('auth/check')
         if (res.status >= 300) {
             throw Error(res?.response?.error);
@@ -88,7 +88,7 @@ export const checkSession = async () => {
     catch(err){
         forceLogout();
         throw Error(err?.response?.error);
-    }
+    }*/
 
     return true;
 }

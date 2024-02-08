@@ -1,7 +1,7 @@
 
 import { Button, Form, Input, Select, Tabs } from 'antd'
 import { useEffect, useState } from 'react';
-import { typesCategories } from '../common/consts';
+import { types_categories } from '../common/consts';
 import { alertError, renderError } from '../common/functions';
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
@@ -72,7 +72,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                             onChange={(type) => onInputChangeByName('type', type)} 
                             value={formState?.type}
                         >
-                            {typesCategories.map(type => 
+                            {types_categories.map(type => 
                                 <Select.Option value={type.id} key={type.id}>{type.name}</Select.Option>
                             )}
                         </Select>
