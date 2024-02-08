@@ -73,7 +73,7 @@ export const AppRouter = () => {
                         {renderPrivateRoutes(1)}
                         <Route path='/*' element={ <Navigate to="/" /> } />
                         <Route path='/auth/login' element={ <LoginPage /> } />
-\\                    </Routes>
+                    </Routes>
                 </div>   
             }
         </div>

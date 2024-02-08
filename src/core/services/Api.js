@@ -35,7 +35,6 @@ const handleError = error => {
 instance.interceptors.response.use(handleSuccess, handleError);
 
 const access_token = localStorage.getItem(ACCESS_TOKEN);
-console.log(access_token)
 instance.defaults.headers.common['X-US-AUTH-TOKEN'] = access_token;
 
 
