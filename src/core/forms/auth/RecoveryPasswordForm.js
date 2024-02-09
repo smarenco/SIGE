@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input, message } from 'antd';
 import { useForm } from '../../hooks/useForm';
@@ -10,12 +10,16 @@ const loginFormFields = {
 
 const RecoveryPasswordForm = ({ handleError }) => {
   const { recoveryEmail, onInputChange: onLoginInputChange } = useForm(loginFormFields);
+  const [loading, setLoading] = useState(false)
 
   const handleOnSubmit = async () => {
     try {
+      setLoading(true);
       const { response } = await recoveryPassword(recoveryEmail);
-      message.success(response.message);
+      message.success(response);
+      setLoading(false);
     }catch(err){
+      setLoading(false);
       handleError('Error en la autenticacion');
     }
   }
@@ -41,13 +45,14 @@ const RecoveryPasswordForm = ({ handleError }) => {
         >
         <Input
           name="recoveryEmail"
+          disabled={loading}
           onChange={onLoginInputChange}
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="Correo Electrónico"
         />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" loading={loading} disabled={loading} htmlType="submit" className="login-form-button">
           Recuperar Contraseña
         </Button>
       </Form.Item>
