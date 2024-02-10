@@ -27,10 +27,10 @@ export const GroupTable = ({ data, onReload, onRowSelectedChange, setFilters, se
         return [
             {
                 title: 'Nombre',
-                dataIndex: 'name',
                 key: 'Nombre',
                 width: 210,
                 ellipsis: true,
+                render: r => <Button type='link' onClick={e => onEditClick(r.id)}>{r.name}</Button>,
                 className: 'ant-table-cell-link',
             }, {
                 title: 'Curso',

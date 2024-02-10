@@ -52,10 +52,12 @@ export const GroupModal = (props) => {
 
     return (
         <Modal
-            bodyStyle={{ paddingTop: 10}}
+            bodyStyle={{ paddingTop: 10, height: '75vh'}}
             title={`${view ? 'Detalle' : item.getId() ? 'Editar' : 'Nuevo registro'}`}
             open={open}
-            width={900}
+            style={{top: 10}}
+            width='100vw'
+            // height='10vh'
             destroyOnClose={true}
             okText='Guardar'
             cancelText='Cancelar'
