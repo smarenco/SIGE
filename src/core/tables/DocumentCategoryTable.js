@@ -1,5 +1,6 @@
 import { EditOutlined, ReloadOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Input, Table, Tag } from 'antd';
+import { types_categories } from '../common/consts';
 
 
 const paginationStyle = {
@@ -27,6 +28,19 @@ export const DocumentCategoryTable = ({ data, onReload, onRowSelectedChange, set
                 title: 'Nombre',
                 dataIndex: 'name',
                 key: 'Nombre',
+                width: 150,
+                ellipsis: true,
+                className: 'ant-table-cell-link',
+            }, {
+                title: 'Tipo',
+                dataIndex: 'type',
+                key: 'Tipo',
+                render: t => {
+                    const type = types_categories.filter(i => i.id === t);
+                    if(type.length > 0){
+                        return type[0].name;
+                    }
+                },
                 width: 150,
                 ellipsis: true,
                 className: 'ant-table-cell-link',

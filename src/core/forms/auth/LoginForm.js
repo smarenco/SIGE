@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useForm } from '../../hooks/useForm';
-import { useAuthStore } from '../../hooks/useAuthStore';
+import { login } from '../../services/AuthService';
 
 const loginFormFields = {
   loginEmail: '',
@@ -18,17 +18,9 @@ const loginFormFields = {
 
 const LoginForm = ({ handleError }) => {
   const { loginEmail, loginPassword, onInputChange: onLoginInputChange } = useForm(loginFormFields);
-  const { startLogin, errorMessage } = useAuthStore();
 
-    useEffect(() => {
-        if (errorMessage !== undefined) {
-          handleError('Error en la autenticacion', errorMessage);
-        }
-
-    }, [errorMessage, handleError])
-
-  const handleOnSubmit = (event) => {
-    startLogin({ username: loginEmail, password: loginPassword });
+  const handleOnSubmit = () => {
+    login(loginEmail, loginPassword);
   }
 
   return (
@@ -79,7 +71,7 @@ const LoginForm = ({ handleError }) => {
           <Checkbox>Recuerdame</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="/auth/resetPassword">
+        <a className="login-form-forgot" href="/auth/recoveryPassword">
           Olvidé mi contraseña
         </a>
       </Form.Item>

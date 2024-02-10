@@ -1,9 +1,9 @@
-import { Button, Checkbox, DatePicker, Input, Modal, Table, Tag } from 'antd';
+import { Button, Modal, Table, Tag } from 'antd';
 import { DownloadOutlined, EditOutlined, ReloadOutlined } from '@ant-design/icons';
-import { DDMMYYYY, methods_payments, MMYYYY } from '../common/consts';
+import { DDMMYYYY, methods_payments } from '../common/consts';
 import { downloadDocument } from '../services/AccountPaymentService';
 import dayjs from 'dayjs';
-import { modalGlobalConfig } from 'antd/es/modal/confirm';
+import Loading from '../components/common/Loading';
 
 
 const paginationStyle = {
@@ -15,7 +15,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const AccountPaymentTable = ({ viewAll, data, onChangeState, onReload, onRowSelectedChange, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
+export const AccountPaymentTable = ({ viewAll, confirmLoading, data, onChangeState, onReload, onRowSelectedChange, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -96,6 +96,7 @@ export const AccountPaymentTable = ({ viewAll, data, onChangeState, onReload, on
             title: 'Aprobar/Rechazar',
             okText: 'Cancelar',
             okType: 'default',
+            loading: confirmLoading,
             content: (
                 <>
                     <div style={{textAlign:'center', marginTop:10}}>Pago correspondiente a <Tag>{dayjs(record.payment_day).format(DDMMYYYY)}</Tag> Estado <Tag color={record.state === 'P' ? 'grey' : record.state === 'A' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'A' ? 'Aprobado' : 'Rechazado'}</Tag></div>

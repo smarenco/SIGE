@@ -31,12 +31,6 @@ export const CourseTable = ({ data, onReload, onRowSelectedChange, setFilters, s
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
-                title: 'Instituto',
-                dataIndex: 'institute_name',
-                key: 'Instituto',
-                width: 150,
-                ellipsis: true,
-            }, {
                 title: 'Cuotas',
                 dataIndex: 'quotas',
                 key: 'Cuotas',

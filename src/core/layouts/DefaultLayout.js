@@ -1,34 +1,31 @@
 import React, { useEffect, useState } from 'react';
-// import 'antd/dist/antd.css';
 import './DefaultLayouts.css';
 import {
     DownOutlined,
     LogoutOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
-    // UploadOutlined,
     UserOutlined,
-    // VideoCameraOutlined,
 } from '@ant-design/icons';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
-import { useDispatch } from 'react-redux';
-import { useAuthStore } from '../hooks/useAuthStore';
 import { MENU } from '../common/consts';
+import { forceLogout } from '../services/AuthService';
 const { Header, Sider, Content } = Layout;
 
-
 const DefaultLayout = ({ component, app }) => {
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
-    const { startLogout } = useAuthStore();
+    const [selectedKeys, setSelectedKeys] = useState(['home']);
+    let i = 0;
 
-    const handleLogout = () => {
-        dispatch(startLogout());
+    const handleLogout = async () => {
+        forceLogout();
     }
 
-    const handleMyProfile = (e) => {
-        console.log(e);
+    const handleMyProfile = () => {
+        setSelectedKeys(['profile']);
+        navigate('/perfil');
     }
 
     let menuProps = JSON.parse(localStorage.getItem(MENU));
@@ -68,15 +65,24 @@ const DefaultLayout = ({ component, app }) => {
         messageApi.success(message);
     };
 
+    const ssetSelectedKeys = (v) => {
+        console.log(v)
+        setSelectedKeys(v);
+    };
+
     useEffect(() => {
+        const route = app.routes.filter(r => r.path === window.location.pathname || r.path + '/' === window.location.pathname);
+        if(route.length > 0) {
+            setSelectedKeys([route[0].key]);
+        }
         success('Bienvenide a URUSIGE');
     }, []);
-
+    console.log(selectedKeys)
     return (
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
             {contextHolder}
             <Layout>
-                <Sider style={{overflow:'auto'}} trigger={null} collapsible collapsed={collapsed}>
+                <Sider style={{overflow:'auto'}} trigger={null} collapsible width={collapsed ? 0 : 270} collapsed={collapsed}>
                     <div className='logo-container'>
                         {
                             collapsed ?
@@ -88,19 +94,53 @@ const DefaultLayout = ({ component, app }) => {
                     <Menu
                         theme="dark"
                         mode="inline"
-                        defaultSelectedKeys={['0']}
-                        items={menuProps.map((r, i) => {
-                            const route = app.routes.filter(route => route.key === r.key)[0];
-                            if (!route.isPublic) {
-                                return {
-                                    key: i,
-                                    icon: route?.icon,
-                                    label: <Link to={route.path}>{route.name}</Link>,
+                        selectedKeys={selectedKeys}
+                        defaultOpenKeys={selectedKeys}
+                        style={{ overflowX: 'auto', height: 'calc(100vh - 105px)', alignSelf: 'flex-start' }}
+                        items={app.menu.main.map((r) => {
+                                i++;
+                                if (r.IsDivider) {
+                                    // return {
+                                    //     type: 'divider',
+                                    //     dashed: 1,
+                                    //     key: r.key,
+                                    // };
                                 }
-                            } else {
-                                return null;
-                            }
-                        })}
+                                if (Array.isArray(r.items)) {
+                                    const children = r.items.map((subMenu) => {
+                                        i++;
+                                        return {
+                                            key: subMenu.key,
+                                            icon: subMenu?.icon,
+                                            label: <Link to={subMenu.to} onClick={() => ssetSelectedKeys([subMenu.key])}>{subMenu.title}</Link>,
+                                        }
+                                    });
+                                    i++;
+                                    return {
+                                        key: r.key,
+                                        icon: r?.icon,
+                                        label: r.title,
+                                        children: children
+                                    }
+                                }else{
+                                    const route = menuProps.filter(menu => menu.key === r.key);
+                                    if(route.length > 0){
+                                        if (!r.isPublic) {
+                                            return {
+                                                key: r.key,
+                                                icon: r?.icon,
+                                                label: <Link to={r.to} onClick={() => setSelectedKeys([r.key])}>{r.title}</Link>,
+                                            }
+                                        } else {
+                                            return null;
+                                        }
+                                    } else {
+                                        return null;
+                                    }
+                                    
+                                }
+                            })
+                        }
                     />
                 </Sider>
                 <Layout className="site-layout">

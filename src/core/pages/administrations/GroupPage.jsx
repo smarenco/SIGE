@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { GroupModal } from '../../modals/GroupModal';
 import Group from '../../models/Group';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { AppstoreAddOutlined, BranchesOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { GroupTable } from '../../tables/GroupTable';
 
@@ -27,7 +27,7 @@ export const GroupPage = ({ app }) => {
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

@@ -23,7 +23,6 @@ export const medicalCoverageIndex = async (filter, output = undefined) => {
             total: response.total,
         }
     }catch(err) {
-        alertError(err);
         renderError(err);
     }
     

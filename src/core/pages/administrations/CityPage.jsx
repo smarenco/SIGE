@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CityModal } from '../../modals/CityModal';
 import City from '../../models/City';
-import { AuthService } from '../../services/AuthService';
+import { user } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { CityTable } from '../../tables/CityTable';
 
@@ -23,7 +23,7 @@ export const CityPage = ({ app }) => {
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
 
-    const { user } = AuthService();
+    //const { user } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

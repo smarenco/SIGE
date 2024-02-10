@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { DatePicker, Form, Input, InputNumber, Select } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
-import { DDMMYYYY, methods_payments } from '../common/consts';
+import { DDMMYYYY, DDMMYYYYHHmm, methods_payments } from '../common/consts';
 import TextArea from 'antd/es/input/TextArea';
 import Dragger from 'antd/es/upload/Dragger';
 import { InboxOutlined } from '@ant-design/icons';
@@ -12,7 +12,7 @@ import dayjs from 'dayjs';
 export const AccountPaymentForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
 
     return (
-        loading ?
+        loading || confirmLoading ?
             <Loading/>
             :
             <Form layout='vertical'>
@@ -24,7 +24,7 @@ export const AccountPaymentForm = ({ view, loading, confirmLoading, formState, o
                         <InputNumber style={{width: '100%'}} name='amount' disabled={view || confirmLoading} onChange={amount => onInputChangeByName('amount', amount)} value={formState?.amount} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Dia de Pago`} labelAlign='left' span={6}>
-                        <DatePicker name='payment_day' disabled={view || confirmLoading} onChange={(payment_day) => {onInputChangeByName('payment_day', payment_day)}} format={DDMMYYYY} value={formState?.payment_day ? dayjs(formState?.payment_day)  : undefined}/>
+                        <DatePicker name='payment_day' disabled={view || confirmLoading} onChange={(payment_day) => {onInputChangeByName('payment_day', payment_day)}} format={DDMMYYYYHHmm} value={formState?.payment_day ? dayjs(formState?.payment_day)  : undefined}/>
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Metodo de pago`} labelAlign='left' span={6}>
                         <Select

@@ -12,7 +12,6 @@ export const AccountPaymentModal = (props) => {
 
     const onOk = () => {
         
-        
         if(!formState.reference || formState.reference.trim().length === 0){
             renderError('Debe ingresar la referencia');
             return;
@@ -35,7 +34,6 @@ export const AccountPaymentModal = (props) => {
     const onCancel = () => {
         onCancelProp();
     }
-
     return (
         <Modal
             bodyStyle={{ paddingTop: 10}}

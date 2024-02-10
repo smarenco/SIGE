@@ -11,16 +11,16 @@ import {
 import { DDMMYYYY } from "../common/consts";
 import { downloadDocument } from "../services/UserService";
 
-export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionario, documentToUser }) => {
+export const DocumentsUserTable = ({ dataSource, loading, loadRequisitoFuncionario, removeDocument }) => {
     
     const onDeleteDocument = (document) => {
         Modal.confirm({
             closable:true,
             title: 'Eliminar',
-            content: 'Confirma la eliminacion de ' + document.file_name + '?',
+            content: 'Confirma la eliminacion de ' + document.name_desc + '?',
             okText: 'Eliminar',
             okCancel: 'Cancelar',
-            onOk: () => documentToUser(document, true)
+            onOk: () => removeDocument(document)
         });
     }
     

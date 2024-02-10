@@ -6,11 +6,6 @@ export default class Course {
     id = undefined;
 
     /**
-     * @type {number}
-     */
-    institute_id = undefined;
-
-    /**
      * @type {string}
      */
     name = undefined;
@@ -48,7 +43,12 @@ export default class Course {
     /**
      * @type {number}
     */
-    documental_category_id = undefined;
+    estudiante_documental_category_id = undefined;
+
+    /**
+     * @type {number}
+    */
+    profesor_documental_category_id = undefined;
 
     /**
      * @type {array}

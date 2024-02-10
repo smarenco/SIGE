@@ -27,7 +27,7 @@ export const DocumentsUserModal = (props) => {
         }
         console.log(formState)
 
-        //onOkProp(formState);
+        onOkProp(formState);
     }
 
     return (

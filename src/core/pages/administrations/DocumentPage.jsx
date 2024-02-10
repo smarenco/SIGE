@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentModal } from '../../modals/DocumentModal';
 import Document from '../../models/Document';
-import { AuthService } from '../../services/AuthService';
 import { documentCreate, documentDelete, documentIndex, documentShow, documentToggle, documentUpdate } from '../../services/DocumentService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { DocumentTable } from '../../tables/DocumentTable';
@@ -20,8 +19,6 @@ export const DocumentPage = ({ app }) => {
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-
-    const { document } = AuthService();
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;

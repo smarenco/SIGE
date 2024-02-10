@@ -28,8 +28,16 @@ export const UserModal = (props) => {
             alertError('Debe indicar una fecha de nacimiento')
             return false;
         }
+        if(!formState.cell_phone){
+            alertError('Debe indicar un telefono')
+            return false;
+        }
         if(!formState.email || formState.email.trim().length === 0){
             alertError('Debe indicar un email')
+            return false;
+        }
+        if(!formState.medical_coverage_id){
+            alertError('Debe indicar una cobertura medica')
             return false;
         }
         if(!formState.type || formState.type.trim().length === 0){
