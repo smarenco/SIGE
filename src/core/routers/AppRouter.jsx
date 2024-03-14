@@ -48,7 +48,7 @@ export const AppRouter = () => {
         let r = routes.map((r, i) => {
             const route = app.routes.filter(route => route.key === r.key)[0];
             if (route && route.isPublic !== true) {
-                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout component={<route.component />} app={app} /> } />;
+                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout route={route} component={<route.component />} app={app} /> } />;
             }
         });
         return r;

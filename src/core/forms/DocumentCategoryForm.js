@@ -98,7 +98,7 @@ export const DocumentCategoryForm = ({ view, loading, confirmLoading, formState,
                                     )}
                                 </Select>
                         </Form.Item>
-                        <Button style={{marginTop: 30}} type='Primary' onClick={addDocument}>Agregar Documento</Button>
+                        <Button style={{marginTop: 30}} type='primary' onClick={addDocument}>Agregar Documento</Button>
                     </LayoutH>
                     <DocumentCategoryDocumentTable
                         data={formState.documental_category_document}

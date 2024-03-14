@@ -18,7 +18,7 @@ const DefaultLayout = ({ component, route, app }) => {
     const [collapsed, setCollapsed] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState(['home']);
     let i = 0;
-
+    
     useEffect(() => {
         const route = app.routes.filter(r => r.path === window.location.pathname || r.path + '/' === window.location.pathname);
         if(route.length > 0) {

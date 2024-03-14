@@ -264,7 +264,9 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                 <>
                     <LayoutH>
                         <Form.Item label={`Alumno`} labelAlign='left' span={12}>
+
                             <Select
+                                name='Alumno'
                                 allowClear
                                 showSearch
                                 disabled={view || confirmLoading || loadingStudents}
@@ -273,11 +275,11 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                                 onChange={userStudentSelected => setUserStudentSelected(userStudentSelected)}
                             >
                                 {students.map(student =>
-                                    <Select.Option key={student.id} value={student.id}>{student.names} {student.lastnames} ({student.document})</Select.Option>
+                                    <Select.Option key={student.id} value={student.id}>{student.names + " " + student.lastnames + " (" + student.document + ")"}</Select.Option>
                                 )}
                             </Select>
                         </Form.Item>
-                        <Button style={{ marginTop: 30 }} type='Primary' onClick={addStudent}>Agregar Estudiante</Button>
+                        <Button style={{ marginTop: 30 }} type='primary' onClick={addStudent}>Agregar Estudiante</Button>
                     </LayoutH>
                     <GroupStudentTable
                         data={formState.students}
@@ -300,11 +302,11 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                                 onChange={userTeacherSelected => setUserTeacherSelected(userTeacherSelected)}
                             >
                                 {teachers.map(teacher =>
-                                    <Select.Option key={teacher.id} value={teacher.id}>{teacher.names} {teacher.lastnames}</Select.Option>
+                                    <Select.Option key={teacher.id} value={teacher.id}>{teacher.names + " " + teacher.lastnames}</Select.Option>
                                 )}
                             </Select>
                         </Form.Item>
-                        <Button style={{ marginTop: 30 }} type='Primary' onClick={addTeacher}>Agregar Profesor</Button>
+                        <Button style={{ marginTop: 30 }} type='primary' onClick={addTeacher}>Agregar Profesor</Button>
                     </LayoutH>
                     <GroupTeacherTable
                         data={formState.teachers}
