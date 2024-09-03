@@ -10,14 +10,28 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
 import { MENU } from '../common/consts';
-import { forceLogout } from '../services/AuthService';
+import { forceLogout, isLogged } from '../services/AuthService';
 const { Header, Sider, Content } = Layout;
 
-const DefaultLayout = ({ component, app }) => {
+const DefaultLayout = ({ component, route, app }) => {
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const [selectedKeys, setSelectedKeys] = useState(['home']);
     let i = 0;
+    
+    useEffect(() => {
+        const route = app.routes.filter(r => r.path === window.location.pathname || r.path + '/' === window.location.pathname);
+        if(route.length > 0) {
+            setSelectedKeys([route[0].key]);
+        }
+        success('Bienvenide a URUSIGE');
+    }, []);
+
+    useEffect(() => {
+        if(!isLogged()){
+            navigate('/auth/login'); 
+        }
+    }, [route]);
 
     const handleLogout = async () => {
         forceLogout();
@@ -66,7 +80,6 @@ const DefaultLayout = ({ component, app }) => {
     };
 
     const ssetSelectedKeys = (v) => {
-        // console.log(v)
         setSelectedKeys(v);
     };
 

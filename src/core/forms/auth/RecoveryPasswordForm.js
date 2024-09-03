@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, Modal, message } from 'antd';
 import { useForm } from '../../hooks/useForm';
 import { recoveryPassword } from '../../services/AuthService';
 
@@ -16,11 +16,20 @@ const RecoveryPasswordForm = ({ handleError }) => {
     try {
       setLoading(true);
       const { response } = await recoveryPassword(recoveryEmail);
-      message.success(response);
+      Modal.confirm({
+        title: response,
+        content: 'Si la dirección de correo es correcta enviamos un mensaje con instrucciones para establecer su nueva contraseña.',
+        cancelButtonProps: { style: { display: 'none' } },
+        onOk: () => window.location.href = '/auth/login',
+      });
       setLoading(false);
     }catch(err){
       setLoading(false);
-      handleError('Error en la autenticacion');
+      Modal.error({
+        title: 'Error al enviar correo',
+        content: <p>{err.response.message}</p>,
+        okText: 'Aceptar',
+      });
     }
   }
 
