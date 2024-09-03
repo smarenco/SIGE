@@ -1,127 +1,139 @@
 import React, { useEffect, useState } from 'react'
-import { Form, Select, DatePicker, Button, Table, Divider, Modal, Upload, message } from 'antd'
+import { DatePicker, Button, Table, Divider } from 'antd'
 import { Header } from 'antd/es/layout/layout';
-import { LeftCircleOutlined, PlusCircleOutlined, RightCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import TextArea from 'antd/es/input/TextArea';
+import { LeftCircleOutlined, PlusCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
+import { AttendanceListModal } from '../../modals/AttendanceListModal';
+import { renderError } from '../../common/functions';
+import { attendanceCreate, attendanceIndex, attendanceUpdate } from '../../services/AttendanceService';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+import './AttendancePage.css'
+import { AttendanceItemModal } from '../../modals/AttendanceItemModal';
+import { DDMMYYYYHHmmss } from '../../common/consts';
 
+dayjs.locale('es');
 
-const AttendancePage = ({ students, onInputChangeByName, view, confirmLoading, loadingCourses }) => {
+export const AttendancePage = ({ students, view, confirmLoading, loadingCourses, group }) => {
     const [modalAttendanceList, setModalAttendanceList] = useState(false);
-    const [showModalAttendanceObservation, setShowModalAttendanceObservation] = useState(false);
-    const [modalAttendanceObservationItem, setModalAttendanceObservationItem] = useState(undefined);
-    const [modalAttendanceObservationAuxItem, setModalAttendanceObservationAuxItem] = useState(undefined);
-    const [fileList, setFileList] = useState([]);
+    const [modalAttendanceItem, setModalAttendanceItem] = useState(false);
+    const [loadingAttendance, setLoadingAttendance] = useState(false);
+    const [attendance, setAttendance] = useState([]);
+    const [attendanceMonth, setAttendanceMonth] = useState(dayjs());
+    const [attendanceItem, setAttendanceItem] = useState({});
+    const [isButtonClick, setIsButtonClick] = useState(false);
 
-    const onChangeAttendanceData = (id, attribute, value) => {
-        const updatedStudents = students.map(student => {
-            if (student.id === id) {
-                const updatedStudent = {
-                    ...student,
-                    [attribute]: value
-                };
-                console.log(updatedStudent, attribute, value)
-                return updatedStudent
-            }
-            return student
-        });
-        // console.log(updatedStudents)
-        onInputChangeByName('students', updatedStudents);
-        if (attribute !== 'state') setModalAttendanceObservationItem({ ...modalAttendanceObservationItem, [attribute]: value })
-    }
+    const fetchAttendance = async ({ attendanceMonth, group_id }) => {
+        try {
+            setLoadingAttendance(true);
+            const { data } = await attendanceIndex({ attendanceMonth, group_id });
+            // console.log('page',data);
 
-    const restoreAttendanceObservationData = (restore) => {
-        console.log(modalAttendanceObservationItem)
-        const updatedStudents = students.map(student => {
-            if (student.id === modalAttendanceObservationItem.id && restore) {
-                // console.log('restore', modalAttendanceObservationAuxItem)
-                return modalAttendanceObservationAuxItem
-            }
-            if (student.id === modalAttendanceObservationItem.id && !restore) {
-                // console.log('no restore', modalAttendanceObservationItem)
-                return modalAttendanceObservationItem
-            }
-            return student
-        });
-        // console.log(updatedStudents)
-        onInputChangeByName('students', updatedStudents);
-        setModalAttendanceObservationItem(undefined)
-        setModalAttendanceObservationAuxItem(undefined)
-    }
-
-    const showModalAttendanceList = () => {
-        setModalAttendanceList(true)
-    }
-    const columns = [
-        {
-            title: 'Estudiante',
-            key: 'name',
-            ellipsis: true,
-            render: (_, record) => `${record.names} ${record.lastnames}`
-        },
-        {
-            title: `Estado`,
-            key: 'estado',
-            width: 150,
-            render: (_, record) => (
-                <Form.Item
-                    style={{ margin: 0, padding: 0, height: 'auto' }}
-                    name={`attendance_state_${record.id}`}
-                    rules={[
-                        {
-                            required: true,
-                            message: `Please enter attendance for ${record.name}`,
-                        },
-                    ]}
-                >
-                    <Select
-                        name={`attendance_state_${record.id}`}
-                        disabled={view || confirmLoading || loadingCourses}
-                        onChange={(e) => onChangeAttendanceData(record.id, 'state', e)}
-                        value={record.state}
-                    >
-                        <Select.Option value={true} key={`${record.id}_asistio`}>Asisitió</Select.Option>
-                        <Select.Option value={false} key={`${record.id}_no_asistio`}>No asisitió</Select.Option>
-                    </Select>
-                </Form.Item>
-            ),
-        },
-        {
-            title: '',
-            key: 'attendance_observation',
-            width: 50,
-            render: (_, record) => <Button onClick={() => {
-                setModalAttendanceObservationItem({ ...record, justification: [] })
-                setModalAttendanceObservationAuxItem({ ...record, justification: [] })
-            }} icon={<PlusCircleOutlined />} />
+            setAttendance(data);
+        } catch (err) {
+            setLoadingAttendance(false);
+            renderError(err);
+        } finally {
+            setLoadingAttendance(false)
         }
-    ];
+    };
 
     const attendanceColumns = () => {
         let cols = [{
             title: 'Estudiante',
-            key: 'stundent',
+            key: 'student_name',
+            dataIndex: 'student_name',
             width: 100,
             ellipsis: true,
         }]
 
         for (let i = 1; i < 32; i++) {
             cols.push({
-                title: `${i}`,
-                key: `${i}`,
+                title: i < 10 ? `0${i}` : i,
+                key: `${i}`,  // Aseguramos que la llave sea un string
+                dataIndex: `${i}`,  // Aseguramos que el dataIndex sea un string
                 width: 20,
                 ellipsis: true,
+                className: 'attendance-state',
+                render: (r, t) => t[i] && renderAttendanceState({ ...t[i], day: i, id: t.student_id })
             })
         }
         // console.log(cols)
         return cols
     }
 
+    const showAttendanceItem = ({ state, observation, justification_id, student_id, day }) => {
+        setAttendanceItem({ state, observation, justification_id, student_id, day })
+        setModalAttendanceItem(true)
+    }
+
+    const renderAttendanceState = (data) => {
+        const { state, observation, justification_id, id: student_id, day } = data
+        const text = state ? 'Asistió' : 'No Asistió'
+        const type = state ? 'true' : 'false'
+
+        if (state !== undefined) {
+            return <div onClick={() => showAttendanceItem({ state, observation, justification_id, student_id, day })} className={`attendance-state attendance-state-${type}`}>{text}</div>
+        }
+        return ''
+    }
+
+    const onCancelModalAttendanceList = (attendanceList) => {
+        setModalAttendanceList(false)
+    }
+
+    const onOkModalAttendanceList = async (attendanceList, attendance_date) => {
+        setLoadingAttendance(true);
+        try {
+            if (attendanceList.id) {
+                console.log('aca');
+
+                await attendanceUpdate(attendanceList.id, attendanceList);
+            } else {
+                await attendanceCreate({ attendanceList, group_id: group.id, attendance_date });
+            }
+
+            setModalAttendanceList(false);
+            fetchAttendance({ attendanceMonth, group_id: group.id });
+        } catch (err) {
+            setLoadingAttendance(false)
+            renderError(err);
+        }
+        setModalAttendanceList(false)
+    }
+
+    const onCancelModalAttendanceItem = (attendanceItem) => {
+        setModalAttendanceItem(false)
+        setAttendanceItem({})
+    }
+
+    const onOkModalAttendanceItem = async (attendanceItem) => {
+        setLoadingAttendance(true);
+        try {
+            await attendanceUpdate({ attendanceMonth, group_id: group.id }, attendanceItem);
+
+            setModalAttendanceItem(false); fetchAttendance({ attendanceMonth, group_id: group.id });
+        } catch (err) {
+            setLoadingAttendance(false)
+            renderError(err);
+        }
+        setModalAttendanceItem(false)
+    }
+
+    const handleMonthChange = (newMonth, fromButton = false) => {
+        setIsButtonClick(fromButton); // Indicamos si el cambio fue desde los botones
+        setAttendanceMonth(newMonth);
+    };
+
     useEffect(() => {
-        // console.log(modalAttendanceObservationItem)
-        if (modalAttendanceObservationItem === undefined) setShowModalAttendanceObservation(false)
-        // console.log(modalAttendanceObservationItem)
-        setShowModalAttendanceObservation(true)
-    }, [modalAttendanceObservationItem])
+        fetchAttendance({ attendanceMonth, group_id: group.id })
+    }, []);
+
+    useEffect(() => {
+        if (isButtonClick) {
+            fetchAttendance({ attendanceMonth, group_id: group.id })
+            setIsButtonClick(false); // Reiniciamos el estado
+        }
+    }, [attendanceMonth]);
 
     return (
         <>
@@ -130,81 +142,43 @@ const AttendancePage = ({ students, onInputChangeByName, view, confirmLoading, l
                 <DatePicker
                     placeholder='Seleccione un mes'
                     style={{ marginLeft: 10, width: '200px' }}
+                    disabled={confirmLoading || loadingAttendance}
                     picker="month"
                     format='MM/YYYY'
+                    value={attendanceMonth}
+                    onChange={setAttendanceMonth}
                 />
-                <Button onClick={() => console.log('buscando')} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
-                <Button icon={<PlusCircleOutlined />} type='primary' onClick={showModalAttendanceList} style={{ float: 'right' }}>Pasar lista</Button>
-                <Divider />
-                <Button icon={<LeftCircleOutlined />} style={{ float: 'left' }}>Mes anterior</Button>
-                <Button icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
+                <Button disabled={confirmLoading || loadingAttendance} onClick={() => fetchAttendance({ attendanceMonth, group_id: group.id })} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
+                <Button icon={<PlusCircleOutlined />} type='primary' onClick={() => setModalAttendanceList(true)} style={{ float: 'right' }}>Pasar lista</Button>
+                <Divider style={{ margin: 15 }} />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Button onClick={() => handleMonthChange(attendanceMonth.subtract(1, 'month'), true)} disabled={confirmLoading || loadingAttendance} icon={<LeftCircleOutlined />} style={{ float: 'left' }}>Mes anterior</Button>
+                    <h2 style={{ textAlign: 'center', flexGrow: 1, margin: 0, textAlign: 'center' }}>{attendanceMonth.format('MMMM').charAt(0).toUpperCase() + attendanceMonth.format('MMMM').slice(1)}</h2>
+                    <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
+                </div>
             </Header>
-            <Table size='small' style={{ height: '100%' }} columns={attendanceColumns()} />
-            <Modal
+            <Table
+                key='student_id'
+                size='small'
+                style={{ height: '100%', paddingTop: 15 }}
+                columns={attendanceColumns()}
+                dataSource={attendance}
+                loading={confirmLoading || loadingAttendance}
+            />
+            <AttendanceListModal
                 open={modalAttendanceList}
-                onCancel={() => setModalAttendanceList(false)}
-                onOk={() => setModalAttendanceList(false)}
-                title='Lista Asistencia'
-                style={{ paddingTop: 10 }}
-            >
-                <Form>
-                    <Table
-                        dataSource={students}
-                        key={'id'}
-                        columns={columns}
-                        pagination={false}
-                        bordered
-                        size='small'
-                    />
-                    {modalAttendanceObservationItem && <Modal
-                        open={showModalAttendanceObservation}
-                        onCancel={() => restoreAttendanceObservationData(true)}
-                        onOk={() => restoreAttendanceObservationData(false)}
-                        title='Datos Extra'
-                        style={{ paddingTop: 10 }}
-                    >
-                        <Form>
-                            <Form.Item
-                                style={{ margin: 0, padding: 0, height: 'auto' }}
-                                name={`attendance_observation`}
-                                rules={[
-                                    {
-                                        required: true,
-                                        message: `Please enter attendance for ${modalAttendanceObservationItem.name}`,
-                                    },
-                                ]}
-                            >
-                                {modalAttendanceObservationItem && <Upload
-                                    onRemove={(file) => {
-                                        onChangeAttendanceData(modalAttendanceObservationItem.id, 'jutification', undefined)
-                                    }}
-                                    beforeUpload={(file) => {
-                                        onChangeAttendanceData(modalAttendanceObservationItem.id, 'jutification', [file])
-                                        message.success(`Archivo ${file.name} cargado correctamente`)
-                                        return false;
-                                    }
-                                    }
-                                    fileList={modalAttendanceObservationItem.justification}
-                                    multilpe={false}
-                                >
-                                    <Button icon={<UploadOutlined />}>Agregar Justificación</Button>
-                                </Upload>}
-                                <TextArea
-                                    style={{ marginTop: 10 }}
-                                    rows={4}
-                                    name={`attendance_observation`}
-                                    placeholder={'Observación'}
-                                    value={modalAttendanceObservationItem.attendance_observation}
-                                    onChange={(e) => onChangeAttendanceData(modalAttendanceObservationItem.id, 'attendance_observation', e.target.value)}
-                                />
-                            </Form.Item>
-                        </Form>
-                    </Modal>}
-                </Form>
-            </Modal>
-
+                loading={confirmLoading || loadingAttendance}
+                students={students}
+                onOk={onOkModalAttendanceList}
+                onCancel={onCancelModalAttendanceList}
+            />
+            <AttendanceItemModal
+                open={modalAttendanceItem}
+                loading={confirmLoading || loadingAttendance}
+                item={attendanceItem}
+                onOk={onOkModalAttendanceItem}
+                onCancel={onCancelModalAttendanceItem}
+            />
         </>
     )
 }
-
-export default AttendancePage

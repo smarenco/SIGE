@@ -14,7 +14,7 @@ import { instituteCombo } from '../services/InstituteService';
 import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumentTable';
 import { documentCategoryShow } from '../services/DocumentCategoryService';
 import dayjs from 'dayjs';
-import AttendancePage from '../pages/administrations/AttendancePage';
+import { AttendancePage } from '../pages/administrations/AttendancePage';
 const { TextArea } = Input;
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
@@ -328,6 +328,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
                     loadingCourses={loadingCourses}
                     confirmLoading={confirmLoading}
                     students={formState.students}
+                    group={formState}
                     onInputChangeByName={onInputChangeByName}
                 />
         }

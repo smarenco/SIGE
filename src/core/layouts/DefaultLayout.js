@@ -66,7 +66,7 @@ const DefaultLayout = ({ component, app }) => {
     };
 
     const ssetSelectedKeys = (v) => {
-        console.log(v)
+        // console.log(v)
         setSelectedKeys(v);
     };
 
@@ -77,7 +77,7 @@ const DefaultLayout = ({ component, app }) => {
         }
         success('Bienvenide a URUSIGE');
     }, []);
-    console.log(selectedKeys)
+    // console.log(selectedKeys)
     return (
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
             {contextHolder}
