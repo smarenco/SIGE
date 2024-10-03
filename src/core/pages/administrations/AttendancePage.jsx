@@ -140,6 +140,7 @@ export const AttendancePage = ({ students, view, confirmLoading, loadingCourses,
             <Header>
                 Mes de asistencia
                 <DatePicker
+                    allowClear={false}
                     placeholder='Seleccione un mes'
                     style={{ marginLeft: 10, width: '200px' }}
                     disabled={confirmLoading || loadingAttendance}
