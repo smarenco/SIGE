@@ -4,7 +4,7 @@ import { CONFIG } from '../../common/consts';
 import { AbsenteeismCausesPage } from '../../pages/administrations/AbsenteeismCausesPage';
 import { AccountPage } from '../../pages/administrations/AccountPage';
 import { ActividadesPage } from '../../pages/administrations/ActividadesPage';
-import { AsistenciaPage } from '../../pages/administrations/AsistenciaPage';
+import { AttendancePage } from '../../pages/administrations/AttendancePage';
 import { CityPage } from '../../pages/administrations/CityPage';
 import { CountryPage } from '../../pages/administrations/CountryPage';
 import { CoursePage } from '../../pages/administrations/CoursePage';
@@ -54,8 +54,7 @@ export const appStore = createSlice({
             { key: 'conf-users', name: 'Usuarios', path: '/usuarios', component: UserPage, icon: <UserOutlined /> },
             { key: 'conf-account', name: 'Cuenta', path: '/cuenta', component: AccountPage, icon: <SettingOutlined /> },
             { key: 'conf-accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta', component: AccountPaymentPage, icon: <UserOutlined /> },
-            // { key: 'marcas', path: '/marcas', component: Marcas },
-            //{ key: 'asistencia', name:'Asistencia', path: '/asistencia', component: AsistenciaPage },
+            { key: 'asistencia', name:'Asistencia', path: '/asistencia', component: AttendancePage },
             // /// Configuración
             // { key: 'auditoria', path: '/auditoria', component: Auditoria },
             // { key: 'auditoria-detail', path: '/auditoria/:id', component: AuditoriaDetalle, keysPage: ['id'] },

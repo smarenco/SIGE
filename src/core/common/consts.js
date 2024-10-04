@@ -6,6 +6,7 @@ export const DDMMYYYY = 'DD/MM/YYYY';
 export const MMYYYY = 'MM/YYYY';
 export const DDMMYYYYHHmm = 'DD/MM/YYYY HH:mm';
 export const DDMMYYYYHHmmss = 'DD/MM/YYYY HH:mm:ss';
+export const YYYYMMDDHHmmss = 'YYYY-MM-DD HH:mm:ss';
 export const HHmmss = 'HH:mm:ss';
 export const HHmm = 'HH:mm';
 

@@ -1,0 +1,37 @@
+.attendance-state {
+    padding: 0px;
+    margin: 1px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    overflow: hidden;
+    padding: 0 !important;
+}
+
+.ant-table-cell {
+    .ant-table-cell-ellipsis {
+        padding: 0px !important;
+    }
+}
+
+.attendance-state-true {
+    background-color: rgb(49, 189, 68);
+    color: rgb(49, 189, 68);
+    border: 2px solid rgb(49, 189, 68);
+}
+
+.attendance-state-false {
+    background-color: rgb(235, 64, 52);
+    color: rgb(235, 64, 52);
+    border: 2px solid rgb(235, 64, 52);
+}
+
+.attendance-state-true:hover {
+    background-color: rgb(77, 227, 97);
+    color: rgb(77, 227, 97);
+}
+
+.attendance-state-false:hover {
+    background-color: rgb(232, 106, 97);
+    color: rgb(232, 106, 97);
+}
