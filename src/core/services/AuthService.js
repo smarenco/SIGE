@@ -104,19 +104,21 @@ export const loadMenu = async () => {
     return response;
 }
 
-export const hasPermission = (IdFuncion) => {
-    return true;
-    // let user = JSON.parse(localStorage.getItem(USER));
-    // if (!user) {
-    //     return false;
-    // }
-    // if (!Array.isArray(user.funciones) || !(user.funciones?.length > 0)) {
-    //     return false;
-    // }
-    // if (IdFuncion === 'chkHome') {
-    //     return true;
-    // }
-    // return user.funciones.filter(fun => fun.idFuncion === IdFuncion)?.length > 0;
+export const hasPermission = (key) => {
+    let menu = JSON.parse(localStorage.getItem(MENU));
+    if (!menu) {
+        return false;
+    }
+    if (!Array.isArray(menu) || menu?.length === 0) {
+        return false;
+    }
+    if (key === 'home') {
+        return true;
+    }
+    
+    const response = menu.filter(func => func.key === key).length > 0;
+    console.log(key,response)
+    return response;
 }
 
 /**

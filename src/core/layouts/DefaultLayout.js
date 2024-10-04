@@ -10,7 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
 import { MENU } from '../common/consts';
-import { forceLogout, isLogged } from '../services/AuthService';
+import { forceLogout, hasPermission, isLogged } from '../services/AuthService';
 const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = ({ component, route, app }) => {
@@ -83,6 +83,51 @@ const DefaultLayout = ({ component, route, app }) => {
         setSelectedKeys(v);
     };
 
+    const renderMenu = (menu) => {
+        return menu.map((r) => {
+            i++;
+            if (r.IsDivider) {
+                return {
+                    type: 'divider',
+                    dashed: 1,
+                    key: r.key,
+                };
+            }
+            if (Array.isArray(r.items)) {
+                const children = renderMenu(r.items);
+                if (children.filter(el => !!el).length === 0) {
+                    return undefined;
+                }
+                i++;
+                return {
+                    key: r.key,
+                    icon: r?.icon,
+                    label: r.title,
+                    children: children
+                }
+            }else{
+                if (!hasPermission(r.key)) {
+                    return null;
+                }
+                const route = menuProps.filter(menu => menu.key === r.key);
+                if(route.length > 0){
+                    if (!r.isPublic) {
+                        return {
+                            key: r.key,
+                            icon: r?.icon,
+                            label: <Link to={r.to} onClick={() => setSelectedKeys([r.key])}>{r.title}</Link>,
+                        }
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+                
+            }
+        })
+    }
+
     return (
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
             {contextHolder}
@@ -102,50 +147,7 @@ const DefaultLayout = ({ component, route, app }) => {
                         selectedKeys={selectedKeys}
                         defaultOpenKeys={selectedKeys}
                         style={{ overflowX: 'auto', height: 'calc(100vh - 105px)', alignSelf: 'flex-start' }}
-                        items={app.menu.main.map((r) => {
-                                i++;
-                                if (r.IsDivider) {
-                                    // return {
-                                    //     type: 'divider',
-                                    //     dashed: 1,
-                                    //     key: r.key,
-                                    // };
-                                }
-                                if (Array.isArray(r.items)) {
-                                    const children = r.items.map((subMenu) => {
-                                        i++;
-                                        return {
-                                            key: subMenu.key,
-                                            icon: subMenu?.icon,
-                                            label: <Link to={subMenu.to} onClick={() => ssetSelectedKeys([subMenu.key])}>{subMenu.title}</Link>,
-                                        }
-                                    });
-                                    i++;
-                                    return {
-                                        key: r.key,
-                                        icon: r?.icon,
-                                        label: r.title,
-                                        children: children
-                                    }
-                                }else{
-                                    const route = menuProps.filter(menu => menu.key === r.key);
-                                    if(route.length > 0){
-                                        if (!r.isPublic) {
-                                            return {
-                                                key: r.key,
-                                                icon: r?.icon,
-                                                label: <Link to={r.to} onClick={() => setSelectedKeys([r.key])}>{r.title}</Link>,
-                                            }
-                                        } else {
-                                            return null;
-                                        }
-                                    } else {
-                                        return null;
-                                    }
-                                    
-                                }
-                            })
-                        }
+                        items={renderMenu(app.menu.main)}
                     />
                 </Sider>
                 <Layout className="site-layout">
