@@ -69,18 +69,8 @@ const DefaultLayout = ({ component, route, app }) => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    // const info = (message) => {
-    //     messageApi.info(message);
-    // };
-    // const error = (message) => {
-    //     messageApi.info(message);
-    // };
     const success = (message) => {
         messageApi.success(message);
-    };
-
-    const ssetSelectedKeys = (v) => {
-        setSelectedKeys(v);
     };
 
     const renderMenu = (menu) => {
