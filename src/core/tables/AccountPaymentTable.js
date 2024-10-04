@@ -79,10 +79,10 @@ export const AccountPaymentTable = ({ viewAll, confirmLoading, data, onChangeSta
             }, {
                 title: '',
                 key: 'actions',
-                width: 100,
+                width: 150,
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
-                        {viewAll && <Button size='small' onClick={e => onModalChangeState(record)} style={{ marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
+                        {viewAll && <Button size='small' type='primary' onClick={e => onModalChangeState(record)} style={{ marginRight: 10 }}>Aprobar/Rechazar</Button>}&nbsp;
                         {record.document_name && <DownloadOutlined onClick={e => downloadDocument(record.document_name)} style={{ fontSize:18, marginRight: 10 }} title='Descargar documento' />}&nbsp;<EditOutlined onClick={e => onEditClick(record.id)} />
                     </div>
                 ),
@@ -92,20 +92,24 @@ export const AccountPaymentTable = ({ viewAll, confirmLoading, data, onChangeSta
 
     const onModalChangeState = (record) => {
         Modal.info({
-            width:450,
+            width:500,
             title: 'Aprobar/Rechazar',
             okText: 'Cancelar',
             okType: 'default',
             loading: confirmLoading,
             content: (
-                <>
-                    <div style={{textAlign:'center', marginTop:10}}>Pago correspondiente a <Tag>{dayjs(record.payment_day).format(DDMMYYYY)}</Tag> Estado <Tag color={record.state === 'P' ? 'grey' : record.state === 'A' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'A' ? 'Aprobado' : 'Rechazado'}</Tag></div>
-                    <div style={{textAlign:'center', marginTop:20, marginBottom:20}}>
-                        <Button type="primary" onClick={e => onChangeState(record.id, 'A')} style={{marginRight: 10 }}>Aprobar</Button> 
-                        <Button type="primary" danger onClick={e => onChangeState(record.id, 'R')} style={{ marginRight: 20 }}>Rechazar</Button>
-                    </div>
-                </>
+                <div style={{marginBottom:15}}>
+                    <div style={{marginTop:10}}>Pago correspondiente a <Tag>{dayjs(record.payment_day).format(DDMMYYYY)}</Tag></div>
+                    <div style={{marginTop:10}}>Estado <Tag color={record.state === 'P' ? 'grey' : record.state === 'A' ? 'green' : 'red'}>{record.state === 'P' ? 'Pendiente' : record.state === 'A' ? 'Aprobado' : 'Rechazado'}</Tag></div>
+                </div>
             ),
+            footer: (
+                <div style={{textAlign:'right'}}>
+                    <Button type="primary" onClick={e => onChangeState(record.id, 'A')} style={{marginRight: 10 }}>Aprobar</Button> 
+                    <Button type="primary" danger onClick={e => onChangeState(record.id, 'R')} style={{ marginRight: 20 }}>Rechazar</Button>
+                    <Button onClick={e => Modal.destroyAll()} style={{ marginRight: 20 }}>Cancelar</Button>
+                </div>
+            )
         });
     };
 
