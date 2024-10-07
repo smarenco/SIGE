@@ -65,9 +65,9 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                     return tipos.filter(tipo => record.type.toLowerCase() === tipo.id)[0]?.name || 'indefinido';
                 },
             }, {
-                title: 'Baja',
-                key: 'Baja',
-                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
+                title: 'Estado',
+                key: 'Estado',
+                render: (record) => <Tag color={record.state ? 'green' : 'red'}>{record.state ? 'Activo' : 'Inactivo'}</Tag>,
                 width: 80,
                 ellipsis: true,
             }, {

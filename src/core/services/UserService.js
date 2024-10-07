@@ -40,7 +40,7 @@ export const userToggle = async (active, records) => {
     if (!Array.isArray(records)) {
         records = [records];
     }
-    return Promise.all(records.map(async (id) => await api.post(`${this.path}/${id}/${active ? 'activate' : 'desactivate'}`)));
+    return Promise.all(records.map(async (id) => await api.post(`${path}/${id}/${active ? 'activate' : 'desactivate'}`)));
 }
 
 export const userShow = async (id) => {
