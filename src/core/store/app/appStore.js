@@ -50,7 +50,7 @@ export const appStore = createSlice({
             { key: 'adm-paymentMethods', name: 'Metodos de pago', path: '/metodos-pago', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
             { key: 'adm-group', name: 'Grupos', path: '/grupos', component: GroupPage, icon: <UsergroupAddOutlined /> },
             { key: 'adm-document', name: 'Documentos', path: '/documentos', component: DocumentPage, icon: <IdcardOutlined /> },
-            { key: 'conf-consult-payment', name: 'Consulta Pagos', path: '/consulta-pago', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'adm-consult-payment', name: 'Consulta Pagos', path: '/consulta-pago', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
             { key: 'conf-users', name: 'Usuarios', path: '/usuarios', component: UserPage, icon: <UserOutlined /> },
             { key: 'conf-account', name: 'Cuenta', path: '/cuenta', component: AccountPage, icon: <SettingOutlined /> },
             { key: 'conf-accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta', component: AccountPaymentPage, icon: <UserOutlined /> },
