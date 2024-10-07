@@ -1,10 +1,9 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal } from 'antd'
 
 import { useEffect, useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentMethodsModal } from '../../modals/PaymentMethodsModal';
 import PaymentMethods from '../../models/PaymentMethods';
-import { user } from '../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { PaymentMethodsTable } from '../../tables/PaymentMethodsTable';
 
@@ -145,7 +144,7 @@ export const PaymentMethodsPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Causas de ausentismos</strong>)}
+                title={(<strong>Metodos de pago</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >
