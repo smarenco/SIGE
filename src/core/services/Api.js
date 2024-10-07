@@ -16,7 +16,6 @@ const handleSuccess = response => {
 }
 
 const handleError = error => {
-    console.log(error.response)
     if (error && error.response && error.response.status === 401) {
         forceLogout();
     }

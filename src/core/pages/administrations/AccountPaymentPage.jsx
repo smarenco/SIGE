@@ -141,7 +141,6 @@ export const AccountPaymentPage = ({ app }) => {
                 await accountPaymentUpdate(obj.id, obj);
             } else {
                 let document = null;
-                console.log(obj)
                 if(obj.file){
                     const arr_name = obj.file.name.split('.');
                     const ext = arr_name[arr_name.length - 1];

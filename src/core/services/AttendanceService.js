@@ -68,7 +68,6 @@ export const attendanceUpdate = async ({ attendanceMonth, group_id }, data) => {
     }
 
     formData.append('justification', data.justification)
-    console.log(formData)
     return await api.post(`${path}/update`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'

@@ -117,7 +117,6 @@ export const hasPermission = (key) => {
     }
     
     const response = menu.filter(func => func.key === key).length > 0;
-    console.log(key,response)
     return response;
 }
 
