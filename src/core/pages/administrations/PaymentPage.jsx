@@ -107,7 +107,7 @@ export const PaymentPage = ({ app }) => {
     const fetchStudents = async () => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({ type: 'student'});
+            const students = await userCombo({ User_type: 'student', State: 1});
             setStudents(students);
             setLoadingStudents(false);
         } catch(err) {
