@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, Space } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { MedicalCoverageModal } from '../../modals/MedicalCoverageModal';
 import MedicalCoverage from '../../models/MedicalCoverage';
 import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { MedicalCoverageTable } from '../../tables/MedicalCoverageTable';
 
 import { medicalCoverageCreate, medicalCoverageDelete, medicalCoverageIndex, medicalCoverageShow, medicalCoverageUpdate } from '../../services/MedicalCoverageService';
@@ -58,7 +58,7 @@ export const MedicalCoveragePage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new MedicalCoverage); }} disabled={loading}>Nuevo</Button>

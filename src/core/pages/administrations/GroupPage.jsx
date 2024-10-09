@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Menu, Modal, message } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, Space, message } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { GroupModal } from '../../modals/GroupModal';
 import Group from '../../models/Group';
 import { user } from '../../services/AuthService';
-import { AppstoreAddOutlined, BranchesOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, BranchesOutlined, DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { GroupTable } from '../../tables/GroupTable';
 
 import { addStudent, asociateStudents, groupCreate, groupDelete, groupIndex, groupShow, groupUpdate, importGroups } from '../../services/GroupService';
@@ -90,7 +90,7 @@ export const GroupPage = ({ app }) => {
                     <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
                 </Dropdown>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => { setOpenModal(true); setItem(new Group); }} disabled={loading}>Nuevo</Button>

@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, Space } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { DocumentCategoryModal } from '../../modals/DocumentCategoryModal';
 import DocumentCategory from '../../models/DocumentCategory';
 import { documentCategoryCreate, documentCategoryDelete, documentCategoryIndex, documentCategoryShow, documentCategoryToggle, documentCategoryUpdate } from '../../services/DocumentCategoryService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { DocumentCategoryTable } from '../../tables/DocumentCategoryTable';
 
 export const DocumentCategoryPage = ({ app }) => {
@@ -53,7 +53,7 @@ export const DocumentCategoryPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new DocumentCategory); }} disabled={loading}>Nuevo</Button>

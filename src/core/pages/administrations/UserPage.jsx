@@ -23,7 +23,7 @@ export const UserPage = ({ app }) => {
     const [importType, setImportType] = useState('student');
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [typesUsers, setTypesUsers] = useState([]);
+    const [userTypes, setUserTypes] = useState([]);
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
@@ -31,7 +31,7 @@ export const UserPage = ({ app }) => {
     const fetchTypes = async (gender) => {
         try {
             const types = loadTypes(gender);
-            setTypesUsers(types);
+            setUserTypes(types);
         } catch (err) { renderError(err); }
     };
 
@@ -274,7 +274,7 @@ export const UserPage = ({ app }) => {
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
-                    typesUsers={typesUsers}
+                    userTypes={userTypes}
                     pagination={{
                         pageSize: pageSize,
                         page: page,
