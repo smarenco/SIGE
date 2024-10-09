@@ -15,7 +15,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, setFilters, selectedRowKeys, loading, onPageChange, paginationProps, onViewClick: onView, onCancelPaymentClick : onCancelPayment }) => {
+export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, setFilters, selectedRowKeys, loading, onPageChange, paginationProps, onViewClick: onView, onAnularPaymentClick : onAnularPayment }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -25,8 +25,8 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
         onView(id);
     }
 
-    const onCancelPaymentClick = (id) => {
-        onCancelPayment(id);
+    const onAnularPaymentClick = (id) => {
+        onAnularPayment(id);
     }
     
     const columns = () => {
@@ -43,7 +43,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 key: 'Nombre',
                 width: 150,
                 ellipsis: true,
-                render: (record) => record.student.names
+                render: (record) => record.student.names + ' ' + record.student.lastnames
             }, {
                 title: 'Fecha pago',
                 key: 'Date',
@@ -81,7 +81,7 @@ export const PaymentTable = ({ data, onReload, onRowSelectedChange, filters, set
                 render: record => (
                     <div style={{ width: '100%', textAlign: 'right' }}>
                         <EyeOutlined onClick={e => onViewClick(record.id)} />
-                        {record.cancelable && <Button onClick={e => onCancelPaymentClick(record.id)}>Anular</Button>}
+                        {record.cancelable && <Button onClick={e => onAnularPaymentClick(record.id)}>Anular</Button>}
                     </div>
                 ),
             }
