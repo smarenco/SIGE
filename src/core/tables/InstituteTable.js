@@ -49,7 +49,7 @@ export const InstituteTable = ({ data, onReload, onRowSelectedChange, setFilters
                 width: 200,
                 ellipsis: true,
             }, {
-                title: 'Baja',
+                title: 'Estado',
                 key: 'Baja',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 100,

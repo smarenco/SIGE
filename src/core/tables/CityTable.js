@@ -31,7 +31,7 @@ export const CityTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 ellipsis: true,
                 className: 'ant-table-cell-link',
             }, {
-                title: 'Baja',
+                title: 'Estado',
                 key: 'Baja',
                 render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
                 width: 150,

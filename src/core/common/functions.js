@@ -12,7 +12,7 @@ export const loadTypes = (gender) => {
     ];
 
     switch (gender) {
-        case 'MALE':
+        case 'male':
             userTypes = [
                 {id: 'administrative', name: 'Administrativo'},
                 {id: 'teacher', name: 'Profesor'},
@@ -20,7 +20,7 @@ export const loadTypes = (gender) => {
                 {id: 'student', name: 'Estudiante'},
             ];
             break;
-        case 'FEMALE':
+        case 'female':
             userTypes = [
                 {id: 'administrative', name: 'Administrativa'},
                 {id: 'teacher', name: 'Profesora'},

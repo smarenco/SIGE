@@ -59,10 +59,10 @@ export const CoursePage = ({ app }) => {
 
         return (
             <>
-                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
                     <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
+                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Button.Group>
                     <Button key="new" onClick={e => { setOpenModal(true); setItem(new Course); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>

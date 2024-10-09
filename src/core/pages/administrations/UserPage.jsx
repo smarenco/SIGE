@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Modal, message } from 'antd'
+import { Button, Card, Dropdown, Modal, Space, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, loadTypes, renderError } from '../../common/functions';
@@ -6,7 +6,7 @@ import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
 import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
-import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
+import { DownOutlined, ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
 import { ImportUsersModal } from '../../modals/ImportUsersModal';
 
 export const UserPage = ({ app }) => {
@@ -97,11 +97,11 @@ export const UserPage = ({ app }) => {
     const renderExtraTable = () => {
         return (
             <>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
+                </Dropdown>
                 <Dropdown menu={dropdownImportProps} placement="bottomLeft" disabled={loading}>
                     <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
-                </Dropdown>
-                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button icon={<ExportOutlined />} style={{ marginRight: 15 }} type="text" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => { setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
