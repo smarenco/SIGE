@@ -106,7 +106,7 @@ export const AbsenteeismCausesPage = ({ app }) => {
         }        
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);
