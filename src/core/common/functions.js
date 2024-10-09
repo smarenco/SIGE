@@ -4,7 +4,7 @@ import { API_URL } from "../../env";
 
 
 export const loadTypes = (gender) => {
-    let typesUsers = [
+    let userTypes = [
         {id: 'administrative', name: 'Administrativo/a'},
         {id: 'teacher', name: 'Profesor/a'},
         {id: 'director', name: 'Director/a'},
@@ -13,7 +13,7 @@ export const loadTypes = (gender) => {
 
     switch (gender) {
         case 'MALE':
-            typesUsers = [
+            userTypes = [
                 {id: 'administrative', name: 'Administrativo'},
                 {id: 'teacher', name: 'Profesor'},
                 {id: 'director', name: 'Director'},
@@ -21,7 +21,7 @@ export const loadTypes = (gender) => {
             ];
             break;
         case 'FEMALE':
-            typesUsers = [
+            userTypes = [
                 {id: 'administrative', name: 'Administrativa'},
                 {id: 'teacher', name: 'Profesora'},
                 {id: 'director', name: 'Directora'},
@@ -30,7 +30,7 @@ export const loadTypes = (gender) => {
             break;
     }
 
-    return typesUsers;
+    return userTypes;
     
 };
 

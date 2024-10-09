@@ -14,7 +14,6 @@ import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
 import { PaymentMethodsPage } from '../../pages/administrations/PaymentMethodsPage';
-import { ConsultPaymentPage } from '../../pages/administrations/ConsultPaymentPage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
@@ -22,6 +21,9 @@ import { HomePage } from '../../pages/HomePage';
 import { PaymentPage } from '../../pages/administrations/PaymentPage';
 import { UserProfilePage } from '../../pages/administrations/UserProfilePage';
 import { AccountPaymentPage } from '../../pages/administrations/AccountPaymentPage';
+
+import { ConsultExpiredDocumentPage } from '../../pages/consults/ConsultExpiredDocumentPage';
+import { ConsultPaymentPage } from '../../pages/consults/ConsultPaymentPage';
 
 
 
@@ -50,7 +52,8 @@ export const appStore = createSlice({
             { key: 'adm-paymentMethods', name: 'Metodos de pago', path: '/metodos-pago', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
             { key: 'adm-group', name: 'Grupos', path: '/grupos', component: GroupPage, icon: <UsergroupAddOutlined /> },
             { key: 'adm-document', name: 'Documentos', path: '/documentos', component: DocumentPage, icon: <IdcardOutlined /> },
-            { key: 'adm-consult-payment', name: 'Consulta Pagos', path: '/consulta-pago', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'cons-consult-payment', name: 'Pagos', path: '/consulta-pagos', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'cons-expired-document', name: 'Documentacion con vencimiento', path: '/consulta-documentacion', component: ConsultExpiredDocumentPage, icon: <PayCircleOutlined /> },
             { key: 'conf-users', name: 'Usuarios', path: '/usuarios', component: UserPage, icon: <UserOutlined /> },
             { key: 'conf-account', name: 'Cuenta', path: '/cuenta', component: AccountPage, icon: <SettingOutlined /> },
             { key: 'conf-accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta', component: AccountPaymentPage, icon: <UserOutlined /> },
@@ -71,7 +74,6 @@ export const appStore = createSlice({
                         { key: 'adm-absenteeismCauses', to: '/causas-ausentismos', icon: <ScheduleOutlined />, title: 'Causas de ausentismos'},
                         { key: 'adm-cities', to: '/ciudades', icon: <AimOutlined />, title: 'Ciudades'},
                         { key: 'adm-medicalCoverage', to: '/coberturas-medicas', icon: <CarOutlined />, title: 'Coberturas medicas'},
-                        { key: 'adm-consult-payment', to: '/consulta-pago', icon: <CreditCardOutlined />, title: 'Consulta pagos'}, 
                         { key: 'adm-courses', to: '/cursos', icon: <ContainerOutlined />, title: 'Cursos'},
                         { key: 'adm-document', to: '/documentos', icon: <FileOutlined />, title: 'Documentos'},
                         { key: 'adm-group', to: '/grupos', icon: <GoldOutlined />, title: 'Grupos'},
@@ -80,6 +82,12 @@ export const appStore = createSlice({
                         { key: 'adm-payment', to: '/pago', icon: <DollarCircleOutlined />, title: 'Pagos'},
                         { key: 'adm-turn', to: '/turnos', icon: <ContainerOutlined />, title: 'Turnos'},
 
+                    ]
+                },
+                {
+                    key: 'conf-consults', icon: <SettingOutlined />, title: 'Consultas', items: [
+                        { key: 'cons-consult-payment', to: '/consulta-pagos', icon: <CreditCardOutlined />, title: 'Consulta pagos'}, 
+                        { key: 'cons-expired-document', to: '/consulta-documentacion', icon: <TeamOutlined />, title: 'Consulta Documentacion'},
                     ]
                 },
                 {
