@@ -25,7 +25,6 @@ export const DocumentsUserModal = (props) => {
             renderError('Debe adjuntar un documento');
             return;
         }
-        console.log(formState)
 
         onOkProp(formState);
     }

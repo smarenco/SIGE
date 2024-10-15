@@ -1,11 +1,10 @@
-import { Button, Card, Dropdown, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, Space } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentModal } from '../../modals/PaymentModal';
 import Payment from '../../models/Payment';
-import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { PaymentTable } from '../../tables/PaymentTable';
 
 import { paymentDelete, paymentIndex, paymentShow } from '../../services/PaymentService';
@@ -60,7 +59,7 @@ export const ConsultPaymentPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Ver</Button>
@@ -109,7 +108,7 @@ export const ConsultPaymentPage = ({ app }) => {
         }
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);
@@ -122,7 +121,7 @@ export const ConsultPaymentPage = ({ app }) => {
         }
     }
 
-    const onCancelPayment = async(id) => {
+    const onAnularPayment = async(id) => {
         setConfirmLoading(true);
         try {
             if (id) {
@@ -164,7 +163,7 @@ export const ConsultPaymentPage = ({ app }) => {
                         total: total,
                     }}
                     onViewClick={loadItem}
-                    onCancelPaymentClick={onCancelPayment}
+                    onAnularPaymentClick={onAnularPayment}
               />
             </Card>
             <PaymentModal

@@ -10,7 +10,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar, Button, Dropdown, Layout, Menu, message, Space } from 'antd';
 import { MENU } from '../common/consts';
-import { forceLogout, isLogged } from '../services/AuthService';
+import { forceLogout, hasPermission, isLogged } from '../services/AuthService';
 const { Header, Sider, Content } = Layout;
 
 const DefaultLayout = ({ component, route, app }) => {
@@ -69,53 +69,55 @@ const DefaultLayout = ({ component, route, app }) => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    // const info = (message) => {
-    //     messageApi.info(message);
-    // };
-    // const error = (message) => {
-    //     messageApi.info(message);
-    // };
     const success = (message) => {
         messageApi.success(message);
     };
 
-    const ssetSelectedKeys = (v) => {
-        setSelectedKeys(v);
-    };
+    const renderMenu = (menu) => {
+        return menu.map((r) => {
+            i++;
+            if (r.IsDivider) {
+                return {
+                    type: 'divider',
+                    dashed: 1,
+                    key: r.key,
+                };
+            }
+            if (Array.isArray(r.items)) {
+                const children = renderMenu(r.items);
+                if (children.filter(el => !!el).length === 0) {
+                    return undefined;
+                }
+                i++;
+                return {
+                    key: r.key,
+                    icon: r?.icon,
+                    label: r.title,
+                    children: children
+                }
+            }else{
+                if (!hasPermission(r.key)) {
+                    return null;
+                }
+                const route = menuProps.filter(menu => menu.key === r.key);
+                if(route.length > 0){
+                    if (!r.isPublic) {
+                        return {
+                            key: r.key,
+                            icon: r?.icon,
+                            label: <Link to={r.to} onClick={() => setSelectedKeys([r.key])}>{r.title}</Link>,
+                        }
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
+                
+            }
+        })
+    }
 
-    const buildMenuItem = (item) => {
-        if (item.IsDivider) {
-            return null; // Puedes manejar el caso de los divisores si lo necesitas
-        }
-    
-        if (Array.isArray(item.items)) {
-            // Si el elemento tiene submenús, llamamos recursivamente a esta función
-            const children = item.items.map((subItem) => buildMenuItem(subItem));
-    
-            return {
-                key: item.key,
-                icon: item.icon,
-                label: item.title,
-                children: children
-            };
-        }
-    
-        // Si es un elemento de menú simple, retornamos sin hijos
-        return {
-            key: item.key,
-            icon: item.icon,
-            label: <Link to={item.to} onClick={() => setSelectedKeys([item.key])}>{item.title}</Link>,
-        };
-    };
-
-    useEffect(() => {
-        const route = app.routes.filter(r => r.path === window.location.pathname || r.path + '/' === window.location.pathname);
-        if(route.length > 0) {
-            setSelectedKeys([route[0].key]);
-        }
-        success('Bienvenide a URUSIGE');
-    }, []);
-    // console.log(selectedKeys)
     return (
         <Layout className="layout" style={{ overflow: 'hidden', height: '100vh' }}>
             {contextHolder}
@@ -135,7 +137,7 @@ const DefaultLayout = ({ component, route, app }) => {
                         selectedKeys={selectedKeys}
                         defaultOpenKeys={selectedKeys}
                         style={{ overflowX: 'auto', height: 'calc(100vh - 105px)', alignSelf: 'flex-start' }}
-                        items={app.menu.main.map((menuItem) => buildMenuItem(menuItem))}
+                        items={renderMenu(app.menu.main)}
                     />
                 </Sider>
                 <Layout className="site-layout">

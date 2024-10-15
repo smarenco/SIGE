@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, Space } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { AccountPaymentModal } from '../../modals/AccountPaymentModal';
 import AccountPayment from '../../models/AccountPayment';
 import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { AccountPaymentTable } from '../../tables/AccountPaymentTable';
 
 import { accountPaymentChangeState, accountPaymentCreate, accountPaymentDelete, accountPaymentIndex, accountPaymentShow, accountPaymentUpdate, uploadDocument } from '../../services/AccountPaymentService';
@@ -58,7 +58,7 @@ export const AccountPaymentPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new AccountPayment); }} disabled={loading}>Nuevo</Button>
@@ -109,7 +109,7 @@ export const AccountPaymentPage = ({ app }) => {
         }       
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);
@@ -141,7 +141,6 @@ export const AccountPaymentPage = ({ app }) => {
                 await accountPaymentUpdate(obj.id, obj);
             } else {
                 let document = null;
-                console.log(obj)
                 if(obj.file){
                     const arr_name = obj.file.name.split('.');
                     const ext = arr_name[arr_name.length - 1];

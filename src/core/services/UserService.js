@@ -23,6 +23,29 @@ export const userIndex = async (filter, output = undefined) => {
     }
 }
 
+export const documentExpired = async (filter, output = undefined) => {
+    let params = filter || {};
+    params.page = filter?.page || 1;
+    params.pageSize = filter?.pageSize || 50;
+
+    if (output) {
+        let exportFilter = { ...filter, output }
+        clearObj(exportFilter);
+        open(`${path}/documents-expired`, exportFilter);
+        return;
+    }
+
+    const { response } = await api.get(`${path}/documents-expired`, { params });
+    return {
+        data: response.data,
+        total: response.total,
+    }
+}
+
+export const notifyExpiredDocument = async (id) => {
+    return await api.post(`${path}/notify-document-expired`, { IdUserDocument: id });
+}
+
 export const userCombo = async (filter) => {
     let params = filter || {};
     const { response } = await api.get(path, { params });
@@ -40,7 +63,7 @@ export const userToggle = async (active, records) => {
     if (!Array.isArray(records)) {
         records = [records];
     }
-    return Promise.all(records.map(async (id) => await api.post(`${this.path}/${id}/${active ? 'activate' : 'desactivate'}`)));
+    return Promise.all(records.map(async (id) => await api.post(`${path}/${id}/${active ? 'activate' : 'desactivate'}`)));
 }
 
 export const userShow = async (id) => {

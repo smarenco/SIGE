@@ -1,11 +1,10 @@
-import { Button, Card, Dropdown, Menu, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, Space } from 'antd'
 
 import { useEffect, useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { PaymentMethodsModal } from '../../modals/PaymentMethodsModal';
 import PaymentMethods from '../../models/PaymentMethods';
-import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { PaymentMethodsTable } from '../../tables/PaymentMethodsTable';
 
 import { paymentMethodsCreate, paymentMethodsDelete, paymentMethodsIndex, paymentMethodsShow, paymentMethodsUpdate } from '../../services/PaymentMethodsService';
@@ -57,7 +56,7 @@ export const PaymentMethodsPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new PaymentMethods); }} disabled={loading}>Nuevo</Button>
@@ -108,7 +107,7 @@ export const PaymentMethodsPage = ({ app }) => {
         }    
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);
@@ -145,7 +144,7 @@ export const PaymentMethodsPage = ({ app }) => {
     return (
         <>
             <Card
-                title={(<strong>Causas de ausentismos</strong>)}
+                title={(<strong>Metodos de pago</strong>)}
                 className='ant-section'
                 extra={renderExtraTable()}
             >

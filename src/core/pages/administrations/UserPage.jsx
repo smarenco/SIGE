@@ -1,13 +1,12 @@
-import { Button, Card, Dropdown, Modal, message } from 'antd'
+import { Button, Card, Dropdown, Modal, Space, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, loadTypes, renderError } from '../../common/functions';
 import { UserModal } from '../../modals/UserModal';
 import User from '../../models/User';
-import { user } from '../../services/AuthService';
 import { uploadDocument, importUsers, userCreate, userDelete, userIndex, userShow, userToggle, userUpdate } from '../../services/UserService';
 import { UserTable } from '../../tables/UserTable';
-import { ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
+import { DownOutlined, ExportOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, IdcardOutlined, ImportOutlined, TeamOutlined, UserAddOutlined } from '@ant-design/icons';
 import { ImportUsersModal } from '../../modals/ImportUsersModal';
 
 export const UserPage = ({ app }) => {
@@ -24,9 +23,7 @@ export const UserPage = ({ app }) => {
     const [importType, setImportType] = useState('student');
     const [loading, setLoading] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
-    const [typesUsers, setTypesUsers] = useState([]);
-
-    //const { user } = AuthService();
+    const [userTypes, setUserTypes] = useState([]);
 
     const { page, pageSize } = dataPage;
     const { selectedRowKeys, selectedRows } = rowSelected;
@@ -34,7 +31,7 @@ export const UserPage = ({ app }) => {
     const fetchTypes = async (gender) => {
         try {
             const types = loadTypes(gender);
-            setTypesUsers(types);
+            setUserTypes(types);
         } catch (err) { renderError(err); }
     };
 
@@ -100,11 +97,11 @@ export const UserPage = ({ app }) => {
     const renderExtraTable = () => {
         return (
             <>
+                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
+                </Dropdown>
                 <Dropdown menu={dropdownImportProps} placement="bottomLeft" disabled={loading}>
                     <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading}>Importar</Button>
-                </Dropdown>
-                <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button icon={<ExportOutlined />} style={{ marginRight: 15 }} type="text" disabled={loading}>Exportar</Button>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => { setOpenModal(true); setItem(new User); }} disabled={loading}>Nuevo</Button>
@@ -192,7 +189,7 @@ export const UserPage = ({ app }) => {
 
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async (id) => {
         setLoading(true);
@@ -277,7 +274,7 @@ export const UserPage = ({ app }) => {
                     selectedRowKeys={selectedRowKeys}
                     loading={loading}
                     onPageChange={onPageChange}
-                    typesUsers={typesUsers}
+                    userTypes={userTypes}
                     pagination={{
                         pageSize: pageSize,
                         page: page,

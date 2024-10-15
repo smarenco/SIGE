@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Menu, Modal, message } from 'antd'
+import { Button, Card, Dropdown, Menu, Modal, Space, message } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CourseModal } from '../../modals/CourseModal';
 import Course from '../../models/Course';
 import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined, ImportOutlined } from '@ant-design/icons';
 import { CourseTable } from '../../tables/CourseTable';
 
 import { courseCreate, courseDelete, courseIndex, courseShow, courseUpdate, importCourses } from '../../services/CourseService';
@@ -59,10 +59,10 @@ export const CoursePage = ({ app }) => {
 
         return (
             <>
-                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
+                <Button icon={<ImportOutlined />} style={{ marginRight: 15 }} type="default" disabled={loading} onClick={() => setOpenImportModal(true)}>Importar</Button>
                 <Button.Group>
                     <Button key="new" onClick={e => { setOpenModal(true); setItem(new Course); }} disabled={loading}>Nuevo</Button>
                     <Button key="edit" onClick={() => onExtraTableClick('edit')} disabled={loading || selectedRowKeys.length !== 1}>Editar</Button>
@@ -112,7 +112,7 @@ export const CoursePage = ({ app }) => {
         }
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async (id) => {
         setLoading(true);

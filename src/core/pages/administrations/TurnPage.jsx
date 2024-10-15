@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, Space } from 'antd'
 import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { TurnModal } from '../../modals/TurnModal';
 import Turn from '../../models/Turn';
 import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { TurnTable } from '../../tables/TurnTable';
 
 import { turnCreate, turnDelete, turnIndex, turnShow, turnUpdate } from '../../services/TurnService';
@@ -57,7 +57,7 @@ export const TurnPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new Turn); }} disabled={loading}>Nuevo</Button>
@@ -108,7 +108,7 @@ export const TurnPage = ({ app }) => {
         }
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);

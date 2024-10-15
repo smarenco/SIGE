@@ -1,11 +1,11 @@
-import { Button, Card, Dropdown, Modal } from 'antd'
+import { Button, Card, Dropdown, Modal, Space } from 'antd'
 
 import { useState } from 'react';
 import { alertError, renderError } from '../../common/functions';
 import { CityModal } from '../../modals/CityModal';
 import City from '../../models/City';
 import { user } from '../../services/AuthService';
-import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
+import { DownOutlined, FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { CityTable } from '../../tables/CityTable';
 
 import { cityCreate, cityDelete, cityIndex, cityShow, cityUpdate } from '../../services/CityService';
@@ -58,7 +58,7 @@ export const CityPage = ({ app }) => {
         return (
             <>
                 <Dropdown menu={menuProps} placement="bottomLeft" disabled={loading}>
-                    <Button style={{ marginRight: 15 }} type="export" disabled={loading}>Exportar</Button>
+                    <a onClick={(e) => e.preventDefault()}><Space> Exportar <DownOutlined /> </Space></a>
                 </Dropdown>
                 <Button.Group>
                     <Button key="new" onClick={e => {setOpenModal(true); setItem(new City); }} disabled={loading}>Nuevo</Button>
@@ -109,7 +109,7 @@ export const CityPage = ({ app }) => {
         }       
     }
 
-    const loadData = () => onPageChange(page);
+    const loadData = () => onPageChange(page, pageSize);
 
     const loadItem = async(id) => {
         setLoading(true);

@@ -27,7 +27,7 @@ export const UserProfilePage = () => {
         const [ medicalCoverages, setMedicalCoverage ] = useState([]);
         const [ countries, setCountry ] = useState([]);
         const [ cities, setCities ] = useState([]);
-        const [ typesUsers, setTypesUsers ] = useState([]);
+        const [ userTypes, setUserTypes ] = useState([]);
         const [ groups, setGroups ] = useState([]);
         const [ courseSelected, setCourseSelected ] = useState(undefined);
         const [ documents, setDocuments ] = useState([]);
@@ -200,7 +200,7 @@ export const UserProfilePage = () => {
         setLoadingTypes(true);
         try {
             const types = loadTypes(gender);
-            setTypesUsers(types);
+            setUserTypes(types);
             setLoadingTypes(false);
         } catch(err) { renderError(err); setLoadingTypes(false);}
     };
@@ -388,7 +388,7 @@ export const UserProfilePage = () => {
                             disabled
                             value={formState?.type?.toLowerCase()}
                         >
-                            {typesUsers.map(type => 
+                            {userTypes.map(type => 
                                 <Select.Option value={type.id} key={type.id}>{type.name}</Select.Option>
                             )}
                         </Select>

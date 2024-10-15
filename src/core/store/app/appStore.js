@@ -11,7 +11,6 @@ import { GroupPage } from '../../pages/administrations/GroupPage';
 import { InstitutePage } from '../../pages/administrations/InstitutePage';
 import { MedicalCoveragePage } from '../../pages/administrations/MedicalCoveragePage';
 import { PaymentMethodsPage } from '../../pages/administrations/PaymentMethodsPage';
-import { ConsultPaymentPage } from '../../pages/administrations/ConsultPaymentPage';
 import { TurnPage } from '../../pages/administrations/TurnPage';
 import { UserPage } from '../../pages/administrations/UserPage';
 import { LoginPage } from '../../pages/auth/LoginPage';
@@ -20,6 +19,9 @@ import { PaymentPage } from '../../pages/administrations/PaymentPage';
 import { UserProfilePage } from '../../pages/administrations/UserProfilePage';
 import { AccountPaymentPage } from '../../pages/administrations/AccountPaymentPage';
 import { AttendanceAdminPage } from '../../pages/administrations/attendance/AttendanceAdminPage';
+
+import { ConsultExpiredDocumentPage } from '../../pages/consults/ConsultExpiredDocumentPage';
+import { ConsultPaymentPage } from '../../pages/consults/ConsultPaymentPage';
 
 
 
@@ -44,11 +46,12 @@ export const appStore = createSlice({
             { key: 'adm-absenteeismCauses', name: 'Causas de ausentismos', path: '/causas-ausentismos', component: AbsenteeismCausesPage, icon: <MedicineBoxOutlined /> },
             { key: 'adm-documentCategory', name: 'Categorias de documentos', path: '/categorias-documentos', component: DocumentCategoryPage, icon: <HddOutlined /> },
             { key: 'adm-turn', name: 'Turnos', path: '/turnos', component: TurnPage, icon: <ClockCircleOutlined /> },
-            { key: 'adm-paymentMethods', name: 'Metodos de pago', path: '/payment-methods', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
+            { key: 'adm-payment', name: 'Pagos', path: '/pago', component: PaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'adm-paymentMethods', name: 'Metodos de pago', path: '/metodos-pago', component: PaymentMethodsPage, icon: <PayCircleOutlined /> },
             { key: 'adm-group', name: 'Grupos', path: '/grupos', component: GroupPage, icon: <UsergroupAddOutlined /> },
             { key: 'adm-document', name: 'Documentos', path: '/documentos', component: DocumentPage, icon: <IdcardOutlined /> },
-            { key: 'conf-consult-payment', name: 'Consulta Pagos', path: '/consulta-pago', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
-            { key: 'conf-payment', name: 'Pagos', path: '/pago', component: PaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'cons-consult-payment', name: 'Pagos', path: '/consulta-pagos', component: ConsultPaymentPage, icon: <PayCircleOutlined /> },
+            { key: 'cons-expired-document', name: 'Documentacion con vencimiento', path: '/consulta-documentacion', component: ConsultExpiredDocumentPage, icon: <PayCircleOutlined /> },
             { key: 'conf-users', name: 'Usuarios', path: '/usuarios', component: UserPage, icon: <UserOutlined /> },
             { key: 'conf-account', name: 'Cuenta', path: '/cuenta', component: AccountPage, icon: <SettingOutlined /> },
             { key: 'conf-accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta', component: AccountPaymentPage, icon: <UserOutlined /> },
@@ -75,6 +78,8 @@ export const appStore = createSlice({
                         { key: 'adm-document', to: '/documentos', icon: <FileOutlined />, title: 'Documentos'},
                         { key: 'adm-group', to: '/grupos', icon: <GoldOutlined />, title: 'Grupos'},
                         { key: 'adm-instituts', to: '/institutos', icon: <BankOutlined />, title: 'Institutos'},
+                        { key: 'adm-paymentMethods', to: '/metodos-pago', icon: <CreditCardOutlined />, title: 'Metodos de pago'},
+                        { key: 'adm-payment', to: '/pago', icon: <DollarCircleOutlined />, title: 'Pagos'},
                         { key: 'adm-turn', to: '/turnos', icon: <ContainerOutlined />, title: 'Turnos'},
                         { key: 'adm-attendance', icon: <ContainerOutlined />, title: 'Asistencia', items: [
                             { key: 'attendance-overview', to: '/attendance/overview', icon: <DashboardOutlined />, title: 'Resumen'},
@@ -84,11 +89,14 @@ export const appStore = createSlice({
                     ]
                 },
                 {
+                    key: 'conf-consults', icon: <SettingOutlined />, title: 'Consultas', items: [
+                        { key: 'cons-consult-payment', to: '/consulta-pagos', icon: <CreditCardOutlined />, title: 'Consulta pagos'}, 
+                        { key: 'cons-expired-document', to: '/consulta-documentacion', icon: <TeamOutlined />, title: 'Consulta Documentacion'},
+                    ]
+                },
+                {
                     key: 'conf-config', icon: <SettingOutlined />, title: 'Configuracion', items: [
                         { key: 'conf-account', to: '/cuenta', icon: <ControlOutlined />, title: 'Cuenta'},
-                        { key: 'conf-consult-payment', to: '/consulta-pago', icon: <CreditCardOutlined />, title: 'Consulta pagos'}, 
-                        { key: 'conf-paymentMethods', to: '/payment-methods', icon: <CreditCardOutlined />, title: 'Metodos de pago'},
-                        { key: 'conf-payment', to: '/pago', icon: <DollarCircleOutlined />, title: 'Pagos'},
                         { key: 'conf-accountPayment', to: '/pago-cuenta', icon: <DollarCircleOutlined />, title: 'Pagos cuentas'},
                         { key: 'conf-users', to: '/usuarios', icon: <TeamOutlined />, title: 'Usuarios'},
                     ]

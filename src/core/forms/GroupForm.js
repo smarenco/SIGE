@@ -41,7 +41,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     const fetchStudents = async () => {
         setLoadingStudents(true);
         try {
-            const students = await userCombo({User_type: 'student'});
+            const students = await userCombo({User_type: 'student', State: 1});
             setStudents(students);
             setLoadingStudents(false);
         } catch (err) {
@@ -53,7 +53,7 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     const fetchTeachers = async () => {
         setLoadingTeachers(true);
         try {
-            const teachers = await userCombo({User_type: 'teacher'});
+            const teachers = await userCombo({User_type: 'teacher', State: 1});
             setTeachers(teachers);
             setLoadingTeachers(false);
         } catch (err) {

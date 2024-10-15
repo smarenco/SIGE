@@ -12,7 +12,7 @@ const paginationStyle = {
     right: 0,
 };
 
-export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, typesUsers }) => {
+export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, selectedRowKeys, loading, onPageChange, pagination, onEditClick: onEdit, userTypes }) => {
 
     const onPageChangeLocal = (page, pageSize) => {
         onPageChange(page, pageSize);
@@ -61,13 +61,13 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                 width: 120,
                 ellipsis: true,
                 render: (record) => {
-                    const tipos = loadTypes(record.gender);
+                    const tipos = loadTypes(record.gender.toLowerCase());
                     return tipos.filter(tipo => record.type.toLowerCase() === tipo.id)[0]?.name || 'indefinido';
                 },
             }, {
-                title: 'Baja',
-                key: 'Baja',
-                render: (record) => <Tag color={!record.deleted_at ? 'green' : 'red'}>{!record.deleted_at ? 'Vigente' : 'Anulado'}</Tag>,
+                title: 'Estado',
+                key: 'Estado',
+                render: (record) => <Tag color={record.state ? 'green' : 'red'}>{record.state ? 'Activo' : 'Inactivo'}</Tag>,
                 width: 80,
                 ellipsis: true,
             }, {
@@ -95,8 +95,8 @@ export const UserTable = ({ data, onReload, onRowSelectedChange, setFilters, sel
                     &nbsp;
                     <Input style={{width: '20%'}} placeholder='Buscar...' className='search-form' onChange={e => setFilters({ Search: e.target.value })} /> 
                     &nbsp;
-                    <Select allowClear style={{width: '20%'}} placeholder='Tipos de usuario...' onChange={User_type => setFilters({ User_type })}>
-                        {typesUsers.map(type => <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>)}
+                    <Select allowClear style={{width: '20%'}} placeholder='Tipos de usuario...' onChange={UserType => setFilters({ UserType })}>
+                        {userTypes.map(type => <Select.Option key={type.id} value={type.id}>{type.name}</Select.Option>)}
                     </Select>
                     &nbsp; 
                     <Checkbox onChange={e => setFilters({ ShowDeleted: e.target.checked }, onReload)}>Ver eliminados</Checkbox>
