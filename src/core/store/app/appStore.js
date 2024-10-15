@@ -1,12 +1,9 @@
-import { AimOutlined, ApartmentOutlined, BankOutlined, CarOutlined, ClockCircleOutlined, ContainerOutlined, ControlOutlined, CreditCardOutlined, DollarCircleOutlined, ExceptionOutlined, FileOutlined, GoldOutlined, HddOutlined, HeartOutlined, HomeOutlined, IdcardOutlined, MedicineBoxOutlined, PayCircleOutlined, ScheduleOutlined, SettingOutlined, SolutionOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
+import { AimOutlined, ApartmentOutlined, BankOutlined, CarOutlined, ClockCircleOutlined, ContainerOutlined, ControlOutlined, CreditCardOutlined, DashboardOutlined, DollarCircleOutlined, ExceptionOutlined, FileOutlined, GoldOutlined, HddOutlined, HeartOutlined, HomeOutlined, IdcardOutlined, MedicineBoxOutlined, OrderedListOutlined, PayCircleOutlined, ScheduleOutlined, SettingOutlined, SolutionOutlined, TeamOutlined, UsergroupAddOutlined, UserOutlined } from '@ant-design/icons';
 import { createSlice } from '@reduxjs/toolkit';
 import { CONFIG } from '../../common/consts';
 import { AbsenteeismCausesPage } from '../../pages/administrations/AbsenteeismCausesPage';
 import { AccountPage } from '../../pages/administrations/AccountPage';
-import { ActividadesPage } from '../../pages/administrations/ActividadesPage';
-import { AttendancePage } from '../../pages/administrations/AttendancePage';
 import { CityPage } from '../../pages/administrations/CityPage';
-import { CountryPage } from '../../pages/administrations/CountryPage';
 import { CoursePage } from '../../pages/administrations/CoursePage';
 import { DocumentCategoryPage } from '../../pages/administrations/DocumentCategoryPage';
 import { DocumentPage } from '../../pages/administrations/DocumentPage';
@@ -22,6 +19,7 @@ import { HomePage } from '../../pages/HomePage';
 import { PaymentPage } from '../../pages/administrations/PaymentPage';
 import { UserProfilePage } from '../../pages/administrations/UserProfilePage';
 import { AccountPaymentPage } from '../../pages/administrations/AccountPaymentPage';
+import { AttendanceAdminPage } from '../../pages/administrations/attendance/AttendanceAdminPage';
 
 
 
@@ -54,7 +52,9 @@ export const appStore = createSlice({
             { key: 'conf-users', name: 'Usuarios', path: '/usuarios', component: UserPage, icon: <UserOutlined /> },
             { key: 'conf-account', name: 'Cuenta', path: '/cuenta', component: AccountPage, icon: <SettingOutlined /> },
             { key: 'conf-accountPayment', name: 'Pagos Cuenta', path: '/pago-cuenta', component: AccountPaymentPage, icon: <UserOutlined /> },
-            { key: 'asistencia', name:'Asistencia', path: '/asistencia', component: AttendancePage },
+            { key: 'attendance-overview', name:'Panel asistencia', path: '/attendance/overview', component: CoursePage },
+            { key: 'attendance-teacher-lists', name:'Listas docentes', path: '/attendance/teacher-lists', component: AttendanceAdminPage },
+            { key: 'attendance-admin', name:'Asistencia', path: '/attendance/admin', component: AttendanceAdminPage },
             // /// Configuración
             // { key: 'auditoria', path: '/auditoria', component: Auditoria },
             // { key: 'auditoria-detail', path: '/auditoria/:id', component: AuditoriaDetalle, keysPage: ['id'] },
@@ -76,7 +76,11 @@ export const appStore = createSlice({
                         { key: 'adm-group', to: '/grupos', icon: <GoldOutlined />, title: 'Grupos'},
                         { key: 'adm-instituts', to: '/institutos', icon: <BankOutlined />, title: 'Institutos'},
                         { key: 'adm-turn', to: '/turnos', icon: <ContainerOutlined />, title: 'Turnos'},
-
+                        { key: 'adm-attendance', icon: <ContainerOutlined />, title: 'Asistencia', items: [
+                            { key: 'attendance-overview', to: '/attendance/overview', icon: <DashboardOutlined />, title: 'Resumen'},
+                            { key: 'attendance-teacher-lists', to: '/attendance/teacher-lists', icon: <OrderedListOutlined />, title: 'Listas docentes'},
+                            { key: 'attendance-admin', to: '/attendance/admin', icon: <TeamOutlined />, title: 'Administracion de asistencia'},
+                        ]},
                     ]
                 },
                 {

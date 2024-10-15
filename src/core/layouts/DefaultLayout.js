@@ -83,6 +83,31 @@ const DefaultLayout = ({ component, route, app }) => {
         setSelectedKeys(v);
     };
 
+    const buildMenuItem = (item) => {
+        if (item.IsDivider) {
+            return null; // Puedes manejar el caso de los divisores si lo necesitas
+        }
+    
+        if (Array.isArray(item.items)) {
+            // Si el elemento tiene submenús, llamamos recursivamente a esta función
+            const children = item.items.map((subItem) => buildMenuItem(subItem));
+    
+            return {
+                key: item.key,
+                icon: item.icon,
+                label: item.title,
+                children: children
+            };
+        }
+    
+        // Si es un elemento de menú simple, retornamos sin hijos
+        return {
+            key: item.key,
+            icon: item.icon,
+            label: <Link to={item.to} onClick={() => setSelectedKeys([item.key])}>{item.title}</Link>,
+        };
+    };
+
     useEffect(() => {
         const route = app.routes.filter(r => r.path === window.location.pathname || r.path + '/' === window.location.pathname);
         if(route.length > 0) {
@@ -110,50 +135,7 @@ const DefaultLayout = ({ component, route, app }) => {
                         selectedKeys={selectedKeys}
                         defaultOpenKeys={selectedKeys}
                         style={{ overflowX: 'auto', height: 'calc(100vh - 105px)', alignSelf: 'flex-start' }}
-                        items={app.menu.main.map((r) => {
-                                i++;
-                                if (r.IsDivider) {
-                                    // return {
-                                    //     type: 'divider',
-                                    //     dashed: 1,
-                                    //     key: r.key,
-                                    // };
-                                }
-                                if (Array.isArray(r.items)) {
-                                    const children = r.items.map((subMenu) => {
-                                        i++;
-                                        return {
-                                            key: subMenu.key,
-                                            icon: subMenu?.icon,
-                                            label: <Link to={subMenu.to} onClick={() => ssetSelectedKeys([subMenu.key])}>{subMenu.title}</Link>,
-                                        }
-                                    });
-                                    i++;
-                                    return {
-                                        key: r.key,
-                                        icon: r?.icon,
-                                        label: r.title,
-                                        children: children
-                                    }
-                                }else{
-                                    const route = menuProps.filter(menu => menu.key === r.key);
-                                    if(route.length > 0){
-                                        if (!r.isPublic) {
-                                            return {
-                                                key: r.key,
-                                                icon: r?.icon,
-                                                label: <Link to={r.to} onClick={() => setSelectedKeys([r.key])}>{r.title}</Link>,
-                                            }
-                                        } else {
-                                            return null;
-                                        }
-                                    } else {
-                                        return null;
-                                    }
-                                    
-                                }
-                            })
-                        }
+                        items={app.menu.main.map((menuItem) => buildMenuItem(menuItem))}
                     />
                 </Sider>
                 <Layout className="site-layout">

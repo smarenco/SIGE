@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { DatePicker, Button, Table, Divider } from 'antd'
+import { DatePicker, Button, Table, Divider, Row, Col } from 'antd'
 import { Header } from 'antd/es/layout/layout';
 import { LeftCircleOutlined, PlusCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
-import { AttendanceListModal } from '../../modals/AttendanceListModal';
-import { renderError } from '../../common/functions';
-import { attendanceCreate, attendanceIndex, attendanceUpdate } from '../../services/AttendanceService';
+import { AttendanceListModal } from '../../../modals/AttendanceListModal';
+import { renderError } from '../../../common/functions';
+import { attendanceCreate, attendanceIndex, attendanceUpdate } from '../../../services/AttendanceService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import './AttendancePage.css'
-import { AttendanceItemModal } from '../../modals/AttendanceItemModal';
-import { DDMMYYYYHHmmss } from '../../common/consts';
+import './AttendanceList.css'
+import { AttendanceItemModal } from '../../../modals/AttendanceItemModal';
 
 dayjs.locale('es');
 
-export const AttendancePage = ({ students, view, confirmLoading, loadingCourses, group }) => {
+export const AttendanceList = ({ students = [], confirmLoading, group: propGroup, modalMode = false }) => {
     const [modalAttendanceList, setModalAttendanceList] = useState(false);
     const [modalAttendanceItem, setModalAttendanceItem] = useState(false);
     const [loadingAttendance, setLoadingAttendance] = useState(false);
@@ -21,6 +20,7 @@ export const AttendancePage = ({ students, view, confirmLoading, loadingCourses,
     const [attendanceMonth, setAttendanceMonth] = useState(dayjs());
     const [attendanceItem, setAttendanceItem] = useState({});
     const [isButtonClick, setIsButtonClick] = useState(false);
+    const [group, setPropGroup] = useState(propGroup);
 
     const fetchAttendance = async ({ attendanceMonth, group_id }) => {
         try {
@@ -125,7 +125,12 @@ export const AttendancePage = ({ students, view, confirmLoading, loadingCourses,
     };
 
     useEffect(() => {
-        fetchAttendance({ attendanceMonth, group_id: group.id })
+        if (group)
+            fetchAttendance({ attendanceMonth, group_id: group.id })
+    }, []);
+
+    useEffect(() => {
+
     }, []);
 
     useEffect(() => {
@@ -136,32 +141,50 @@ export const AttendancePage = ({ students, view, confirmLoading, loadingCourses,
     }, [attendanceMonth]);
 
     return (
-        <>
-            <Header>
-                Mes de asistencia
-                <DatePicker
-                    allowClear={false}
-                    placeholder='Seleccione un mes'
-                    style={{ marginLeft: 10, width: '200px' }}
-                    disabled={confirmLoading || loadingAttendance}
-                    picker="month"
-                    format='MM/YYYY'
-                    value={attendanceMonth}
-                    onChange={setAttendanceMonth}
-                />
-                <Button disabled={confirmLoading || loadingAttendance} onClick={() => fetchAttendance({ attendanceMonth, group_id: group.id })} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
-                <Button icon={<PlusCircleOutlined />} type='primary' onClick={() => setModalAttendanceList(true)} style={{ float: 'right' }}>Pasar lista</Button>
+        <div style={{ height: '100%' }}>
+            <Header style={{
+                backgroundColor: 'white',
+                paddingInline: 15,
+                lineHeight: 0
+            }}>
+                <Row>
+                    <Col span={18}>
+                        Mes de asistencia
+                        <DatePicker
+                            allowClear={false}
+                            placeholder='Seleccione un mes'
+                            style={{ marginLeft: 10, width: '200px' }}
+                            disabled={confirmLoading || loadingAttendance}
+                            picker="month"
+                            format='MM/YYYY'
+                            value={attendanceMonth}
+                            onChange={setAttendanceMonth}
+                        />
+                        <Button disabled={confirmLoading || loadingAttendance || group == null} onClick={() => fetchAttendance({ attendanceMonth, group_id: group ? group.id : null })} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
+                    </Col>
+                    <Col span={6}>
+                        <Button disabled={group == null} icon={<PlusCircleOutlined />} type='primary' onClick={() => setModalAttendanceList(true)} style={{ float: 'right' }}>Pasar lista</Button>
+                    </Col>
+                </Row>
                 <Divider style={{ margin: 15 }} />
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Button onClick={() => handleMonthChange(attendanceMonth.subtract(1, 'month'), true)} disabled={confirmLoading || loadingAttendance} icon={<LeftCircleOutlined />} style={{ float: 'left' }}>Mes anterior</Button>
-                    <h2 style={{ textAlign: 'center', flexGrow: 1, margin: 0, textAlign: 'center' }}>{attendanceMonth.format('MMMM').charAt(0).toUpperCase() + attendanceMonth.format('MMMM').slice(1)}</h2>
-                    <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
-                </div>
+                <Row>
+                    <Col span={8}>
+                        <Button onClick={() => handleMonthChange(attendanceMonth.subtract(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == null} icon={<LeftCircleOutlined />}>Mes anterior</Button>
+                    </Col>
+                    <Col span={8}>
+                        <h2 style={{ textAlign: 'center', textAlign: 'center' }}>{attendanceMonth.format('MMMM').charAt(0).toUpperCase() + attendanceMonth.format('MMMM').slice(1)}</h2>
+                    </Col>
+                    <Col span={8}>
+                        <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == null} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
+                    </Col>
+                </Row>
+                {/* <div style={{}}>
+                </div> */}
             </Header>
             <Table
                 key='student_id'
                 size='small'
-                style={{ height: '100%', paddingTop: 15 }}
+                style={{ paddingTop: modalMode ? 10 : 50 }}
                 columns={attendanceColumns()}
                 dataSource={attendance}
                 loading={confirmLoading || loadingAttendance}
@@ -180,6 +203,6 @@ export const AttendancePage = ({ students, view, confirmLoading, loadingCourses,
                 onOk={onOkModalAttendanceItem}
                 onCancel={onCancelModalAttendanceItem}
             />
-        </>
+        </div>
     )
 }
