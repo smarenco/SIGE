@@ -22,6 +22,7 @@ import { AttendanceAdminPage } from '../../pages/administrations/attendance/Atte
 
 import { ConsultExpiredDocumentPage } from '../../pages/consults/ConsultExpiredDocumentPage';
 import { ConsultPaymentPage } from '../../pages/consults/ConsultPaymentPage';
+import { MyAttendancePage } from '../../pages/administrations/attendance/MyAttendancePage';
 
 
 
@@ -58,6 +59,7 @@ export const appStore = createSlice({
             { key: 'attendance-overview', name:'Panel asistencia', path: '/attendance/overview', component: CoursePage },
             { key: 'attendance-teacher-lists', name:'Listas docentes', path: '/attendance/teacher-lists', component: AttendanceAdminPage },
             { key: 'attendance-admin', name:'Asistencia', path: '/attendance/admin', component: AttendanceAdminPage },
+            { key: 'my-attendance', name:'Mi asistencia', path: '/my-attendance', component: MyAttendancePage },
             // /// Configuración
             // { key: 'auditoria', path: '/auditoria', component: Auditoria },
             // { key: 'auditoria-detail', path: '/auditoria/:id', component: AuditoriaDetalle, keysPage: ['id'] },
@@ -66,7 +68,8 @@ export const appStore = createSlice({
             main: [
                 // { key: '', to: '', icon: '', text: '', title: '', items: [] },
                 { key: 'home', to: '/', icon: <HomeOutlined />, title: 'Home'},
-                { key: 'profile', to: '/perfil', icon: <SolutionOutlined />, title: 'Perfil'},
+                // { key: 'profile', to: '/perfil', icon: <SolutionOutlined />, title: 'Perfil'}, comentado porque ya esta en fotito de usuario
+                { key: 'my-attendance', to: '/my-attendance', icon: <OrderedListOutlined />, title: 'Mi asistencia'},
                 { key: 'IsDivider', IsDivider: true},
                 {
                     key: 'adm-administrations', icon: <HomeOutlined />, title: 'Administracion' , items: [
@@ -82,8 +85,8 @@ export const appStore = createSlice({
                         { key: 'adm-payment', to: '/pago', icon: <DollarCircleOutlined />, title: 'Pagos'},
                         { key: 'adm-turn', to: '/turnos', icon: <ContainerOutlined />, title: 'Turnos'},
                         { key: 'adm-attendance', icon: <ContainerOutlined />, title: 'Asistencia', items: [
-                            { key: 'attendance-overview', to: '/attendance/overview', icon: <DashboardOutlined />, title: 'Resumen'},
-                            { key: 'attendance-teacher-lists', to: '/attendance/teacher-lists', icon: <OrderedListOutlined />, title: 'Listas docentes'},
+                            { disabled: true, key: 'attendance-overview', to: '/attendance/overview', icon: <DashboardOutlined />, title: 'Resumen'},
+                            { disabled: true, key: 'attendance-teacher-lists', to: '/attendance/teacher-lists', icon: <OrderedListOutlined />, title: 'Listas docentes'},
                             { key: 'attendance-admin', to: '/attendance/admin', icon: <TeamOutlined />, title: 'Administracion de asistencia'},
                         ]},
                     ]

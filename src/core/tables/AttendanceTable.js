@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { DatePicker, Button, Table, Divider, Row, Col } from 'antd'
 import { Header } from 'antd/es/layout/layout';
 import { LeftCircleOutlined, PlusCircleOutlined, RightCircleOutlined } from '@ant-design/icons';
-import { AttendanceListModal } from '../../../modals/AttendanceListModal';
-import { renderError } from '../../../common/functions';
-import { attendanceCreate, attendanceIndex, attendanceUpdate } from '../../../services/AttendanceService';
+import { AttendanceListModal } from '../modals/AttendanceListModal';
+import { renderError } from '../common/functions';
+import { attendanceCreate, attendanceIndex, attendanceUpdate } from '../services/AttendanceService';
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
-import './AttendanceList.css'
-import { AttendanceItemModal } from '../../../modals/AttendanceItemModal';
+import './AttendanceTable.css'
+import { AttendanceItemModal } from '../modals/AttendanceItemModal';
 
 dayjs.locale('es');
 
-export const AttendanceList = ({ students = [], confirmLoading, group: propGroup, modalMode = false }) => {
+export const AttendanceTable = ({ students = [], confirmLoading, group: propGroup, modalMode = false }) => {
     const [modalAttendanceList, setModalAttendanceList] = useState(false);
     const [modalAttendanceItem, setModalAttendanceItem] = useState(false);
     const [loadingAttendance, setLoadingAttendance] = useState(false);
@@ -20,7 +20,7 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
     const [attendanceMonth, setAttendanceMonth] = useState(dayjs());
     const [attendanceItem, setAttendanceItem] = useState({});
     const [isButtonClick, setIsButtonClick] = useState(false);
-    const [group, setPropGroup] = useState(propGroup);
+    const [group, setGroup] = useState(propGroup);
 
     const fetchAttendance = async ({ attendanceMonth, group_id }) => {
         try {
@@ -54,30 +54,30 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
                 width: 20,
                 ellipsis: true,
                 className: 'attendance-state',
-                render: (r, t) => t[i] && renderAttendanceState({ ...t[i], day: i, id: t.student_id })
+                render: (r, t) => t[i] && renderAttendanceState({ ...t[i], day: i, id: t.student_id, name: t.student_name })
             })
         }
         // console.log(cols)
         return cols
     }
 
-    const showAttendanceItem = ({ state, observation, justification_id, student_id, day }) => {
-        setAttendanceItem({ state, observation, justification_id, student_id, day })
+    const showAttendanceItem = ({ state, observation, justification_id, student_id, day, name }) => {
+        setAttendanceItem({ state, observation, justification_id, student_id, day, name })
         setModalAttendanceItem(true)
     }
 
     const renderAttendanceState = (data) => {
-        const { state, observation, justification_id, id: student_id, day } = data
+        const { state, observation, justification_id, id: student_id, day, name } = data
         const text = state ? 'Asistió' : 'No Asistió'
         const type = state ? 'true' : 'false'
 
         if (state !== undefined) {
-            return <div onClick={() => showAttendanceItem({ state, observation, justification_id, student_id, day })} className={`attendance-state attendance-state-${type}`}>{text}</div>
+            return <div onClick={() => showAttendanceItem({ state, observation, justification_id, student_id, day, name })} className={`attendance-state attendance-state-${type}`}>{text}</div>
         }
         return ''
     }
 
-    const onCancelModalAttendanceList = (attendanceList) => {
+    const onCancelModalAttendanceList = () => {
         setModalAttendanceList(false)
     }
 
@@ -85,15 +85,13 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
         setLoadingAttendance(true);
         try {
             if (attendanceList.id) {
-                console.log('aca');
-
                 await attendanceUpdate(attendanceList.id, attendanceList);
             } else {
-                await attendanceCreate({ attendanceList, group_id: group.id, attendance_date });
+                await attendanceCreate({ attendanceList, group_id: group, attendance_date });
             }
 
             setModalAttendanceList(false);
-            fetchAttendance({ attendanceMonth, group_id: group.id });
+            fetchAttendance({ attendanceMonth, group_id: group });
         } catch (err) {
             setLoadingAttendance(false)
             renderError(err);
@@ -109,9 +107,9 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
     const onOkModalAttendanceItem = async (attendanceItem) => {
         setLoadingAttendance(true);
         try {
-            await attendanceUpdate({ attendanceMonth, group_id: group.id }, attendanceItem);
+            await attendanceUpdate({ attendanceMonth, group_id: group }, attendanceItem);
 
-            setModalAttendanceItem(false); fetchAttendance({ attendanceMonth, group_id: group.id });
+            setModalAttendanceItem(false); fetchAttendance({ attendanceMonth, group_id: group });
         } catch (err) {
             setLoadingAttendance(false)
             renderError(err);
@@ -126,16 +124,16 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
 
     useEffect(() => {
         if (group)
-            fetchAttendance({ attendanceMonth, group_id: group.id })
+            fetchAttendance({ attendanceMonth, group_id: group })
     }, []);
 
     useEffect(() => {
-
-    }, []);
+        setGroup(propGroup)
+    }, [propGroup]);
 
     useEffect(() => {
         if (isButtonClick) {
-            fetchAttendance({ attendanceMonth, group_id: group.id })
+            fetchAttendance({ attendanceMonth, group_id: group })
             setIsButtonClick(false); // Reiniciamos el estado
         }
     }, [attendanceMonth]);
@@ -160,22 +158,22 @@ export const AttendanceList = ({ students = [], confirmLoading, group: propGroup
                             value={attendanceMonth}
                             onChange={setAttendanceMonth}
                         />
-                        <Button disabled={confirmLoading || loadingAttendance || group == null} onClick={() => fetchAttendance({ attendanceMonth, group_id: group ? group.id : null })} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
+                        <Button disabled={confirmLoading || loadingAttendance || group == undefined} onClick={() => fetchAttendance({ attendanceMonth, group_id: group !== undefined ? group : undefined })} type='primary' style={{ marginLeft: 10 }}>Buscar</Button>
                     </Col>
                     <Col span={6}>
-                        <Button disabled={group == null} icon={<PlusCircleOutlined />} type='primary' onClick={() => setModalAttendanceList(true)} style={{ float: 'right' }}>Pasar lista</Button>
+                        <Button disabled={group == undefined} icon={<PlusCircleOutlined />} type='primary' onClick={() => setModalAttendanceList(true)} style={{ float: 'right' }}>Pasar lista</Button>
                     </Col>
                 </Row>
                 <Divider style={{ margin: 15 }} />
                 <Row>
                     <Col span={8}>
-                        <Button onClick={() => handleMonthChange(attendanceMonth.subtract(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == null} icon={<LeftCircleOutlined />}>Mes anterior</Button>
+                        <Button onClick={() => handleMonthChange(attendanceMonth.subtract(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == undefined} icon={<LeftCircleOutlined />}>Mes anterior</Button>
                     </Col>
                     <Col span={8}>
                         <h2 style={{ textAlign: 'center', textAlign: 'center' }}>{attendanceMonth.format('MMMM').charAt(0).toUpperCase() + attendanceMonth.format('MMMM').slice(1)}</h2>
                     </Col>
                     <Col span={8}>
-                        <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == null} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
+                        <Button onClick={() => handleMonthChange(attendanceMonth.add(1, 'month'), true)} disabled={confirmLoading || loadingAttendance || group == undefined} icon={<RightCircleOutlined />} style={{ float: 'right' }}>Mes siguiente</Button>
                     </Col>
                 </Row>
                 {/* <div style={{}}>

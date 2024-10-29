@@ -4,7 +4,7 @@ import { alertError, renderError } from '../../../common/functions';
 import { user } from '../../../services/AuthService';
 import { FileExcelOutlined, FilePdfOutlined, FileTextOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
-import { AttendanceList } from './AttendanceList';
+import { AttendanceTable } from '../../../tables/AttendanceTable';
 import TabPane from 'antd/es/tabs/TabPane';
 import { courseIndex } from '../../../services/CourseService';
 import { groupIndex } from '../../../services/GroupService';
@@ -49,7 +49,23 @@ export const AttendanceAdminPage = ({ app }) => {
         }
     }
 
-    
+    const handleOnCourseChange = (value) => {
+        setCourse(value)
+        if(value == undefined){
+            setGroup(undefined)
+            setGroups([])
+        }
+    }
+
+    const handleOnGroupChange = (value) => {
+        let auxGroup = groups.find(x => x.id == value)
+        setGroup(auxGroup)
+        if(auxGroup)
+            console.log(auxGroup);
+            
+            setStudents(auxGroup.students)
+    }
+
     useEffect(()=>{
         loadCourses()
     },[]);
@@ -67,28 +83,32 @@ export const AttendanceAdminPage = ({ app }) => {
                 <>
                     <div style={{ width: '100%', paddingInline: 15, paddingBottom: 10 }}>
                         Curso <Select
+                            allowClear
                             loading={loading}
                             disabled={loading}
                             placeholder={'Seleccione un curso'}
-                            onChange={setCourse}
+                            onChange={handleOnCourseChange}
+                            value={course}
                             style={{ marginInline: 10 }}
                         >
                             {renderCourseOptions(courses)}
                         </Select>
                         Grupo <Select
+                            allowClear
                             loading={loading}
                             disabled={loading || course == null}
                             placeholder={'Seleccione un grupo'}
-                            onChange={setGroup}
+                            onChange={handleOnGroupChange}
+                            value={group?.id}
                             style={{ marginLeft: 10 }}
                         >
                             {renderGroupOptions(groups)}
                         </Select>
                     </div>
-                    <AttendanceList
+                    <AttendanceTable
                         confirmLoading={loading}
                         students={students}
-                        group={group}
+                        group={group?.id}
                     />
                 </>
         }

@@ -11,6 +11,7 @@ export const attendanceIndex = async (filter, output = undefined) => {
     params.pageSize = filter?.pageSize || 50;
     params.month = filter?.attendanceMonth;
     params.group_id = filter?.group_id;
+    params.student_id = filter?.student_id;
 
     if (output) {
         let exportFilter = { ...filter, output }

@@ -14,7 +14,7 @@ import { instituteCombo } from '../services/InstituteService';
 import { DocumentCategoryDocumentTable } from '../tables/DocumentCategoryDocumentTable';
 import { documentCategoryShow } from '../services/DocumentCategoryService';
 import dayjs from 'dayjs';
-import { AttendanceList } from '../pages/administrations/attendance/AttendanceList';
+import { AttendanceTable } from '../tables/AttendanceTable';
 const { TextArea } = Input;
 
 export const GroupForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
@@ -180,6 +180,8 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     };
 
     useEffect(() => {
+        console.log(formState);
+        
         fetchStudents();
         fetchTeachers();
         fetchTurns();
@@ -325,11 +327,11 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
             label: 'Asistencia',
             key: 'attendance',
             children:
-                <AttendanceList
+                <AttendanceTable
                     loadingCourses={loadingCourses}
                     confirmLoading={confirmLoading}
                     students={formState.students}
-                    group={formState}
+                    group={formState.id}
                     modalMode={true}
                 />
         }

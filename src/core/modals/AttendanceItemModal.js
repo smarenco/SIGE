@@ -45,7 +45,7 @@ export const AttendanceItemModal = ({ item, open, onOk: onOkProp, loading, onCan
             open={open}
             onCancel={onCancel}
             onOk={onOk}
-            title={<span>Item Asistencia {item.state ? <Tag color='green'>Asistió</Tag> : <Tag color='red'>No asistió</Tag>}</span>}
+            title={<span>{item.name} dia {item.day} {item.state ? <Tag color='green'>Asistió</Tag> : <Tag color='red'>No asistió</Tag>}</span>}
             style={{ paddingTop: 10 }}
         >
             {

@@ -20,6 +20,7 @@ export const AppRouter = () => {
 
     const token = localStorage.getItem(ACCESS_TOKEN);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const app = useSelector( state => state.app );
 
     useEffect(() => {
@@ -48,7 +49,7 @@ export const AppRouter = () => {
         let r = routes.map((r, i) => {
             const route = app.routes.filter(route => route.key === r.key)[0];
             if (route && route.isPublic !== true) {
-                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout route={route} component={<route.component />} app={app} /> } />;
+                return <Route key={i + j} path={`${APP_PATH}${route.path}`} route={route} exact element={ <DefaultLayout route={route} isMobile={isMobile} component={<route.component isMobile={isMobile} />} app={app} /> } />;
             }
         });
         return r;
