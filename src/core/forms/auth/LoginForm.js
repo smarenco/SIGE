@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import { useForm } from '../../hooks/useForm';
@@ -17,10 +17,14 @@ const loginFormFields = {
 // }
 
 const LoginForm = ({ handleError }) => {
+  
+  const [loading, setLoading] = useState(false)
   const { loginEmail, loginPassword, onInputChange: onLoginInputChange } = useForm(loginFormFields);
 
-  const handleOnSubmit = () => {
-    login(loginEmail, loginPassword);
+  const handleOnSubmit = async () => {
+    setLoading(true);
+    await login(loginEmail, loginPassword);
+    setLoading(false);
   }
 
   return (
@@ -43,6 +47,7 @@ const LoginForm = ({ handleError }) => {
         ]}
         >
         <Input
+          disabled={loading}
           name="loginEmail"
           onChange={onLoginInputChange}
           prefix={<UserOutlined className="site-form-item-icon" />}
@@ -59,6 +64,7 @@ const LoginForm = ({ handleError }) => {
         ]}
         >
         <Input.Password
+          disabled={loading}
           name="loginPassword"
           onChange={onLoginInputChange}
           prefix={<LockOutlined className="site-form-item-icon" />}
@@ -68,19 +74,19 @@ const LoginForm = ({ handleError }) => {
       </Form.Item>
       <Form.Item>
         <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Recuerdame</Checkbox>
+          <Checkbox disabled={loading}>Recuerdame</Checkbox>
         </Form.Item>
 
-        <a className="login-form-forgot" href="/auth/recoveryPassword">
+        <a className="login-form-forgot" disabled={loading} href="/auth/recoveryPassword">
           Olvidé mi contraseña
         </a>
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" disabled={loading} loading={loading} htmlType="submit" className="login-form-button">
           Iniciar Sesion
         </Button>
-        O tambien puedes <a href="/auth/register">registrate aqui!</a>
+        O tambien puedes <a href="/auth/register" disabled={loading}>registrate aqui!</a>
       </Form.Item>
     </Form>
   );
