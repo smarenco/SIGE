@@ -14,11 +14,13 @@ export const CityModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
-        onOkProp(formState);
     }
 
     const onCancel = () => {

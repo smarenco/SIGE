@@ -14,20 +14,16 @@ export const InstituteModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
-        }
-        if(!formState.country_id || formState.country_id.length === 0){
-            renderError('Debe ingresar el pais');
-            return;
-        }
-        if(!formState.city_id || formState.city_id.length === 0){
-            renderError('Debe ingresar la ciudad');
-            return;
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+            { name: 'country_id', text: 'Debe seleccionar un pais'},
+            { name: 'city_id', text: 'Debe seleccionar una ciudad'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
 
-        onOkProp(formState);
     }
 
     const onCancel = () => {

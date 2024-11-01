@@ -14,20 +14,16 @@ export const TurnModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
-        }
-        if(!formState.start_time || formState.start_time.length === 0){
-            renderError('Debe ingresar la hora inicial');
-            return;
-        }
-        if(!formState.finish_time || formState.finish_time.length === 0){
-            renderError('Debe ingresar la hora final');
-            return;
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+            { name: 'start_time', text: 'Debe ingresar la hora inicial'},
+            { name: 'finish_time', text: 'Debe ingresar la hora final'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
 
-        onOkProp(formState);
     }
 
     const onCancel = () => {

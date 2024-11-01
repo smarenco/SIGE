@@ -12,12 +12,14 @@ export const AbsenteeismCausesModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
+        const inputs = [
+            { name: 'name', text: 'Debe seleccionar un nombre'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
 
-        onOkProp(formState);
     }
 
     const onCancel = () => {

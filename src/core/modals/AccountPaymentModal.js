@@ -12,23 +12,16 @@ export const AccountPaymentModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.reference || formState.reference.trim().length === 0){
-            renderError('Debe ingresar la referencia');
-            return;
+        const inputs = [
+            { name: 'reference', text: 'Debe seleccionar la referencia'},
+            { name: 'amount', text: 'Debe ingresar el monto'},
+            { name: 'payment_day', text: 'Debe ingresar el dia de pago'},
+            { name: 'payment_method', text: 'Debe ingresar el metodo de pago'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
-        if(!formState.amount || formState.amount.length === 0){
-            renderError('Debe ingresar el monto');
-            return;
-        }
-        if(!formState.payment_day || formState.payment_day.length === 0){
-            renderError('Debe ingresar el dia de pago');
-            return;
-        }
-        if(!formState.payment_method || formState.payment_method.trim().length === 0){
-            renderError('Debe ingresar el metodo de pago');
-            return;
-        }
-        onOkProp(formState);
     }
 
     const onCancel = () => {

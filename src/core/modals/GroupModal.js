@@ -14,36 +14,19 @@ export const GroupModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
-        }
-        if(!formState.turn_id || formState.turn_id.length === 0){
-            renderError('Debe ingresar un turno');
-            return;
-        }
-        if(!formState.course_id || formState.course_id.length === 0){
-            renderError('Debe ingresar un curso');
-            return;
-        }
-        if(!formState.institute_id || formState.institute_id.length === 0){
-            renderError('Debe ingresar un instituto');
-            return;
-        }
-        if(!formState.number_students || formState.number_students.length === 0){
-            renderError('Debe ingresar la cantidad de cupos');
-            return;
-        }
-        if(!formState.start_date || formState.start_date.length === 0){
-            renderError('Debe ingresar la fecha inicial');
-            return;
-        }
-        if(!formState.finish_date || formState.finish_date.length === 0){
-            renderError('Debe ingresar la fecha final');
-            return;
-        }
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+            { name: 'turn_id', text: 'Debe seleccionar un turno'},
+            { name: 'course_id', text: 'Debe seleccionar un curso'},
+            { name: 'institute_id', text: 'Debe seleccionar un instituto'},
+            { name: 'number_students', text: 'Debe ingresar la cantidad de cupos'},
+            { name: 'start_date', text: 'Debe ingresar la fecha inicial'},
+            { name: 'finish_date', text: 'Debe ingresar la fecha final'},
+        ];
 
-        onOkProp(formState);
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
+        }
     }
 
     const onCancel = () => {

@@ -34,6 +34,29 @@ export const loadTypes = (gender) => {
     
 };
 
+export const validatorInputsRequired = (values, inputs) => {
+    try {
+        inputs.forEach(input => {
+            if(!values[input.name]){
+                throw (input.text);
+            }
+
+            if(values[input.name] && typeof values[input.name] === 'string' && values[input.name].trim().length === 0){
+                throw (input.text);
+            }
+
+            if(values[input.name] && typeof values[input.name] === 'number' && values[input.name].length === 0){
+                throw (input.text);
+            }
+        });
+    } catch (err) {
+        renderError(err);
+        return false;
+    }
+    
+    return true;
+}
+
 export const renderFormItem = (key, label, initialValue, component) => {
     let labelExt, valuePropName = 'value';
     if (typeof initialValue === 'boolean') {
