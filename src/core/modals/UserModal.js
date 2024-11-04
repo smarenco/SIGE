@@ -12,42 +12,20 @@ export const UserModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.document || formState.document.trim().length === 0){
-            alertError('Debe indicar un documento')
-            return false;
-        }
-        if(!formState.names || formState.names.trim().length === 0){
-            alertError('Debe indicar un nombre')
-            return false;
-        }
-        if(!formState.lastnames || formState.lastnames.trim().length === 0){
-            alertError('Debe indicar un apellido')
-            return false;
-        }
-        if(!formState.birth_day){
-            alertError('Debe indicar una fecha de nacimiento')
-            return false;
-        }
-        if(!formState.cell_phone){
-            alertError('Debe indicar un telefono')
-            return false;
-        }
-        if(!formState.email || formState.email.trim().length === 0){
-            alertError('Debe indicar un email')
-            return false;
-        }
-        if(!formState.medical_coverage_id){
-            alertError('Debe indicar una cobertura medica')
-            return false;
-        }
-        if(!formState.type || formState.type.trim().length === 0){
-            alertError('Debe indicar un tipo de usuario')
-            return false;
-        }
+        const inputs = [
+            { name: 'document', text: 'Debe ingresar un documento'},
+            { name: 'names', text: 'Debe seleccionar un nombre'},
+            { name: 'lastnames', text: 'Debe ingresar un apellido'},
+            { name: 'birth_day', text: 'Debe ingresar una fecha de nacimiento'},
+            { name: 'cell_phone', text: 'Debe ingresar un telefono'},
+            { name: 'email', text: 'Debe ingresar un email'},
+            { name: 'medical_coverage_id', text: 'Debe seleccionar una cobertura medica'},
+            { name: 'type', text: 'Debe seleccionar un tipo de usuario'},
+        ];
 
-        let error = false;
-        
-        if(!error){ onOkProp(formState); }
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
+        }
     }
 
     const onCancel = () => {

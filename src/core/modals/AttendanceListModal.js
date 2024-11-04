@@ -28,7 +28,7 @@ export const AttendanceListModal = (props) => {
             renderError('Debe asignar un Estado a todos los estudiantes');
             return;
         }
-        // console.log(fecha)
+
         onOkProp(hookStudents, fecha);
     }
 

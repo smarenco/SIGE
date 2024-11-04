@@ -12,17 +12,15 @@ export const DocumentCategoryModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+            { name: 'type', text: 'Debe seleccionar el tipo'},
+        ];
+
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
         }
 
-        if(!formState.type || formState.type.trim().length === 0){
-            renderError('Debe seleccionar el tipo');
-            return;
-        }
-
-        onOkProp(formState);
     }
 
     const onCancel = () => {

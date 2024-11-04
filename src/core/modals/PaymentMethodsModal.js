@@ -14,12 +14,13 @@ export const PaymentMethodsModal = (props) => {
 
     const onOk = () => {
         
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
-        }
+        const inputs = [
+            { name: 'name', text: 'Debe ingresar el nombre'},
+        ];
 
-        onOkProp(formState);
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
+        }
     }
 
     const onCancel = () => {

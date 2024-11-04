@@ -14,32 +14,22 @@ export const CourseModal = (props) => {
 
     const onOk = () => {
 
-        if(!formState.name || formState.name.trim().length === 0){
-            renderError('Debe ingresar el nombre');
-            return;
-        }
-
-        if(!formState.identifier || formState.identifier.trim().length === 0){
-            renderError('Debe ingresar el identifiador');
-            return;
-        }
-
-        if(!formState.quotas || formState.quotas.length === 0){
-            renderError('Debe ingresar la cantidad de cuotas');
-            return;
-        }
-
-        if(!formState.quota_value || formState.quota_value.length === 0){
-            renderError('Debe ingresar el valor de la cuota');
-            return;
-        }
+        const inputs = [
+            { name: 'name', text: 'Debe seleccionar un nombre'},
+            { name: 'identifier', text: 'Debe ingresar un identificador'},
+            { name: 'quotas', text: 'Debe ingresar la cantidad de cuotas'},
+            { name: 'quota_value', text: 'Debe ingresar el valor de la cuota'},
+        ];
 
         if(formState.tuition && (!formState.tuition_value || formState.tuition_value.length === 0)){
             renderError('Debe ingresar el valor de la matricula');
             return;
         }
 
-        onOkProp(formState);
+        if(validatorInputsRequired(formState, inputs)){
+            onOkProp(formState);
+        }
+
     }
 
     const onCancel = () => {
