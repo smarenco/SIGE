@@ -180,8 +180,6 @@ export const GroupForm = ({ view, loading, confirmLoading, formState, onInputCha
     };
 
     useEffect(() => {
-        console.log(formState);
-        
         fetchStudents();
         fetchTeachers();
         fetchTurns();

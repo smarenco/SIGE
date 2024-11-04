@@ -7,11 +7,10 @@ import { attendanceUpdate } from '../services/AttendanceService';
 
 export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustification: propUploadJustification }) => {
     const [attendance, setAttendance] = useState([]);
-    const [justificationFileList, setJustificationFileList] = useState([]);
 
-    const uploadJustification = (file) => {
-        if (file !== undefined) {
-            propUploadJustification(file);
+    const uploadJustification = (data) => {
+        if (data.justification !== undefined) {
+            propUploadJustification(data);
         }
     }
 
@@ -44,9 +43,9 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
                         onRemove={(file) => {
                             uploadJustification(undefined)
                         }}
-                        beforeUpload={(file) => {
-                            uploadJustification(file)
-                            message.success(`Archivo ${file.name} cargado correctamente`)
+                        beforeUpload={(justification) => {
+                            uploadJustification({justification, student_id: record.student_id, day: record.day})
+                            message.success(`Archivo ${justification.name} cargado correctamente`)
                             return false;
                         }
                         }
@@ -66,7 +65,7 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
     ];
 
     const downloadJustification = (justificationId) => {
-        if(justificationId){
+        if (justificationId) {
             const token = localStorage.getItem(ACCESS_TOKEN);
             const url = `${API_URL}/justification/${justificationId}?token=${token}`; // Reemplaza con la URL de tu archivo
             window.open(url, '_blank');
@@ -75,11 +74,15 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
 
     useEffect(() => {
         let transformedAttendance = [];
-
+        
         if (propAttendance.length > 0) {
+            let student_id = propAttendance[0]['student_id'];
+
             transformedAttendance = Object.keys(propAttendance[0])
                 .filter(key => key !== 'student_id' && key !== 'student_name')
-                .map(day => ({
+                .map((day, index) => ({
+                    key: `${day}-${index}`,
+                    student_id,
                     day,
                     state: propAttendance[0][day].state ? 'Presente' : 'Falta',
                     observation: propAttendance[0][day]?.observation,
@@ -95,7 +98,10 @@ export const MyAttendanceTable = ({ data: propAttendance, loading, uploadJustifi
             columns={columns}
             dataSource={attendance}
             loading={loading}
-            scroll={{ x: '100%', y: 500 }}
+            scroll={{ x: '100%', y: '45vh' }}
+            style={{
+                height:'60vh'
+            }}
         />
     )
 }

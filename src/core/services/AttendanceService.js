@@ -9,7 +9,7 @@ export const attendanceIndex = async (filter, output = undefined) => {
     let params = filter || {};
     params.page = filter?.page || 1;
     params.pageSize = filter?.pageSize || 50;
-    params.month = filter?.attendanceMonth;
+    params.month = filter?.attendanceMonth?.format(YYYYMMDDHHmmss);
     params.group_id = filter?.group_id;
     params.student_id = filter?.student_id;
 
@@ -26,13 +26,6 @@ export const attendanceIndex = async (filter, output = undefined) => {
         total: response.total,
     }
 }
-
-// export const attendanceCombo = async (filter) => {
-//     let params = filter || {};
-//     const { response } = await api.get(path, { params });
-
-//     return response.data;
-// }
 
 export const attendanceShow = async (id) => {
     const { response } = await api.get(`${path}/${id}`);
@@ -57,12 +50,13 @@ export const attendanceCreate = async ({ attendanceList, group_id, attendance_da
     });
 }
 
-export const attendanceUpdate = async ({ attendanceMonth, group_id }, data) => {
+export const attendanceUpdate = async ({ attendanceMonth, group_id, student_id }, data) => {
     // console.log(data.justification)
     const formData = new FormData();
     formData.append('group_id', group_id);
+    formData.append('student_id', student_id);
     formData.append('attendance_month', attendanceMonth);
-
+    
     for(let key in data){
         if(key !== 'justification')
             formData.append(key, data[key]);

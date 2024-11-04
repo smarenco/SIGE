@@ -177,7 +177,6 @@ export const PaymentPage = ({ app }) => {
                 fechaInicial = dayjs(course?.group.start_date);
                 fechaInicial = fechaInicial.add(-1, 'M');
             }
-            console.log('fechaInicial',fechaInicial);
             for(let i=1; i <= 6; i++){
 
                 fechaInicial = fechaInicial.add(1, 'M');
@@ -185,9 +184,6 @@ export const PaymentPage = ({ app }) => {
                 cuotes.push({'format': format, 'date': dayjs(fechaInicial)});
             }
         }
-
-        console.log('cuotes',cuotes)
-
         setFormState({...formState, course_id, value_cuote: course?.quota_value, cuotes: [], amount_coute: 0});
         setCuotes(cuotes);
     }
