@@ -36,7 +36,7 @@ export const MyAttendancePage = ({ app, isMobile }) => {
                     disabled={loading}
                     onChange={setGroup}
                     style={{ marginRight: 10, width: isMobile ? '150px' : '200px', marginBottom: 10, marginTop: 10 }}
-                    placeholder='Elija grupo'
+                    placeholder='Grupos'
                 >
                     {groups.map(group =>
                         <Select.Option value={group.id} key={group.id}>{group.name}</Select.Option>
