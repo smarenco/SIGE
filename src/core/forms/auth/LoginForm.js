@@ -86,7 +86,7 @@ const LoginForm = ({ handleError }) => {
         <Button type="primary" disabled={loading} loading={loading} htmlType="submit" className="login-form-button">
           Iniciar Sesion
         </Button>
-        O tambien puedes <a href="/auth/register" disabled={loading}>registrate aqui!</a>
+        {/* O tambien puedes <a href="/auth/register" disabled={loading}>registrate aqui!</a> */}
       </Form.Item>
     </Form>
   );

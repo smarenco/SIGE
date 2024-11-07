@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import React from 'react'
-import { alertError } from '../common/functions';
+import { alertError, validatorInputsRequired } from '../common/functions';
 import { UserForm } from '../forms/UserForm';
 import { useForm } from '../hooks/useForm';
 
