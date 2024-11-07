@@ -1,6 +1,6 @@
 import { Modal } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { renderError } from '../common/functions';
+import { renderError, validatorInputsRequired } from '../common/functions';
 import { InstituteForm } from '../forms/InstituteForm';
 import { useForm } from '../hooks/useForm';
 

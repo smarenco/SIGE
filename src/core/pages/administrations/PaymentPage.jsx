@@ -208,7 +208,7 @@ export const PaymentPage = ({ app }) => {
                                 onChange={student_id => setFormState({...formState, student_id})}
                                 > 
                                     {students.map(student => 
-                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
+                                        <Select.Option value={student.id} key={student.id}>{student.names +' '+ student.lastnames + ' - ' + student.document}</Select.Option>
                                         )}
                                 </Select>
                         </Form.Item>

@@ -134,7 +134,7 @@ export const PaymentForm = ({ view, loading, confirmLoading, formState, onInputC
                                 onChange={student_id => onInputChangeByName('student_id', student_id)}
                                 > 
                                     {students.map(student => 
-                                        <Select.Option value={student.id} key={student.id}>{student.names} {student.lastnames} - {student.document}</Select.Option>
+                                        <Select.Option value={student.id} key={student.id}>{student.names +' '+ student.lastnames + ' - ' + student.document}</Select.Option>
                                         )}
                                 </Select>
                         </Form.Item>
