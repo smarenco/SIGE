@@ -72,6 +72,8 @@ export const loginByToken = token => {
         });
 }
 
+export const sendEmail = (email) => api.post('auth/recovery-password', { email });
+
 export const forceLogout = () => {
     delete api.defaults.headers.common['X-US-AUTH-TOKEN'];
     localStorage.removeItem(ACCESS_TOKEN);

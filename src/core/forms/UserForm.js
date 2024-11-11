@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider, InputNumber } from 'antd'
+import { Form, Input, Select, DatePicker, Tabs, Checkbox, Divider, InputNumber, Modal, message, Button } from 'antd'
 import Loading from '../components/common/Loading'
 import LayoutH from '../components/layout/LayoutH';
 import TextArea from 'antd/lib/input/TextArea';
@@ -16,6 +16,7 @@ import { DocumentsUserModal } from '../modals/DocumentsUserModal';
 import { GroupTable } from '../tables/GroupTable';
 import { DDMMYYYY, genders, education_level } from '../common/consts';
 import dayjs from 'dayjs';
+import { sendEmail } from '../services/AuthService';
 
 export const UserForm = ({ view, loading, confirmLoading, formState, onInputChange, onInputChangeByName }) => {
 
@@ -195,6 +196,24 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
         onInputChangeByName('documents', documents);
     }
 
+    const requestNewPassword = () => {
+        Modal.confirm({
+            width: 600,
+            title: 'Atención',
+            content: (<div>Está por enviar un correo electrónico al usuario para que pueda crear una nueva contraseña.<br />El correo llegará a la dirección <code>{formState.email}</code><br /><br />¿Seguro desea solicitar una nueva contraseña para {formState.names} {formState.lastnames}?</div>),
+            onOk: () => {
+                message.loading('Solicitando nueva contraseña...', 0);
+                sendEmail(formState.email).then(res => {
+                    message.destroy()
+                    message.success('Contraseña solicitada correctamente');
+                }).catch((err) => {
+                    message.destroy()
+                    renderError(err);
+                });
+            }
+        })
+    }
+
     const items = [
         { 
             label: 'Datos Basicos', 
@@ -228,7 +247,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                             )}
                         </Select>
                     </Form.Item>
-                    <Form.Item label='Direccion' labelAlign='left' span={9}>
+                    <Form.Item label='Direccion' labelAlign='left' span={8}>
                         <Input name='direction' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.direction} />
                     </Form.Item>
                     <Form.Item label={`${!view ? '*' : ''} Telefono`} labelAlign='left' span={5}>
@@ -237,9 +256,9 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
                     <Form.Item label={`${!view ? '*' : ''} Email`} labelAlign='left' span={6}>
                         <Input type="email" name='email' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.email} />
                     </Form.Item>
-                    <Form.Item label='Contraseña' labelAlign='left' span={4}>
-                        <Input placeholder='Solo si desea cambiarla' type="password" name='password' disabled={view || confirmLoading} onChange={onInputChange} value={formState?.password} />
-                    </Form.Item>
+                    <div span={5} style={{ marginTop: 29 }}>
+                        <Button onClick={requestNewPassword} disabled={!formState.id}>Solicitar nueva contraseña</Button>
+                    </div>
                     <Form.Item label={`${!view ? '*' : ''} Pais`} labelAlign='left' span={5}>
                         <Select 
                             allowClear 
