@@ -417,7 +417,7 @@ export const UserForm = ({ view, loading, confirmLoading, formState, onInputChan
             children: 
                 <LayoutH>
                     <Form.Item labelAlign='left' span={6}>
-                        <Checkbox name='work_in_Area_similar' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('work_in_Area_similar', e.target.checked)} checked={formState?.work_in_Area_similar}>Trabaja en area similar</Checkbox>
+                        <Checkbox name='work_in_similar_area' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('work_in_similar_area', e.target.checked)} checked={formState?.work_in_similar_area}>Trabaja en area similar</Checkbox>
                     </Form.Item>
                     <Form.Item labelAlign='left' span={8}>
                         <Checkbox name='has_knowledge_in_area' disabled={view || confirmLoading} onChange={(e) => onInputChangeByName('has_knowledge_in_area', e.target.checked)} checked={formState?.has_knowledge_in_area}>Tiene conocimiento en el area</Checkbox>
